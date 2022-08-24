@@ -76,7 +76,11 @@ bool get_data(const string& filename, vector<string> &column_headers, vector<vec
 
 		vector<string> data_cells = std_strtok(line, "[,]");
 
-		if (data_cells.size() != column_headers.size() - 1)
+		if (data_cells.size() > column_headers.size() - 1)
+		{
+			data_cells.resize(column_headers.size() - 1);
+		}
+		else if (data_cells.size() < (column_headers.size() - 1))
 		{
 			size_t num_to_add = (column_headers.size() - 1) - data_cells.size();
 
