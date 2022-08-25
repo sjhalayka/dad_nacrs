@@ -6,6 +6,7 @@ class dad_table_data : public table_data
 {
 public:
 
+	// Function that is dataset specific
 	bool get_various_column_indices(size_t& neutropenia_index, vector<size_t>& diag_codes)
 	{
 		neutropenia_index = get_index("Neutropenia_Indicator");
