@@ -29,7 +29,7 @@ public:
 
 	size_t get_D700_count(void)
 	{
-		const size_t row_count = data[0].size();
+		const size_t row_count = get_row_count();
 
 		size_t D700_count = 0;
 
