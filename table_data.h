@@ -12,14 +12,21 @@ using namespace std;
 
 class table_data
 {
-public:
+private:
+	
 	vector<string> column_headers;
 	vector<vector<string>> data;
 	size_t neutropenia_index = 0;
 	vector<size_t> diag_codes;
 
+public:
+
+	// This function *must* be implemented by inheriting classes
+	// Making it equal to 0 means that one cannot instantiate the
+	// base class table_data
 	virtual bool get_various_column_indices(size_t& neutropenia_index, vector<size_t>& diag_codes) = 0;
 
+	// Functions that are dataset agnostic
 	size_t get_row_count(void)
 	{
 		if (data.size() == 0)

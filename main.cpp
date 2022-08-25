@@ -10,7 +10,6 @@ int main(void)
 	if (false == dtd.init("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv"))
 		return -1;
 
-	cout << "Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv" << endl;
 	cout << dtd.get_row_count() << " rows" << endl;
 	cout << dtd.get_D700_count() << " neutropenia count" << endl;
 	cout << endl;
@@ -23,7 +22,6 @@ int main(void)
 	if (false == ntd.init("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18.csv"))
 		return -1;
 
-	cout << "Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18.csv" << endl;
 	cout << ntd.get_row_count() << " rows" << endl;
 	cout << ntd.get_D700_count() << " neutropenia count" << endl;
 	cout << endl;
