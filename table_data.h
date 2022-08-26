@@ -54,7 +54,7 @@ public:
 		ofstream outfile(filename, ios_base::binary);
 		outfile.write(oss.str().c_str(), oss.str().size());
 
-		cout << "Done\n" << endl;
+		cout << "Done" << endl << endl;
 	}
 
 	size_t get_row_count(void)
