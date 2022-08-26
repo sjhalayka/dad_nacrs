@@ -29,7 +29,6 @@ public:
 	void print_to_file(const string& filename)
 	{
 		ostringstream oss;
-		//ofstream outfile(filename);
 		
 		for (size_t i = 0; i < (column_headers.size() - 1); i++)
 			oss << column_headers[i] << ',';
