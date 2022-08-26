@@ -4,8 +4,6 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <map>
-#include <map>
 #include <string>
 #include <regex>
 using namespace std;
@@ -26,8 +24,10 @@ public:
 	// base class table_data
 	virtual bool get_various_column_indices(size_t& neutropenia_index, vector<size_t>& diag_codes) = 0;
 
+	// Functions that are dataset agnostic
 	void print_to_file(const string& filename)
 	{
+		// Throw everything into a string stream
 		ostringstream oss;
 		
 		for (size_t i = 0; i < (column_headers.size() - 1); i++)
@@ -45,11 +45,12 @@ public:
 			oss << data[column_headers.size() - 1][i] << endl;
 		}
 
-		ofstream outfile(filename);
-		outfile << oss.str().c_str();
+		// Write string stream contents to file in one shot
+		// This is about as fast as it gets
+		ofstream outfile(filename, ios_base::binary);
+		outfile.write(reinterpret_cast<const char*>(oss.str().c_str()), oss.str().size());
 	}
 
-	// Functions that are dataset agnostic
 	size_t get_row_count(void)
 	{
 		if (data.size() == 0)
