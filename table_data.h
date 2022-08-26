@@ -23,7 +23,7 @@ public:
 	// This function *must* be implemented by inheriting classes
 	// Making it equal to 0 means that one cannot instantiate the
 	// base class table_data
-	virtual bool get_various_column_indices(void /*size_t& neutropenia_index, vector<size_t>& diag_codes*/) = 0;
+	virtual bool get_various_column_indices(void) = 0;
 
 	void save_to_CSV(const string& filename)
 	{
