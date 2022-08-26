@@ -14,7 +14,7 @@ int main(void)
 	cout << dtd.get_D700_count() << " neutropenia count" << endl;
 	cout << endl;
 
-	dtd.print_to_file("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18_with_neutropenia_indicator.csv");
+	dtd.save_to_CSV("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18_with_neutropenia_indicator.csv");
 
 
 	nacrs_table_data ntd;
@@ -28,7 +28,7 @@ int main(void)
 	cout << ntd.get_D700_count() << " neutropenia count" << endl;
 	cout << endl;
 
-	ntd.print_to_file("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18_with_neutropenia_indicator.csv");
+	ntd.save_to_CSV("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18_with_neutropenia_indicator.csv");
 
 	return 0;
 }

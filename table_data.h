@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <regex>
+#include <chrono>
 using namespace std;
 
 class table_data
@@ -24,35 +25,42 @@ public:
 	// base class table_data
 	virtual bool get_various_column_indices(void /*size_t& neutropenia_index, vector<size_t>& diag_codes*/) = 0;
 
-	// Functions that are dataset agnostic
-	void print_to_file(const string& filename)
+	void save_to_CSV(const string& filename)
 	{
 		cout << "Building buffer..." << endl;
 
-		// Throw everything into a string stream
-		ostringstream oss;
-		
-		for (size_t i = 0; i < (column_headers.size() - 1); i++)
-			oss << column_headers[i] << ',';
+		// Throw everything into a string
+		string s;
 
-		oss << column_headers[column_headers.size() - 1] << endl;
+		for (size_t i = 0; i < (column_headers.size() - 1); i++)
+		{
+			s += column_headers[i];
+			s += ',';
+		}
+
+		s += column_headers[column_headers.size() - 1];
+		s += '\n';
 
 		const size_t row_count = get_row_count();
 
 		for (size_t i = 0; i < row_count; i++)
 		{
 			for (size_t j = 0; j < (column_headers.size() - 1); j++)
-				oss << data[j][i] << ',';
+			{
+				s += data[j][i];
+				s += ',';
+			}
 
-			oss << data[column_headers.size() - 1][i] << endl;
+			s += data[column_headers.size() - 1][i];
+			s += '\n';
 		}
 
 		cout << "Writing buffer to disk... ";
 
-		// Write string stream contents to file in one shot
+		// Write string contents to file in one shot
 		// This is about as fast as it gets
 		ofstream outfile(filename, ios_base::binary);
-		outfile.write(oss.str().c_str(), oss.str().size());
+		outfile.write(s.c_str(), s.size());
 
 		cout << "Done" << endl << endl;
 	}
