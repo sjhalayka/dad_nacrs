@@ -46,7 +46,6 @@ public:
 		}
 
 		ofstream outfile(filename);
-
 		outfile << oss.str().c_str();
 	}
 
