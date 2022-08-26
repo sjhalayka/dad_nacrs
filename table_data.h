@@ -30,6 +30,8 @@ public:
 		cout << "Building buffer..." << endl;
 
 		// Throw everything into a string
+		// This takes up 2x the RAM, but it's about as fast
+		// as it can get
 		string s;
 
 		for (size_t i = 0; i < (column_headers.size() - 1); i++)
@@ -176,9 +178,7 @@ public:
 				size_t num_to_add = (column_headers.size() - 1) - data_cells.size();
 
 				for (size_t i = 0; i < num_to_add; i++)
-				{
 					data_cells.push_back("");
-				}
 			}
 
 			// Initialize Neutropenia indicator
@@ -198,7 +198,7 @@ public:
 		return true;
 	}
 
-	bool init(const string &filename)
+	bool load_from_CSV(const string &filename)
 	{
 		if (false == get_data(filename))
 			return false;

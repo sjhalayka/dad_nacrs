@@ -7,7 +7,7 @@ int main(void)
 
 	// "Z:/Smartphone_2/Shawn/Neutropenia/dad_08_18_cohorts.csv"
 	// "Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv"
-	if (false == dtd.init("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv"))
+	if (false == dtd.load_from_CSV("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv"))
 		return -1;
 
 	cout << dtd.get_row_count() << " rows" << endl;
@@ -21,7 +21,7 @@ int main(void)
 
 	// "Z:/Smartphone_2/Shawn/Neutropenia/nacrs_cohorts_08_18.csv"
 	// "Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18.csv"
-	if (false == ntd.init("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18.csv"))
+	if (false == ntd.load_from_CSV("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18.csv"))
 		return -1;
 
 	cout << ntd.get_row_count() << " rows" << endl;
