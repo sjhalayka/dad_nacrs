@@ -26,6 +26,31 @@ public:
 	// base class table_data
 	virtual bool get_various_column_indices(size_t& neutropenia_index, vector<size_t>& diag_codes) = 0;
 
+	void print_to_file(const string& filename)
+	{
+		ostringstream oss;
+		//ofstream outfile(filename);
+		
+		for (size_t i = 0; i < (column_headers.size() - 1); i++)
+			oss << column_headers[i] << ',';
+
+		oss << column_headers[column_headers.size() - 1] << endl;
+
+		const size_t row_count = get_row_count();
+
+		for (size_t i = 0; i < row_count; i++)
+		{
+			for (size_t j = 0; j < (column_headers.size() - 1); j++)
+				oss << data[j][i] << ',';
+
+			oss << data[column_headers.size() - 1][i] << endl;
+		}
+
+		ofstream outfile(filename);
+
+		outfile << oss.str().c_str();
+	}
+
 	// Functions that are dataset agnostic
 	size_t get_row_count(void)
 	{
