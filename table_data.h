@@ -48,7 +48,7 @@ public:
 		// Write string stream contents to file in one shot
 		// This is about as fast as it gets
 		ofstream outfile(filename, ios_base::binary);
-		outfile.write(reinterpret_cast<const char*>(oss.str().c_str()), oss.str().size());
+		outfile.write(oss.str().c_str(), oss.str().size());
 	}
 
 	size_t get_row_count(void)
