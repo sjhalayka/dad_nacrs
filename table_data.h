@@ -10,7 +10,7 @@ using namespace std;
 
 class table_data
 {
-private:
+protected:
 	
 	vector<string> column_headers;
 	vector<vector<string>> data;
@@ -22,11 +22,13 @@ public:
 	// This function *must* be implemented by inheriting classes
 	// Making it equal to 0 means that one cannot instantiate the
 	// base class table_data
-	virtual bool get_various_column_indices(size_t& neutropenia_index, vector<size_t>& diag_codes) = 0;
+	virtual bool get_various_column_indices(void /*size_t& neutropenia_index, vector<size_t>& diag_codes*/) = 0;
 
 	// Functions that are dataset agnostic
 	void print_to_file(const string& filename)
 	{
+		cout << "Building buffer..." << endl;
+
 		// Throw everything into a string stream
 		ostringstream oss;
 		
@@ -45,10 +47,14 @@ public:
 			oss << data[column_headers.size() - 1][i] << endl;
 		}
 
+		cout << "Writing buffer to disk... ";
+
 		// Write string stream contents to file in one shot
 		// This is about as fast as it gets
 		ofstream outfile(filename, ios_base::binary);
 		outfile.write(oss.str().c_str(), oss.str().size());
+
+		cout << "Done\n" << endl;
 	}
 
 	size_t get_row_count(void)
@@ -189,7 +195,7 @@ public:
 		if (false == get_data(filename))
 			return false;
 
-		if (false == get_various_column_indices(neutropenia_index, diag_codes))
+		if (false == get_various_column_indices())
 			return false;
 
 		const size_t row_count = get_row_count();
