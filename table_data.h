@@ -25,6 +25,7 @@ public:
 	// base class table_data
 	virtual bool get_various_column_indices(void) = 0;
 
+	// Save to comma separated values file
 	void save_to_CSV(const string& filename)
 	{
 		cout << "Building buffer..." << endl;
@@ -141,7 +142,7 @@ public:
 
 		string line;
 
-		// Get first line (the column titles)
+		// Get first line (the variable names)
 		getline(infile, line);
 
 		line_num++;
@@ -154,7 +155,7 @@ public:
 
 		column_headers = std_strtok(line, "[,]");
 
-		// Add column manually
+		// Add column
 		column_headers.push_back("Neutropenia_Indicator");
 
 		data.resize(column_headers.size());
@@ -169,12 +170,15 @@ public:
 
 			vector<string> data_cells = std_strtok(line, "[,]");
 
+			// Touch up the data in case it's broken
 			if (data_cells.size() > (column_headers.size() - 1))
 			{
+				// Too many data, chop off the end
 				data_cells.resize(column_headers.size() - 1);
 			}
 			else if (data_cells.size() < (column_headers.size() - 1))
 			{
+				// Not enough data, pad with empty strings
 				size_t num_to_add = (column_headers.size() - 1) - data_cells.size();
 
 				for (size_t i = 0; i < num_to_add; i++)
@@ -191,6 +195,7 @@ public:
 		return true;
 	}
 
+	// Load from comma separated values file
 	bool load_from_CSV(const string &filename)
 	{
 		if (false == get_data(filename))
