@@ -184,13 +184,6 @@ public:
 			// Initialize Neutropenia indicator
 			data_cells.push_back("0");
 
-			if (data_cells.size() != column_headers.size())
-			{
-				cout << "Data size mismatch on line " << line_num + 1 << ": " << data_cells.size() << " " << column_headers.size() << endl;
-				cout << line_num + 1 << endl;
-				continue;// return false;
-			}
-
 			for (size_t i = 0; i < column_headers.size(); i++)
 				data[i].push_back(data_cells[i]);
 		}
