@@ -11,6 +11,7 @@
 using namespace std;
 
 
+// Base class
 class table_data
 {
 protected:
