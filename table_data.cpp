@@ -1,7 +1,32 @@
 #include "table_data.h"
 
 
-void table_data::save_to_CSV(const string& filename)
+
+void table_data::save_to_CSV_oss(const string& filename)
+{
+	ostringstream oss;
+
+	for (size_t i = 0; i < (column_headers.size() - 1); i++)
+		oss << column_headers[i] << ',';
+
+	oss << column_headers[column_headers.size() - 1] << endl;
+
+	const size_t row_count = get_row_count();
+
+	for (size_t i = 0; i < row_count; i++)
+	{
+		for (size_t j = 0; j < (column_headers.size() - 1); j++)
+			oss << data[j][i] << ',';
+
+		oss << data[column_headers.size() - 1][i] << endl;
+	}
+
+	ofstream outfile(filename);
+
+	outfile << oss.str().c_str();
+}
+
+void table_data::save_to_CSV_buffer(const string& filename)
 {
 	std::chrono::high_resolution_clock::time_point start_time, end_time;
 	start_time = std::chrono::high_resolution_clock::now();
@@ -316,10 +341,6 @@ bool table_data::get_data_line_by_line(const string& filename)
 
 	return true;
 }
-
-
-
-
 
 // Load from comma separated values file
 bool table_data::load_from_CSV(const string& filename)
