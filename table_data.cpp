@@ -136,8 +136,8 @@ bool table_data::get_data_buffer(const string& filename)
 {
 	//cout << "Getting file size" << endl;
 
-	std::chrono::high_resolution_clock::time_point start_time, end_time;
-	start_time = std::chrono::high_resolution_clock::now();
+	//std::chrono::high_resolution_clock::time_point start_time, end_time;
+	//start_time = std::chrono::high_resolution_clock::now();
 
 	column_headers.clear();
 	data.clear();
@@ -153,6 +153,9 @@ bool table_data::get_data_buffer(const string& filename)
 	size_t file_size = infile.tellg();
 
 	infile.close();
+
+	if (file_size == 0)
+		return false;
 
 	//cout << "Reopening file" << endl;
 
@@ -239,9 +242,9 @@ bool table_data::get_data_buffer(const string& filename)
 		}
 	}
 	 
-	end_time = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
-	cout << elapsed.count() / 1000.0f << endl;
+	//end_time = std::chrono::high_resolution_clock::now();
+	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
+	//cout << elapsed.count() / 1000.0f << endl;
 
 	return true;
 }
@@ -321,10 +324,6 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 {
 	if (false == get_data_buffer(filename))
 		return false;
-
-	cout << get_row_count() << endl;
-
-	exit(0);
 
 	if (false == get_various_column_indices())
 		return false;
