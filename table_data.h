@@ -38,11 +38,12 @@ protected:
 public:
 
 	// These are accessible from outside the class
-	void save_to_CSV_oss(const string& filename);
+	void save_to_CSV_line_by_line(const string& filename);
 	void save_to_CSV_buffer(const string& filename);
 	size_t get_row_count(void);
 	size_t get_D700_count(void);
-	bool load_from_CSV(const string& filename);
+	bool load_from_CSV_buffer(const string& filename);
+	bool load_from_CSV_line_by_line(const string& filename);
 };
 
 
