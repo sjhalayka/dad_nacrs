@@ -66,24 +66,6 @@ size_t table_data::get_D700_count(void)
 	return D700_count;
 }
 
-vector<string> table_data::std_strtok(const string& s, const string& regex_s)
-{
-	vector<string> tokens;
-
-	regex r(regex_s);
-
-	sregex_token_iterator iter(s.begin(), s.end(), r, -1);
-	sregex_token_iterator end;
-
-	while (iter != end)
-	{
-		tokens.push_back(*iter);
-		iter++;
-	}
-
-	return tokens;
-}
-
 size_t table_data::get_index(const string& column_name)
 {
 	size_t index = 0;
@@ -102,10 +84,15 @@ size_t table_data::get_index(const string& column_name)
 
 bool table_data::get_data(const string& filename)
 {
+	//cout << "Getting file size" << endl;
+
+	//std::chrono::high_resolution_clock::time_point start_time, end_time;
+	//start_time = std::chrono::high_resolution_clock::now();
+
 	column_headers.clear();
 	data.clear();
 
-	ifstream infile(filename);
+	ifstream infile(filename, ifstream::ate | ifstream::binary);
 
 	if (infile.fail())
 	{
@@ -113,59 +100,92 @@ bool table_data::get_data(const string& filename)
 		return false;
 	}
 
-	size_t line_num = 0;
+	size_t file_size = infile.tellg();
 
-	string line;
+	infile.close();
 
-	// Get first line (the variable names)
-	getline(infile, line);
+	//cout << "Reopening file" << endl;
 
-	line_num++;
+	infile.open(filename, ifstream::binary);
 
-	if (line == "")
+	if (infile.fail())
 	{
-		cout << "First line is blank!" << endl;
+		cout << "Could not re-open file" << endl;
 		return false;
 	}
 
-	column_headers = std_strtok(line, "[,]");
+	//cout << "Allocating memory" << endl;
+	string s(file_size, ' ');
 
-	// Add column
-	column_headers.push_back("Neutropenia_Indicator");
+	//cout << "Reading file" << endl;
+	infile.read(&s[0], file_size);
+	infile.close();
 
-	data.resize(column_headers.size());
+	vector<string> tokens;
+	string temp_token;
 
-	// Get subsequent lines (the data)
-	while (getline(infile, line))
+	size_t line_num = 0;
+
+	for (size_t i = 0; i < file_size; i++)
 	{
-		line_num++;
-
-		if (line == "")
-			continue;
-
-		vector<string> data_cells = std_strtok(line, "[,]");
-
-		// Touch up the data in case it's broken
-		if (data_cells.size() > (column_headers.size() - 1))
+		if (s[i] == ',')
 		{
-			// Too many data, chop off the end
-			data_cells.resize(column_headers.size() - 1);
+			tokens.push_back(temp_token);
+			temp_token = "";
 		}
-		else if (data_cells.size() < (column_headers.size() - 1))
+		else if (s[i] == '\n')
 		{
-			// Not enough data, pad with empty strings
-			size_t num_to_add = (column_headers.size() - 1) - data_cells.size();
+			tokens.push_back(temp_token);
+			temp_token = "";
 
-			for (size_t i = 0; i < num_to_add; i++)
-				data_cells.push_back("");
+			// Process line here
+			if (line_num == 0)
+			{
+				column_headers = tokens;
+
+				// Add column
+				column_headers.push_back("Neutropenia_Indicator");
+
+				data.resize(column_headers.size());
+			}
+			else
+			{
+				vector<string> data_cells = tokens;
+
+				// Touch up the data in case it's broken
+				if (data_cells.size() > (column_headers.size() - 1))
+				{
+					// Too many data, chop off the end
+					data_cells.resize(column_headers.size() - 1);
+				}
+				else if (data_cells.size() < (column_headers.size() - 1))
+				{
+					// Not enough data, pad with empty strings
+					size_t num_to_add = (column_headers.size() - 1) - data_cells.size();
+
+					for (size_t i = 0; i < num_to_add; i++)
+						data_cells.push_back("");
+				}
+
+				// Initialize Neutropenia indicator
+				data_cells.push_back("0");
+
+				for (size_t i = 0; i < column_headers.size(); i++)
+					data[i].push_back(data_cells[i]);
+			}
+
+			tokens.clear();
+			line_num++;
 		}
-
-		// Initialize Neutropenia indicator
-		data_cells.push_back("0");
-
-		for (size_t i = 0; i < column_headers.size(); i++)
-			data[i].push_back(data_cells[i]);
+		else
+		{
+			temp_token += s[i];
+		}
 	}
+
+	//end_time = std::chrono::high_resolution_clock::now();
+	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
+	//cout << elapsed.count() / 1000.0f << endl;
 
 	return true;
 }

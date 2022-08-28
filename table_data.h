@@ -29,7 +29,6 @@ protected:
 
 	// These are helper functions that are inaccessible
 	// from outside of the class
-	vector<string> std_strtok(const string& s, const string& regex_s);
 	size_t get_index(const string& column_name);
 	bool get_data(const string& filename);
 
