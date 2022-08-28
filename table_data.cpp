@@ -3,6 +3,9 @@
 // Save to comma separated values file
 void table_data::save_to_CSV(const string& filename)
 {
+	std::chrono::high_resolution_clock::time_point start_time, end_time;
+	start_time = std::chrono::high_resolution_clock::now();
+
 	cout << "Building buffer..." << endl;
 
 	// Throw everything into a string
@@ -41,6 +44,10 @@ void table_data::save_to_CSV(const string& filename)
 	outfile.write(s.c_str(), s.size());
 
 	cout << "Done" << endl << endl;
+
+	end_time = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
+	cout << elapsed.count() / 1000.0f << endl;
 }
 
 size_t table_data::get_row_count(void)
@@ -82,12 +89,16 @@ size_t table_data::get_index(const string& column_name)
 	return -1;
 }
 
+
+
+
+
 bool table_data::get_data(const string& filename)
 {
 	//cout << "Getting file size" << endl;
 
-	//std::chrono::high_resolution_clock::time_point start_time, end_time;
-	//start_time = std::chrono::high_resolution_clock::now();
+	std::chrono::high_resolution_clock::time_point start_time, end_time;
+	start_time = std::chrono::high_resolution_clock::now();
 
 	column_headers.clear();
 	data.clear();
@@ -183,9 +194,41 @@ bool table_data::get_data(const string& filename)
 		}
 	}
 
-	//end_time = std::chrono::high_resolution_clock::now();
-	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
-	//cout << elapsed.count() / 1000.0f << endl;
+	// Finish off last line, if necessary
+	if (temp_token != "" || tokens.size() > 0)
+	{
+		tokens.push_back(temp_token);
+		temp_token = "";
+
+		vector<string> data_cells = tokens;
+
+		// Touch up the data in case it's broken
+		if (data_cells.size() > (column_headers.size() - 1))
+		{
+			// Too many data, chop off the end
+			data_cells.resize(column_headers.size() - 1);
+		}
+		else if (data_cells.size() < (column_headers.size() - 1))
+		{
+			// Not enough data, pad with empty strings
+			size_t num_to_add = (column_headers.size() - 1) - data_cells.size();
+
+			for (size_t i = 0; i < num_to_add; i++)
+				data_cells.push_back("");
+		}
+
+		// Initialize Neutropenia indicator
+		data_cells.push_back("0");
+
+		for (size_t i = 0; i < column_headers.size(); i++)
+			data[i].push_back(data_cells[i]);
+
+		tokens.clear();
+	}
+
+	end_time = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
+	cout << elapsed.count() / 1000.0f << endl;
 
 	return true;
 }

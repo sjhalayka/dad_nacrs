@@ -32,6 +32,8 @@ protected:
 	size_t get_index(const string& column_name);
 	bool get_data(const string& filename);
 
+	void convert_tokens_to_data(const vector<string>& tokens);
+
 public:
 
 	// These are accessible from outside the class
