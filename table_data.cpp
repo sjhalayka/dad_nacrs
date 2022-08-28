@@ -2,7 +2,7 @@
 
 
 
-void table_data::save_to_CSV_line_by_line(const string& filename)
+bool table_data::save_to_CSV_line_by_line(const string& filename)
 {
 	ostringstream oss;
 
@@ -24,14 +24,16 @@ void table_data::save_to_CSV_line_by_line(const string& filename)
 	ofstream outfile(filename);
 
 	outfile << oss.str().c_str();
+
+	return true;
 }
 
-void table_data::save_to_CSV_buffer(const string& filename)
+bool table_data::save_to_CSV_buffer(const string& filename)
 {
 	std::chrono::high_resolution_clock::time_point start_time, end_time;
 	start_time = std::chrono::high_resolution_clock::now();
 
-	cout << "Building buffer..." << endl;
+	//cout << "Building buffer..." << endl;
 
 	// Throw everything into a string
 	// This takes up 2x the RAM, but it's about as fast
@@ -61,18 +63,20 @@ void table_data::save_to_CSV_buffer(const string& filename)
 		s += '\n';
 	}
 
-	cout << "Writing buffer to disk... ";
+	//cout << "Writing buffer to disk... ";
 
 	// Write string contents to file in one shot
 	// This is about as fast as it gets
 	ofstream outfile(filename, ios_base::binary);
 	outfile.write(s.c_str(), s.size());
 
-	end_time = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
-	cout << elapsed.count() / 1000.0f << endl;
+	//end_time = std::chrono::high_resolution_clock::now();
+	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
+	//cout << elapsed.count() / 1000.0f << endl;
 
-	cout << "Done" << endl << endl;
+	//cout << "Done" << endl << endl;
+
+	return true;
 }
 
 size_t table_data::get_row_count(void)

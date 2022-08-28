@@ -7,22 +7,29 @@ int main(void)
 	std::chrono::high_resolution_clock::time_point start_time, end_time;
 	start_time = std::chrono::high_resolution_clock::now();
 
+	const bool use_buffers = true;
+
 	dad_table_data dtd;
 
 	// "Z:/Smartphone_2/Shawn/Neutropenia/dad_08_18_cohorts.csv"
 	// "Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv"
-	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv"))
-//	if (false == dtd.load_from_CSV_line_by_line("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv"))
+	if (false == dtd.load_from_CSV("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv", use_buffers))
 		return -1;
 
-	cout << dtd.get_row_count() << " rows" << endl;
-	cout << dtd.get_D700_count() << " neutropenia count" << endl;
-	cout << endl;
-
-	//dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18_with_neutropenia_indicator.csv");
+	//cout << dtd.get_row_count() << " rows" << endl;
+	//cout << dtd.get_D700_count() << " neutropenia count" << endl;
+	//cout << endl;
 
 	end_time = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
+	cout << elapsed.count() / 1000.0f << endl;
+
+	start_time = std::chrono::high_resolution_clock::now();
+
+	dtd.save_to_CSV("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18_with_neutropenia_indicator.csv", use_buffers);
+
+	end_time = std::chrono::high_resolution_clock::now();
+	elapsed = end_time - start_time;
 	cout << elapsed.count() / 1000.0f << endl;
 
 
