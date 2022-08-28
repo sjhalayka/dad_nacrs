@@ -1,107 +1,5 @@
 #include "table_data.h"
 
-
-
-bool table_data::save_to_CSV_line_by_line(const string& filename)
-{
-	ostringstream oss;
-
-	for (size_t i = 0; i < (column_headers.size() - 1); i++)
-		oss << column_headers[i] << ',';
-
-	oss << column_headers[column_headers.size() - 1] << endl;
-
-	const size_t row_count = get_row_count();
-
-	for (size_t i = 0; i < row_count; i++)
-	{
-		for (size_t j = 0; j < (column_headers.size() - 1); j++)
-			oss << data[j][i] << ',';
-
-		oss << data[column_headers.size() - 1][i] << endl;
-	}
-
-	ofstream outfile(filename);
-
-	outfile << oss.str().c_str();
-
-	return true;
-}
-
-bool table_data::save_to_CSV_buffer(const string& filename)
-{
-	std::chrono::high_resolution_clock::time_point start_time, end_time;
-	start_time = std::chrono::high_resolution_clock::now();
-
-	//cout << "Building buffer..." << endl;
-
-	// Throw everything into a string
-	// This takes up 2x the RAM, but it's about as fast
-	// as it can get
-	string s;
-
-	for (size_t i = 0; i < (column_headers.size() - 1); i++)
-	{
-		s += column_headers[i];
-		s += ',';
-	}
-
-	s += column_headers[column_headers.size() - 1];
-	s += '\n';
-
-	const size_t row_count = get_row_count();
-
-	for (size_t i = 0; i < row_count; i++)
-	{
-		for (size_t j = 0; j < (column_headers.size() - 1); j++)
-		{
-			s += data[j][i];
-			s += ',';
-		}
-
-		s += data[column_headers.size() - 1][i];
-		s += '\n';
-	}
-
-	//cout << "Writing buffer to disk... ";
-
-	// Write string contents to file in one shot
-	// This is about as fast as it gets
-	ofstream outfile(filename, ios_base::binary);
-	outfile.write(s.c_str(), s.size());
-
-	//end_time = std::chrono::high_resolution_clock::now();
-	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
-	//cout << elapsed.count() / 1000.0f << endl;
-
-	//cout << "Done" << endl << endl;
-
-	return true;
-}
-
-size_t table_data::get_row_count(void)
-{
-	if (data.size() == 0)
-		return 0;
-
-	return data[0].size();
-}
-
-size_t table_data::get_D700_count(void)
-{
-	const size_t row_count = get_row_count();
-
-	size_t D700_count = 0;
-
-	for (size_t i = 0; i < row_count; i++)
-	{
-		if (data[neutropenia_index][i] == "1")
-			D700_count++;
-	}
-
-	return D700_count;
-}
-
 size_t table_data::get_index(const string& column_name)
 {
 	size_t index = 0;
@@ -116,24 +14,6 @@ size_t table_data::get_index(const string& column_name)
 
 	// If we made it this far, there was no match at all
 	return -1;
-}
-
-vector<string> table_data::std_strtok(const string& s, const string& regex_s)
-{
-	vector<string> tokens;
-
-	regex r(regex_s);
-
-	sregex_token_iterator iter(s.begin(), s.end(), r, -1);
-	sregex_token_iterator end;
-
-	while (iter != end)
-	{
-		tokens.push_back(*iter);
-		iter++;
-	}
-
-	return tokens;
 }
 
 bool table_data::get_data_buffer(const string& filename)
@@ -245,7 +125,7 @@ bool table_data::get_data_buffer(const string& filename)
 			temp_token += s[i];
 		}
 	}
-	 
+
 	//end_time = std::chrono::high_resolution_clock::now();
 	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
 	//cout << elapsed.count() / 1000.0f << endl;
@@ -323,6 +203,102 @@ bool table_data::get_data_line_by_line(const string& filename)
 	return true;
 }
 
+vector<string> table_data::std_strtok(const string& s, const string& regex_s)
+{
+	vector<string> tokens;
+
+	regex r(regex_s);
+
+	sregex_token_iterator iter(s.begin(), s.end(), r, -1);
+	sregex_token_iterator end;
+
+	while (iter != end)
+	{
+		tokens.push_back(*iter);
+		iter++;
+	}
+
+	return tokens;
+}
+
+bool table_data::save_to_CSV_line_by_line(const string& filename)
+{
+	ostringstream oss;
+
+	for (size_t i = 0; i < (column_headers.size() - 1); i++)
+		oss << column_headers[i] << ',';
+
+	oss << column_headers[column_headers.size() - 1] << endl;
+
+	const size_t row_count = get_row_count();
+
+	for (size_t i = 0; i < row_count; i++)
+	{
+		for (size_t j = 0; j < (column_headers.size() - 1); j++)
+			oss << data[j][i] << ',';
+
+		oss << data[column_headers.size() - 1][i] << endl;
+	}
+
+	ofstream outfile(filename);
+
+	outfile << oss.str().c_str();
+
+	return true;
+}
+
+bool table_data::save_to_CSV_buffer(const string& filename)
+{
+	std::chrono::high_resolution_clock::time_point start_time, end_time;
+	start_time = std::chrono::high_resolution_clock::now();
+
+	//cout << "Building buffer..." << endl;
+
+	// Throw everything into a string
+	// This takes up 2x the RAM, but it's about as fast
+	// as it can get
+	string s;
+
+	for (size_t i = 0; i < (column_headers.size() - 1); i++)
+	{
+		s += column_headers[i];
+		s += ',';
+	}
+
+	s += column_headers[column_headers.size() - 1];
+	s += '\n';
+
+	const size_t row_count = get_row_count();
+
+	for (size_t i = 0; i < row_count; i++)
+	{
+		for (size_t j = 0; j < (column_headers.size() - 1); j++)
+		{
+			s += data[j][i];
+			s += ',';
+		}
+
+		s += data[column_headers.size() - 1][i];
+		s += '\n';
+	}
+
+	//cout << "Writing buffer to disk... ";
+
+	// Write string contents to file in one shot
+	// This is about as fast as it gets
+	ofstream outfile(filename, ios_base::binary);
+	outfile.write(s.c_str(), s.size());
+
+	//end_time = std::chrono::high_resolution_clock::now();
+	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
+	//cout << elapsed.count() / 1000.0f << endl;
+
+	//cout << "Done" << endl << endl;
+
+	return true;
+}
+
+
 // Load from comma separated values file
 bool table_data::load_from_CSV_buffer(const string& filename)
 {
@@ -355,7 +331,6 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 	return true;
 }
 
-
 bool table_data::load_from_CSV_line_by_line(const string& filename)
 {
 	if (false == get_data_line_by_line(filename))
@@ -387,3 +362,41 @@ bool table_data::load_from_CSV_line_by_line(const string& filename)
 	return true;
 }
 
+bool table_data::save_to_CSV(const string& filename, bool use_buffer)
+{
+	if (use_buffer)
+		return save_to_CSV_buffer(filename);
+	else
+		return save_to_CSV_line_by_line(filename);
+}
+
+bool table_data::load_from_CSV(const string& filename, bool use_buffer)
+{
+	if (use_buffer)
+		return load_from_CSV_buffer(filename);
+	else
+		return load_from_CSV_line_by_line(filename);
+}
+
+size_t table_data::get_row_count(void)
+{
+	if (data.size() == 0)
+		return 0;
+
+	return data[0].size();
+}
+
+size_t table_data::get_D700_count(void)
+{
+	const size_t row_count = get_row_count();
+
+	size_t D700_count = 0;
+
+	for (size_t i = 0; i < row_count; i++)
+	{
+		if (data[neutropenia_index][i] == "1")
+			D700_count++;
+	}
+
+	return D700_count;
+}

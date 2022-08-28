@@ -32,34 +32,17 @@ protected:
 	size_t get_index(const string& column_name);
 	bool get_data_buffer(const string& filename);
 	bool get_data_line_by_line(const string& filename);
-
 	vector<string> std_strtok(const string& s, const string& regex_s);
-
 	bool save_to_CSV_line_by_line(const string& filename);
 	bool save_to_CSV_buffer(const string& filename);
-
 	bool load_from_CSV_buffer(const string& filename);
 	bool load_from_CSV_line_by_line(const string& filename);
 
 public:
 
-	bool save_to_CSV(const string& filename, bool use_buffer = true)
-	{
-		if (use_buffer)
-			return save_to_CSV_buffer(filename);
-		else
-			return save_to_CSV_line_by_line(filename);
-	}
-
-	bool load_from_CSV(const string& filename, bool use_buffer = true)
-	{
-		if (use_buffer)
-			return load_from_CSV_buffer(filename);
-		else
-			return load_from_CSV_line_by_line(filename);
-	}
-
 	// These are accessible from outside the class
+	bool save_to_CSV(const string& filename, bool use_buffer = true);
+	bool load_from_CSV(const string& filename, bool use_buffer = true);
 	size_t get_row_count(void);
 	size_t get_D700_count(void);
 };
