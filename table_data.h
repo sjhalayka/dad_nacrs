@@ -30,9 +30,10 @@ protected:
 	// These are helper functions that are inaccessible
 	// from outside of the class
 	size_t get_index(const string& column_name);
-	bool get_data(const string& filename);
+	bool get_data_buffer(const string& filename);
+	bool get_data_line_by_line(const string& filename);
 
-	void convert_tokens_to_data(const vector<string>& tokens);
+	vector<string> std_strtok(const string& s, const string& regex_s);
 
 public:
 

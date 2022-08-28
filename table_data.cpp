@@ -1,6 +1,6 @@
 #include "table_data.h"
 
-// Save to comma separated values file
+
 void table_data::save_to_CSV(const string& filename)
 {
 	std::chrono::high_resolution_clock::time_point start_time, end_time;
@@ -43,11 +43,11 @@ void table_data::save_to_CSV(const string& filename)
 	ofstream outfile(filename, ios_base::binary);
 	outfile.write(s.c_str(), s.size());
 
-	cout << "Done" << endl << endl;
-
 	end_time = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
 	cout << elapsed.count() / 1000.0f << endl;
+
+	cout << "Done" << endl << endl;
 }
 
 size_t table_data::get_row_count(void)
@@ -89,11 +89,25 @@ size_t table_data::get_index(const string& column_name)
 	return -1;
 }
 
+vector<string> table_data::std_strtok(const string& s, const string& regex_s)
+{
+	vector<string> tokens;
 
+	regex r(regex_s);
 
+	sregex_token_iterator iter(s.begin(), s.end(), r, -1);
+	sregex_token_iterator end;
 
+	while (iter != end)
+	{
+		tokens.push_back(*iter);
+		iter++;
+	}
 
-bool table_data::get_data(const string& filename)
+	return tokens;
+}
+
+bool table_data::get_data_buffer(const string& filename)
 {
 	//cout << "Getting file size" << endl;
 
@@ -233,10 +247,84 @@ bool table_data::get_data(const string& filename)
 	return true;
 }
 
+bool table_data::get_data_line_by_line(const string& filename)
+{
+	column_headers.clear();
+	data.clear();
+
+	ifstream infile(filename);
+
+	if (infile.fail())
+	{
+		cout << "Could not open file" << endl;
+		return false;
+	}
+
+	size_t line_num = 0;
+
+	string line;
+
+	// Get first line (the variable names)
+	getline(infile, line);
+
+	line_num++;
+
+	if (line == "")
+	{
+		cout << "First line is blank!" << endl;
+		return false;
+	}
+
+	column_headers = std_strtok(line, "[,]");
+
+	// Add column
+	column_headers.push_back("Neutropenia_Indicator");
+
+	data.resize(column_headers.size());
+
+	// Get subsequent lines (the data)
+	while (getline(infile, line))
+	{
+		line_num++;
+
+		if (line == "")
+			continue;
+
+		vector<string> data_cells = std_strtok(line, "[,]");
+
+		// Touch up the data in case it's broken
+		if (data_cells.size() > (column_headers.size() - 1))
+		{
+			// Too many data, chop off the end
+			data_cells.resize(column_headers.size() - 1);
+		}
+		else if (data_cells.size() < (column_headers.size() - 1))
+		{
+			// Not enough data, pad with empty strings
+			size_t num_to_add = (column_headers.size() - 1) - data_cells.size();
+
+			for (size_t i = 0; i < num_to_add; i++)
+				data_cells.push_back("");
+		}
+
+		// Initialize Neutropenia indicator
+		data_cells.push_back("0");
+
+		for (size_t i = 0; i < column_headers.size(); i++)
+			data[i].push_back(data_cells[i]);
+	}
+
+	return true;
+}
+
+
+
+
+
 // Load from comma separated values file
 bool table_data::load_from_CSV(const string& filename)
 {
-	if (false == get_data(filename))
+	if (false == get_data_line_by_line(filename))
 		return false;
 
 	if (false == get_various_column_indices())
