@@ -161,7 +161,7 @@ bool table_data::get_data_line_by_line(const string& filename)
 		return false;
 	}
 
-	column_headers = std_strtok(line, "[,]");
+	std_strtok(line, "[,]", column_headers);
 
 	// Add column
 	column_headers.push_back("Neutropenia_Indicator");
@@ -176,7 +176,8 @@ bool table_data::get_data_line_by_line(const string& filename)
 		if (line == "")
 			continue;
 
-		vector<string> data_cells = std_strtok(line, "[,]");
+		vector<string> data_cells;
+		std_strtok(line, "[,]", data_cells);
 
 		// Touch up the data in case it's broken
 		if (data_cells.size() > (column_headers.size() - 1))
@@ -203,9 +204,9 @@ bool table_data::get_data_line_by_line(const string& filename)
 	return true;
 }
 
-vector<string> table_data::std_strtok(const string& s, const string& regex_s)
+void table_data::std_strtok(const string& s, const string& regex_s, vector<string> &tokens)
 {
-	vector<string> tokens;
+	tokens.clear();
 
 	regex r(regex_s);
 
@@ -217,8 +218,6 @@ vector<string> table_data::std_strtok(const string& s, const string& regex_s)
 		tokens.push_back(*iter);
 		iter++;
 	}
-
-	return tokens;
 }
 
 bool table_data::save_to_CSV_line_by_line(const string& filename)
