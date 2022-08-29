@@ -79,7 +79,7 @@ bool table_data::get_data_buffer(const string& filename)
 		}
 		else if (s[i] == '\n')
 		{
-			if (s[i - 1] == '\r')
+			if (i != 0 && s[i - 1] == '\r')
 				temp_token.resize(temp_token.size() - 1);
 
 			tokens.push_back(temp_token);
