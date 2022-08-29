@@ -249,8 +249,8 @@ bool table_data::save_to_CSV_line_by_line(const string& filename)
 
 bool table_data::save_to_CSV_buffer(const string& filename)
 {
-	std::chrono::high_resolution_clock::time_point start_time, end_time;
-	start_time = std::chrono::high_resolution_clock::now();
+	//std::chrono::high_resolution_clock::time_point start_time, end_time;
+	//start_time = std::chrono::high_resolution_clock::now();
 
 	//cout << "Building buffer..." << endl;
 
