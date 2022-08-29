@@ -1,5 +1,6 @@
 #include "table_data.h"
 
+
 size_t table_data::get_index(const string& column_name)
 {
 	size_t index = 0;
