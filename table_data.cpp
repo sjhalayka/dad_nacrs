@@ -59,7 +59,7 @@ bool table_data::get_data_buffer(const string& filename)
 	infile.read(&s[0], file_size);
 	infile.close();
 
-	if (s[s.size() - 1] != '\n')
+	if (s[file_size - 1] != '\n')
 	{
 		s += '\n';
 		file_size += 1;
@@ -68,9 +68,9 @@ bool table_data::get_data_buffer(const string& filename)
 	vector<string> tokens;
 	string temp_token;
 
-	size_t line_num = 0;
+	bool first_line = true;
 
-	for (size_t i = 0; i < file_size; i++)
+	for (size_t i = 0; i < s.length(); i++)
 	{
 		if (s[i] == ',')
 		{
@@ -79,11 +79,14 @@ bool table_data::get_data_buffer(const string& filename)
 		}
 		else if (s[i] == '\n')
 		{
+			if (s[i - 1] == '\r')
+				temp_token.resize(temp_token.size() - 1);
+
 			tokens.push_back(temp_token);
 			temp_token = "";
 
 			// Process line here
-			if (line_num == 0)
+			if (first_line == true)
 			{
 				column_headers = tokens;
 
@@ -91,35 +94,35 @@ bool table_data::get_data_buffer(const string& filename)
 				column_headers.push_back("Neutropenia_Indicator");
 
 				data.resize(column_headers.size());
+
+				tokens.clear();
+				first_line = false;
 			}
 			else
 			{
-				vector<string> data_cells = tokens;
-
 				// Touch up the data in case it's broken
-				if (data_cells.size() > (column_headers.size() - 1))
+				if (tokens.size() > (column_headers.size() - 1))
 				{
 					// Too many data, chop off the end
-					data_cells.resize(column_headers.size() - 1);
+					tokens.resize(column_headers.size() - 1);
 				}
-				else if (data_cells.size() < (column_headers.size() - 1))
+				else if (tokens.size() < (column_headers.size() - 1))
 				{
 					// Not enough data, pad with empty strings
-					size_t num_to_add = (column_headers.size() - 1) - data_cells.size();
+					size_t num_to_add = (column_headers.size() - 1) - tokens.size();
 
-					for (size_t i = 0; i < num_to_add; i++)
-						data_cells.push_back("");
+					for (size_t j = 0; j < num_to_add; j++)
+						tokens.push_back("");
 				}
 
 				// Initialize Neutropenia indicator
-				data_cells.push_back("0");
+				tokens.push_back("0");
 
-				for (size_t i = 0; i < column_headers.size(); i++)
-					data[i].push_back(data_cells[i]);
+				for (size_t j = 0; j < column_headers.size(); j++)
+					data[j].push_back(tokens[j]);
+
+				tokens.clear();
 			}
-
-			tokens.clear();
-			line_num++;
 		}
 		else
 		{
@@ -205,7 +208,7 @@ bool table_data::get_data_line_by_line(const string& filename)
 	return true;
 }
 
-void table_data::std_strtok(const string& s, const string& regex_s, vector<string> &tokens)
+void table_data::std_strtok(const string& s, const string& regex_s, vector<string>& tokens)
 {
 	tokens.clear();
 
@@ -228,7 +231,7 @@ bool table_data::save_to_CSV_line_by_line(const string& filename)
 	for (size_t i = 0; i < (column_headers.size() - 1); i++)
 		oss << column_headers[i] << ',';
 
-	oss << column_headers[column_headers.size() - 1] << endl;
+	oss << column_headers[column_headers.size() - 1] << '\n';
 
 	const size_t row_count = get_row_count();
 
@@ -237,7 +240,7 @@ bool table_data::save_to_CSV_line_by_line(const string& filename)
 		for (size_t j = 0; j < (column_headers.size() - 1); j++)
 			oss << data[j][i] << ',';
 
-		oss << data[column_headers.size() - 1][i] << endl;
+		oss << data[column_headers.size() - 1][i] << '\n';
 	}
 
 	ofstream outfile(filename);
@@ -287,7 +290,7 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 	// Write string contents to file in one shot
 	// This is about as fast as it gets
 	ofstream outfile(filename, ios_base::binary);
-	outfile.write(s.c_str(), s.size());
+	outfile.write(s.c_str(), s.length());
 
 	//end_time = std::chrono::high_resolution_clock::now();
 	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
