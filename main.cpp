@@ -25,10 +25,10 @@ int main(void)
 
 	// "Z:/Smartphone_2/Shawn/Neutropenia/nacrs_cohorts_08_18.csv"
 	// "Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18.csv"
-	if (false == ntd.load_from_CSV("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_cohorts_08_18.csv"))
+	if (false == ntd.load_from_CSV("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18.csv"))
 		return -1;
 
-	if(false == ntd.save_to_CSV("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_cohorts_08_18_with_neutropenia_indicator.csv"))
+	if(false == ntd.save_to_CSV("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18_with_neutropenia_indicator.csv"))
 		return -1;
 
 	cout << ntd.get_row_count() << " rows" << endl;

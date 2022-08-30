@@ -30,14 +30,10 @@ bool table_data::get_data_line_by_line(const string& filename)
 		return false;
 	}
 
-	size_t line_num = 0;
-
 	string line;
 
 	// Get first line (the variable names)
 	getline(infile, line);
-
-	line_num++;
 
 	if (line == "")
 	{
@@ -55,8 +51,6 @@ bool table_data::get_data_line_by_line(const string& filename)
 	// Get subsequent lines (the data)
 	while (getline(infile, line))
 	{
-		line_num++;
-
 		if (line == "")
 			continue;
 
@@ -104,13 +98,8 @@ void table_data::std_strtok(const string& s, const string& regex_s, vector<strin
 	}
 }
 
-bool table_data::save_to_CSV_buffer(const string& filename)
+bool table_data::save_to_CSV(const string& filename)
 {
-	//std::chrono::high_resolution_clock::time_point start_time, end_time;
-	//start_time = std::chrono::high_resolution_clock::now();
-
-	//cout << "Building buffer..." << endl;
-
 	// Throw everything into a string
 	// This takes up 2x the RAM, but it's about as fast
 	// as it can get
@@ -139,23 +128,15 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 		s += '\n';
 	}
 
-	//cout << "Writing buffer to disk... ";
-
 	// Write string contents to file in one shot
 	// This is about as fast as it gets
 	ofstream outfile(filename, ios_base::binary);
 	outfile.write(s.c_str(), s.length());
 
-	//end_time = std::chrono::high_resolution_clock::now();
-	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
-	//cout << elapsed.count() / 1000.0f << endl;
-
-	//cout << "Done" << endl << endl;
-
 	return true;
 }
 
-bool table_data::load_from_CSV_line_by_line(const string& filename)
+bool table_data::load_from_CSV(const string& filename)
 {
 	if (false == get_data_line_by_line(filename))
 		return false;
@@ -184,16 +165,6 @@ bool table_data::load_from_CSV_line_by_line(const string& filename)
 	}
 
 	return true;
-}
-
-bool table_data::save_to_CSV(const string& filename, bool use_buffer)
-{
-	return save_to_CSV_buffer(filename);
-}
-
-bool table_data::load_from_CSV(const string& filename, bool use_buffer)
-{
-	return load_from_CSV_line_by_line(filename);
 }
 
 size_t table_data::get_row_count(void)
