@@ -100,7 +100,7 @@ void table_data::std_strtok(const string& s, const string& regex_s, vector<strin
 
 bool table_data::save_to_CSV(const string& filename)
 {
-	// Throw everything into a string
+	// Throw everything into a single string
 	// This takes up 2x the RAM, but it's about as fast
 	// as it can get
 	string s;
@@ -129,7 +129,6 @@ bool table_data::save_to_CSV(const string& filename)
 	}
 
 	// Write string contents to file in one shot
-	// This is about as fast as it gets
 	ofstream outfile(filename, ios_base::binary);
 	outfile.write(s.c_str(), s.length());
 
