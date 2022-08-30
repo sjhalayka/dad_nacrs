@@ -17,126 +17,6 @@ size_t table_data::get_index(const string& column_name)
 	return -1;
 }
 
-bool table_data::get_data_buffer(const string& filename)
-{
-	//cout << "Getting file size" << endl;
-
-	//std::chrono::high_resolution_clock::time_point start_time, end_time;
-	//start_time = std::chrono::high_resolution_clock::now();
-
-	column_headers.clear();
-	data.clear();
-
-	ifstream infile(filename, ifstream::ate | ifstream::binary);
-
-	if (infile.fail())
-	{
-		cout << "Could not open file" << endl;
-		return false;
-	}
-
-	size_t file_size = infile.tellg();
-
-	infile.close();
-
-	if (file_size == 0)
-		return false;
-
-	//cout << "Reopening file" << endl;
-
-	infile.open(filename, ifstream::binary);
-
-	if (infile.fail())
-	{
-		cout << "Could not re-open file" << endl;
-		return false;
-	}
-
-	//cout << "Allocating memory" << endl;
-	string s(file_size, ' ');
-
-	//cout << "Reading file" << endl;
-	infile.read(&s[0], file_size);
-	infile.close();
-
-	if (s[file_size - 1] != '\n')
-	{
-		s += '\n';
-		file_size += 1;
-	}
-
-	vector<string> tokens;
-	string temp_token;
-
-	bool first_line = true;
-
-	for (size_t i = 0; i < s.length(); i++)
-	{
-		if (s[i] == ',')
-		{
-			tokens.push_back(temp_token);
-			temp_token = "";
-		}
-		else if (s[i] == '\n')
-		{
-			if (i != 0 && s[i - 1] == '\r')
-				temp_token.resize(temp_token.size() - 1);
-
-			tokens.push_back(temp_token);
-			temp_token = "";
-
-			// Process line here
-			if (first_line == true)
-			{
-				column_headers = tokens;
-
-				// Add column
-				column_headers.push_back("Neutropenia_Indicator");
-
-				data.resize(column_headers.size());
-
-				tokens.clear();
-				first_line = false;
-			}
-			else
-			{
-				// Touch up the data in case it's broken
-				if (tokens.size() > (column_headers.size() - 1))
-				{
-					// Too many data, chop off the end
-					tokens.resize(column_headers.size() - 1);
-				}
-				else if (tokens.size() < (column_headers.size() - 1))
-				{
-					// Not enough data, pad with empty strings
-					size_t num_to_add = (column_headers.size() - 1) - tokens.size();
-
-					for (size_t j = 0; j < num_to_add; j++)
-						tokens.push_back("");
-				}
-
-				// Initialize Neutropenia indicator
-				tokens.push_back("0");
-
-				for (size_t j = 0; j < column_headers.size(); j++)
-					data[j].push_back(tokens[j]);
-
-				tokens.clear();
-			}
-		}
-		else
-		{
-			temp_token += s[i];
-		}
-	}
-
-	//end_time = std::chrono::high_resolution_clock::now();
-	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
-	//cout << elapsed.count() / 1000.0f << endl;
-
-	return true;
-}
-
 bool table_data::get_data_line_by_line(const string& filename)
 {
 	column_headers.clear();
@@ -224,32 +104,6 @@ void table_data::std_strtok(const string& s, const string& regex_s, vector<strin
 	}
 }
 
-bool table_data::save_to_CSV_line_by_line(const string& filename)
-{
-	ostringstream oss;
-
-	for (size_t i = 0; i < (column_headers.size() - 1); i++)
-		oss << column_headers[i] << ',';
-
-	oss << column_headers[column_headers.size() - 1] << '\n';
-
-	const size_t row_count = get_row_count();
-
-	for (size_t i = 0; i < row_count; i++)
-	{
-		for (size_t j = 0; j < (column_headers.size() - 1); j++)
-			oss << data[j][i] << ',';
-
-		oss << data[column_headers.size() - 1][i] << '\n';
-	}
-
-	ofstream outfile(filename);
-
-	outfile << oss.str().c_str();
-
-	return true;
-}
-
 bool table_data::save_to_CSV_buffer(const string& filename)
 {
 	//std::chrono::high_resolution_clock::time_point start_time, end_time;
@@ -301,39 +155,6 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 	return true;
 }
 
-
-// Load from comma separated values file
-bool table_data::load_from_CSV_buffer(const string& filename)
-{
-	if (false == get_data_buffer(filename))
-		return false;
-
-	if (false == get_various_column_indices())
-		return false;
-
-	const size_t row_count = get_row_count();
-
-	// Search for D700 code(s), 
-	// to populate the Neutropenia indicator
-	for (size_t i = 0; i < row_count; i++)
-	{
-		for (size_t j = 0; j < diag_codes.size(); j++)
-		{
-			const size_t index = diag_codes[j];
-
-			// If found D700, then adjust the 
-			// Neutropenia indicator and go to next row
-			if (data[index][i] == "D700")
-			{
-				data[neutropenia_index][i] = "1";
-				break;
-			}
-		}
-	}
-
-	return true;
-}
-
 bool table_data::load_from_CSV_line_by_line(const string& filename)
 {
 	if (false == get_data_line_by_line(filename))
@@ -367,18 +188,12 @@ bool table_data::load_from_CSV_line_by_line(const string& filename)
 
 bool table_data::save_to_CSV(const string& filename, bool use_buffer)
 {
-	if (use_buffer)
-		return save_to_CSV_buffer(filename);
-	else
-		return save_to_CSV_line_by_line(filename);
+	return save_to_CSV_buffer(filename);
 }
 
 bool table_data::load_from_CSV(const string& filename, bool use_buffer)
 {
-	if (use_buffer)
-		return load_from_CSV_buffer(filename);
-	else
-		return load_from_CSV_line_by_line(filename);
+	return load_from_CSV_line_by_line(filename);
 }
 
 size_t table_data::get_row_count(void)

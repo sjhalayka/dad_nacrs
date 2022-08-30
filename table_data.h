@@ -31,12 +31,10 @@ protected:
 	virtual bool get_various_column_indices(void) = 0;
 
 	size_t get_index(const string& column_name);
-	bool get_data_buffer(const string& filename);
 	bool get_data_line_by_line(const string& filename);
 	void std_strtok(const string& s, const string& regex_s, vector<string>& tokens);
-	bool save_to_CSV_line_by_line(const string& filename);
+
 	bool save_to_CSV_buffer(const string& filename);
-	bool load_from_CSV_buffer(const string& filename);
 	bool load_from_CSV_line_by_line(const string& filename);
 
 public:
