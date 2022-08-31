@@ -255,7 +255,7 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 
 bool table_data::save_to_CSV(const string& filename)
 {
-	// Throw everything into a single string
+	// Throw everything into a single string.
 	// This takes up 2x the RAM, but it's about as fast
 	// as it can get
 	string s;
@@ -290,7 +290,7 @@ bool table_data::save_to_CSV(const string& filename)
 	return true;
 }
 
-bool table_data::load_from_CSV(const string& filename)
+bool table_data::load_from_CSV_line_by_line(const string& filename)
 {
 	if (false == get_data_line_by_line(filename))
 		return false;

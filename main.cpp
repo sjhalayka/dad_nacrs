@@ -7,14 +7,13 @@ int main(void)
 	dad_table_data dtd;
 
 	// Use the buffer method, which is a little faster
-	// than doing it line by line
+	// than doing it line by line (e.g. using getline() and regex)
 	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_cohorts_08_18.csv"))
 		return -1;
 
+	// Saving uses the buffer method always
 	if (false == dtd.save_to_CSV("Z:/Smartphone_2/Shawn/Neutropenia/dad_cohorts_08_18_with_neutropenia_indicator.csv"))
 		return -1;
-
-	return 0;
 
 	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv"))
 		return -1;
