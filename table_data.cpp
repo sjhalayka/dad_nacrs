@@ -57,7 +57,7 @@ bool table_data::get_data_line_by_line(const string& filename)
 		vector<string> data_cells;
 		std_strtok(line, "[,]", data_cells);
 
-		// Touch up the data in case it's broken
+		// Touch up the data in case they're broken
 		if (data_cells.size() > (column_headers.size() - 1))
 		{
 			// Too many data, chop off the end
