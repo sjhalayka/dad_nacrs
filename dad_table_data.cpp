@@ -3,9 +3,7 @@
 
 bool dad_table_data::get_various_column_indices(void)
 {
-	neutropenia_index = get_index("Neutropenia_Indicator");
-
-	if (neutropenia_index == -1)
+	if (false == get_index("Neutropenia_Indicator", neutropenia_index))
 		return false;
 
 	// Get column numbers for DIAG_CODE_1 through DIAG_CODE_25
@@ -18,9 +16,9 @@ bool dad_table_data::get_various_column_indices(void)
 
 		const string d = "DIAG_CODE_" + oss.str();
 
-		size_t diag_codes_index = get_index(d);
+		size_t diag_codes_index = 0;
 
-		if (diag_codes_index == -1)
+		if (false == get_index(d, diag_codes_index))
 			return false;
 		else
 			diag_codes.push_back(diag_codes_index);

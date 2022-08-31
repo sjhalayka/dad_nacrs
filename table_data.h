@@ -24,7 +24,7 @@ protected:
 
 	// The following are helper functions that are inaccessible
 	// from outside of the class
-	size_t get_index(const string& column_name);
+	bool get_index(const string& column_name, size_t &index);
 	bool get_data_line_by_line(const string& filename);
 	void std_strtok(const string& s, const string& regex_s, vector<string>& tokens);
 	bool get_data_buffer(const string& filename);

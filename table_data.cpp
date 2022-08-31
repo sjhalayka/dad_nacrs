@@ -1,20 +1,20 @@
 #include "table_data.h"
 
 
-size_t table_data::get_index(const string& column_name)
+bool table_data::get_index(const string& column_name, size_t &index)
 {
-	size_t index = 0;
+	index = 0;
 
 	for (vector<string>::const_iterator ci = column_headers.begin(); ci != column_headers.end(); ci++)
 	{
 		if (*ci == column_name)
-			return index;
+			return true;
 		else
 			index++;
 	}
 
 	// If we made it this far, there was no match at all
-	return -1;
+	return false;
 }
 
 bool table_data::get_data_line_by_line(const string& filename)

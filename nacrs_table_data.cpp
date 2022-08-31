@@ -3,37 +3,29 @@
 
 bool nacrs_table_data::get_various_column_indices(void)
 {
-	neutropenia_index = get_index("Neutropenia_Indicator");
-
-	if (neutropenia_index == -1)
+	if (false == get_index("Neutropenia_Indicator", neutropenia_index))
 		return false;
 
 	diag_codes.clear();
 
-	size_t diag_codes_index = get_index("ED_DISCHARGE_DIAG_CODE_1");
+	size_t diag_codes_index = 0;
 
-	if (diag_codes_index == -1)
+	if (false == get_index("ED_DISCHARGE_DIAG_CODE_1", diag_codes_index))
 		return false;
 	else
 		diag_codes.push_back(diag_codes_index);
 
-	diag_codes_index = get_index("ED_DISCHARGE_DIAG_CODE_2");
-
-	if (diag_codes_index == -1)
+	if (false == get_index("ED_DISCHARGE_DIAG_CODE_2", diag_codes_index))
 		return false;
 	else
 		diag_codes.push_back(diag_codes_index);
 
-	diag_codes_index = get_index("ED_DISCHARGE_DIAG_CODE_3");
-
-	if (diag_codes_index == -1)
+	if (false == get_index("ED_DISCHARGE_DIAG_CODE_3", diag_codes_index))
 		return false;
 	else
 		diag_codes.push_back(diag_codes_index);
 
-	diag_codes_index = get_index("MAIN_PROBLEM");
-
-	if (diag_codes_index == -1)
+	if (false == get_index("MAIN_PROBLEM", diag_codes_index))
 		return false;
 	else
 		diag_codes.push_back(diag_codes_index);
@@ -45,9 +37,7 @@ bool nacrs_table_data::get_various_column_indices(void)
 
 		const string d = "OTHER_PROBLEM_" + oss.str();
 
-		diag_codes_index = get_index(d);
-
-		if (diag_codes_index == -1)
+		if (false == get_index(d, diag_codes_index))
 			return false;
 		else
 			diag_codes.push_back(diag_codes_index);
