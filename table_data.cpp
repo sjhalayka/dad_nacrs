@@ -140,6 +140,7 @@ bool table_data::get_data_buffer(const string& filename)
 	infile.read(&s[0], file_size);
 	infile.close();
 
+	// Make sure that the last line ends in a newline
 	if (s[s.size() - 1] != '\n')
 	{
 		s += '\n';
@@ -149,18 +150,19 @@ bool table_data::get_data_buffer(const string& filename)
 	vector<string> tokens;
 	string temp_token;
 
-	size_t line_num = 0;
+	bool first_line = true;
 
 	for (size_t i = 0; i < file_size; i++)
 	{
-		if (s[i] == ',')
+		if (s[i] == '\r')
+		{
+			// Skip over Windows carriage return
+			continue;
+		}
+		else if (s[i] == ',')
 		{
 			tokens.push_back(temp_token);
 			temp_token = "";
-		}
-		else if (s[i] == '\r')
-		{
-			continue;
 		}
 		else if (s[i] == '\n')
 		{
@@ -168,7 +170,7 @@ bool table_data::get_data_buffer(const string& filename)
 			temp_token = "";
 
 			// Process line here
-			if (line_num == 0)
+			if (first_line)
 			{
 				column_headers = tokens;
 
@@ -176,6 +178,8 @@ bool table_data::get_data_buffer(const string& filename)
 				column_headers.push_back("Neutropenia_Indicator");
 
 				data.resize(column_headers.size());
+
+				first_line = false;
 			}
 			else
 			{
@@ -199,12 +203,11 @@ bool table_data::get_data_buffer(const string& filename)
 				// Initialize Neutropenia indicator
 				data_cells.push_back("0");
 
-				for (size_t i = 0; i < column_headers.size(); i++)
-					data[i].push_back(data_cells[i]);
+				for (size_t j = 0; j < column_headers.size(); j++)
+					data[j].push_back(data_cells[j]);
 			}
 
 			tokens.clear();
-			line_num++;
 		}
 		else
 		{
