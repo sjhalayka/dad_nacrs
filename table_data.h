@@ -36,7 +36,7 @@ using std::getline;
 using std::regex;
 using std::sregex_token_iterator;
 
-// High-speed timing
+// High-precision timing
 #include <chrono>
 
 
