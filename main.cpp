@@ -7,13 +7,12 @@ int main(void)
 	// Handle DAD data
 	dad_table_data dtd;
 
-	// Use the buffer method, which is a little faster than doing it line by line
+	// Use the buffer method, which is a tiny bit faster than doing it line by line
 	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_cohorts_08_18.csv"))
 		return -1;
 
-	// Saving uses the buffer method always 
-	// Doing it line by line is so very glacially slow that I haven't even included
-	// it in this source
+	// Saving uses the buffer method always, because doing it line by line is so 
+	// very glacially slow by comparison
 	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_cohorts_08_18_with_neutropenia_indicator.csv"))
 		return -1;
 
