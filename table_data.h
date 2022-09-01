@@ -1,3 +1,4 @@
+// Guard against including this file more than once
 #ifndef TABLE_DATA_H
 #define TABLE_DATA_H
 

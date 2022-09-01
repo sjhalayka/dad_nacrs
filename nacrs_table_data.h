@@ -1,3 +1,4 @@
+// Guard against including this file more than once
 #ifndef NACRS_TABLE_DATA_H
 #define NACRS_TABLE_DATA_H
 
