@@ -1,4 +1,5 @@
-#pragma once
+#ifndef NACRS_TABLE_DATA_H
+#define NACRS_TABLE_DATA_H
 
 
 #include "table_data.h"
@@ -13,4 +14,6 @@ public:
 	bool get_various_column_indices(void);
 };
 
+
+#endif
 

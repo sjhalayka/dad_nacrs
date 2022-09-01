@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DAD_TABLE_DATA_H
+#define DAD_TABLE_DATA_H
 
 
 #include "table_data.h"
@@ -13,3 +14,5 @@ public:
 	bool get_various_column_indices(void);
 };
 
+
+#endif

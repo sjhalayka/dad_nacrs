@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TABLE_DATA_H
+#define TABLE_DATA_H
 
 
 // Standard library console input/output
@@ -71,5 +72,8 @@ public:
 	size_t get_row_count(void);
 	size_t get_D700_count(void);
 };
+
+
+#endif
 
 
