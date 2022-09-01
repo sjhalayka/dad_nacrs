@@ -24,7 +24,7 @@ using std::ostringstream;
 #include <vector>
 using std::vector;
 
-// String (a kind of array) using 8-bit unsigned chars
+// String (a kind of array) using 8-bit chars
 // We use this in lieu of new[]/delete[]
 #include <string>
 using std::string;

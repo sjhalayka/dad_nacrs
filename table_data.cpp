@@ -222,37 +222,6 @@ bool table_data::get_data_buffer(const string& filename)
 	return true;
 }
 
-bool table_data::load_from_CSV_buffer(const string& filename)
-{
-	if (false == get_data_buffer(filename))
-		return false;
-
-	if (false == get_various_column_indices())
-		return false;
-
-	const size_t row_count = get_row_count();
-
-	// Search for D700 code(s), 
-	// to populate the Neutropenia indicator
-	for (size_t i = 0; i < row_count; i++)
-	{
-		for (size_t j = 0; j < diag_codes.size(); j++)
-		{
-			const size_t index = diag_codes[j];
-
-			// If found D700, then adjust the 
-			// Neutropenia indicator and go to next row
-			if (data[index][i] == "D700")
-			{
-				data[neutropenia_index][i] = "1";
-				break;
-			}
-		}
-	}
-
-	return true;
-}
-
 bool table_data::save_to_CSV_buffer(const string& filename)
 {
 	// Throw everything into a single string.
@@ -293,6 +262,37 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 bool table_data::load_from_CSV_line_by_line(const string& filename)
 {
 	if (false == get_data_line_by_line(filename))
+		return false;
+
+	if (false == get_various_column_indices())
+		return false;
+
+	const size_t row_count = get_row_count();
+
+	// Search for D700 code(s), 
+	// to populate the Neutropenia indicator
+	for (size_t i = 0; i < row_count; i++)
+	{
+		for (size_t j = 0; j < diag_codes.size(); j++)
+		{
+			const size_t index = diag_codes[j];
+
+			// If found D700, then adjust the 
+			// Neutropenia indicator and go to next row
+			if (data[index][i] == "D700")
+			{
+				data[neutropenia_index][i] = "1";
+				break;
+			}
+		}
+	}
+
+	return true;
+}
+
+bool table_data::load_from_CSV_buffer(const string& filename)
+{
+	if (false == get_data_buffer(filename))
 		return false;
 
 	if (false == get_various_column_indices())
