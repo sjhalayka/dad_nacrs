@@ -253,7 +253,7 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 	return true;
 }
 
-bool table_data::save_to_CSV(const string& filename)
+bool table_data::save_to_CSV_buffer(const string& filename)
 {
 	// Throw everything into a single string.
 	// This takes up 2x the RAM, but it's about as fast
@@ -284,7 +284,7 @@ bool table_data::save_to_CSV(const string& filename)
 	}
 
 	// Write string contents to file in one shot
-	ofstream outfile(filename, ios_base::binary);
+	ofstream outfile(filename, ifstream::binary);
 	outfile.write(s.c_str(), s.length());
 
 	return true;

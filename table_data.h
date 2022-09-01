@@ -1,14 +1,42 @@
 #pragma once
 
 
+// Standard library console input/output
 #include <iostream>
+using std::cout;
+using std::endl;
+
+// File input/output
 #include <fstream>
+using std::ifstream;
+using std::ofstream;
+
+// Stringstream input/output
+// This is for converting strings to integers (etc),
+// and for converting integers (etc) back to strings
 #include <sstream>
+using std::istringstream;
+using std::ostringstream;
+
+// Vector (a kind of array) using multiple types of data
+// We use this in lieu of new[]/delete[]
 #include <vector>
+using std::vector;
+
+// String (a kind of array) using 8-bit unsigned chars
+// We use this in lieu of new[]/delete[]
 #include <string>
+using std::string;
+using std::getline;
+
+// Regular expressions
+// We use this to tokenize a string
 #include <regex>
+using std::regex;
+using std::sregex_token_iterator;
+
+// High-speed timing
 #include <chrono>
-using namespace std;
 
 
 // Base class
@@ -37,7 +65,7 @@ protected:
 public:
 
 	// These are accessible from outside the class
-	bool save_to_CSV(const string& filename);
+	bool save_to_CSV_buffer(const string& filename);
 	bool load_from_CSV_line_by_line(const string& filename);
 	bool load_from_CSV_buffer(const string& filename);
 	size_t get_row_count(void);
