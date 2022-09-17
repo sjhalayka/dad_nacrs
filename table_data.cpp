@@ -17,71 +17,6 @@ bool table_data::get_index(const string& column_name, size_t &index)
 	return false;
 }
 
-bool table_data::get_data_line_by_line(const string& filename)
-{
-	column_headers.clear();
-	data.clear();
-
-	ifstream infile(filename);
-
-	if (infile.fail())
-	{
-		cout << "Could not open file" << endl;
-		return false;
-	}
-
-	string line;
-
-	// Get first line (the variable names)
-	getline(infile, line);
-
-	if (line == "")
-	{
-		cout << "First line is blank!" << endl;
-		return false;
-	}
-
-	std_strtok(line, "[,]", column_headers);
-
-	// Add column
-	column_headers.push_back("Neutropenia_Indicator");
-
-	data.resize(column_headers.size());
-
-	// Get subsequent lines (the data)
-	while (getline(infile, line))
-	{
-		if (line == "")
-			continue;
-
-		vector<string> data_cells;
-		std_strtok(line, "[,]", data_cells);
-
-		// Touch up the data in case they're broken
-		if (data_cells.size() > (column_headers.size() - 1))
-		{
-			// Too many data, chop off the end
-			data_cells.resize(column_headers.size() - 1);
-		}
-		else if (data_cells.size() < (column_headers.size() - 1))
-		{
-			// Not enough data, pad with empty strings
-			size_t num_to_add = (column_headers.size() - 1) - data_cells.size();
-
-			for (size_t i = 0; i < num_to_add; i++)
-				data_cells.push_back("");
-		}
-
-		// Initialize Neutropenia indicator
-		data_cells.push_back("0");
-
-		for (size_t i = 0; i < column_headers.size(); i++)
-			data[i].push_back(data_cells[i]);
-	}
-
-	return true;
-}
-
 void table_data::std_strtok(const string& s, const string& regex_s, vector<string>& tokens)
 {
 	tokens.clear();
@@ -259,36 +194,6 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 	return true;
 }
 
-bool table_data::load_from_CSV_line_by_line(const string& filename)
-{
-	if (false == get_data_line_by_line(filename))
-		return false;
-
-	if (false == get_various_column_indices())
-		return false;
-
-	const size_t row_count = get_row_count();
-
-	// Search for D700 code(s), 
-	// to populate the Neutropenia indicator
-	for (size_t i = 0; i < row_count; i++)
-	{
-		for (size_t j = 0; j < diag_codes.size(); j++)
-		{
-			const size_t index = diag_codes[j];
-
-			// If found D700, then adjust the 
-			// Neutropenia indicator and go to next row
-			if (data[index][i] == "D700")
-			{
-				data[neutropenia_index][i] = "1";
-				break;
-			}
-		}
-	}
-
-	return true;
-}
 
 bool table_data::load_from_CSV_buffer(const string& filename)
 {
