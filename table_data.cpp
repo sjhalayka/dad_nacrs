@@ -35,6 +35,8 @@ void table_data::std_strtok(const string& s, const string& regex_s, vector<strin
 
 bool table_data::get_data_buffer(const string& filename)
 {
+	filepath = "";
+
 	//cout << "Getting file size" << endl;
 
 	//std::chrono::high_resolution_clock::time_point start_time, end_time;
@@ -67,6 +69,8 @@ bool table_data::get_data_buffer(const string& filename)
 		cout << "Could not re-open file" << endl;
 		return false;
 	}
+
+	filepath = filename;
 
 	//cout << "Allocating memory" << endl;
 	string s(file_size, ' ');
@@ -109,8 +113,10 @@ bool table_data::get_data_buffer(const string& filename)
 			{
 				column_headers = tokens;
 
-				// Add column
+				// Add columns
 				column_headers.push_back("Neutropenia_Indicator");
+				column_headers.push_back("Myocarditis_Indicator");
+				column_headers.push_back("Cardiomyopathy_Indicator");
 
 				data.resize(column_headers.size());
 
@@ -135,8 +141,10 @@ bool table_data::get_data_buffer(const string& filename)
 						data_cells.push_back("");
 				}
 
-				// Initialize Neutropenia indicator
-				data_cells.push_back("0");
+				// Initialize indicators with blank data
+				data_cells.push_back("");
+				data_cells.push_back("");
+				data_cells.push_back("");
 
 				for (size_t j = 0; j < column_headers.size(); j++)
 					data[j].push_back(data_cells[j]);
@@ -205,10 +213,12 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 
 	const size_t row_count = get_row_count();
 
-	// Search for D700 code(s), 
+	// Search for neutropenia code(s), 
 	// to populate the Neutropenia indicator
 	for (size_t i = 0; i < row_count; i++)
 	{
+		data[neutropenia_index][i] = "0";
+
 		for (size_t j = 0; j < diag_codes.size(); j++)
 		{
 			const size_t index = diag_codes[j];
@@ -218,6 +228,58 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 			if (data[index][i] == "D700")
 			{
 				data[neutropenia_index][i] = "1";
+				break;
+			}
+		}
+	}
+
+	// Search for myocarditis code(s), 
+	// to populate the myocarditis indicator
+	for (size_t i = 0; i < row_count; i++)
+	{
+		data[myocarditis_index][i] = "0";
+
+		for (size_t j = 0; j < diag_codes.size(); j++)
+		{
+			const size_t index = diag_codes[j];
+
+			// If found code, then adjust the 
+			// indicator and go to next row
+			if (data[index][i] == "I401" || 
+				data[index][i] == "I408" ||
+				data[index][i] == "I409" ||
+				data[index][i] == "I41"  ||
+				data[index][i] == "I514")
+			{
+				data[myocarditis_index][i] = "1";
+				break;
+			}
+		}
+	}
+
+	// Search for cardiomyopathy code(s), 
+	// to populate the cardiomyopathy indicator
+	for (size_t i = 0; i < row_count; i++)
+	{
+		data[cardiomyopathy_index][i] = "0";
+
+		for (size_t j = 0; j < diag_codes.size(); j++)
+		{
+			const size_t index = diag_codes[j];
+
+			// If found code, then adjust the 
+			// indicator and go to next row
+			if (data[index][i] == "I420" ||
+				data[index][i] == "I421" ||
+				data[index][i] == "I422" ||
+				data[index][i] == "I423" ||
+				data[index][i] == "I424" ||
+				data[index][i] == "I425" ||
+				data[index][i] == "I427" ||
+				data[index][i] == "I428" ||
+				data[index][i] == "I429")
+			{
+				data[cardiomyopathy_index][i] = "1";
 				break;
 			}
 		}
@@ -234,17 +296,52 @@ size_t table_data::get_row_count(void)
 	return data[0].size();
 }
 
-size_t table_data::get_D700_count(void)
+size_t table_data::get_neutropenia_count(void)
 {
 	const size_t row_count = get_row_count();
 
-	size_t D700_count = 0;
+	size_t count = 0;
 
 	for (size_t i = 0; i < row_count; i++)
 	{
 		if (data[neutropenia_index][i] == "1")
-			D700_count++;
+			count++;
 	}
 
-	return D700_count;
+	return count;
+}
+
+size_t table_data::get_myocarditis_count(void)
+{
+	const size_t row_count = get_row_count();
+
+	size_t count = 0;
+
+	for (size_t i = 0; i < row_count; i++)
+	{
+		if (data[myocarditis_index][i] == "1")
+			count++;
+	}
+
+	return count;
+}
+
+size_t table_data::get_cardiomyopathy_count(void)
+{
+	const size_t row_count = get_row_count();
+
+	size_t count = 0;
+
+	for (size_t i = 0; i < row_count; i++)
+	{
+		if (data[cardiomyopathy_index][i] == "1")
+			count++;
+	}
+
+	return count;
+}
+
+string table_data::get_filename(void)
+{
+	return filepath;
 }

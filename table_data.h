@@ -50,11 +50,14 @@ protected:
 	vector<string> column_headers;
 	vector<vector<string>> data;
 	size_t neutropenia_index = 0;
+	size_t myocarditis_index = 0;
+	size_t cardiomyopathy_index = 0;
+
 	vector<size_t> diag_codes;
 
 	// The following are helper functions that are inaccessible
 	// from outside of the class
-	bool get_index(const string& column_name, size_t &index);
+	bool get_index(const string& column_name, size_t& index);
 	void std_strtok(const string& s, const string& regex_s, vector<string>& tokens);
 	bool get_data_buffer(const string& filename);
 
@@ -63,13 +66,18 @@ protected:
 	// base class table_data
 	virtual bool get_various_column_indices(void) = 0;
 
+	string filepath = "";
+
 public:
 
 	// These are accessible from outside the class
 	bool save_to_CSV_buffer(const string& filename);
 	bool load_from_CSV_buffer(const string& filename);
 	size_t get_row_count(void);
-	size_t get_D700_count(void);
+	size_t get_neutropenia_count(void);
+	size_t get_myocarditis_count(void);
+	size_t get_cardiomyopathy_count(void);
+	string get_filename(void);
 };
 
 

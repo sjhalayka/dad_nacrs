@@ -6,6 +6,12 @@ bool nacrs_table_data::get_various_column_indices(void)
 	if (false == get_index("Neutropenia_Indicator", neutropenia_index))
 		return false;
 
+	if (false == get_index("Myocarditis_Indicator", myocarditis_index))
+		return false;
+
+	if (false == get_index("Cardiomyopathy_Indicator", cardiomyopathy_index))
+		return false;
+
 	diag_codes.clear();
 
 	size_t diag_codes_index = 0;

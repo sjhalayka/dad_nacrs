@@ -2,6 +2,7 @@
 #include "nacrs_table_data.h"
 
 
+
 int main(void)
 {
 	// Handle DAD data
@@ -12,16 +13,27 @@ int main(void)
 	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_cohorts_08_18.csv"))
 		return -1;
 
-	// Saving uses the buffer method always, because saving the CSV file line by line is so 
-	// very glacially slow by comparison
-	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_cohorts_08_18_with_neutropenia_indicator.csv"))
+	cout << dtd.get_filename() << endl;
+	cout << "Neutropenia count: " << dtd.get_neutropenia_count() << endl;
+	cout << "Myocarditis count: " << dtd.get_myocarditis_count() << endl;
+	cout << "Cardiomyopathy count: " << dtd.get_cardiomyopathy_count() << endl;
+	cout << endl;
+
+	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_cohorts_08_18_with_indicators.csv"))
 		return -1;
 
 	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv"))
 		return -1;
 
-	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18_with_neutropenia_indicator.csv"))
+	cout << dtd.get_filename() << endl;
+	cout << "Neutropenia count: " << dtd.get_neutropenia_count() << endl;
+	cout << "Myocarditis count: " << dtd.get_myocarditis_count() << endl;
+	cout << "Cardiomyopathy count: " << dtd.get_cardiomyopathy_count() << endl;
+	cout << endl;
+
+	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18_with_indicators.csv"))
 		return -1;
+
 
 
 	// Handle NACRS data
@@ -30,14 +42,28 @@ int main(void)
 	if (false == ntd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_cohorts_08_18.csv"))
 		return -1;
 
-	if(false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_cohorts_08_18_with_neutropenia_indicator.csv"))
+	cout << ntd.get_filename() << endl;
+	cout << "Neutropenia count: " << ntd.get_neutropenia_count() << endl;
+	cout << "Myocarditis count: " << ntd.get_myocarditis_count() << endl;
+	cout << "Cardiomyopathy count: " << ntd.get_cardiomyopathy_count() << endl;
+	cout << endl;
+
+	if(false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_cohorts_08_18_with_indicators.csv"))
 		return -1;
 
 	if (false == ntd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18.csv"))
 		return -1;
 
-	if (false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18_with_neutropenia_indicator.csv"))
+	cout << ntd.get_filename() << endl;
+	cout << "Neutropenia count: " << ntd.get_neutropenia_count() << endl;
+	cout << "Myocarditis count: " << ntd.get_myocarditis_count() << endl;
+	cout << "Cardiomyopathy count: " << ntd.get_cardiomyopathy_count() << endl;
+	cout << endl;
+
+	if (false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18_with_indicators.csv"))
 		return -1;
+
+
 
 	// It's all good
 	return 0;
