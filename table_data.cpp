@@ -262,13 +262,13 @@ size_t table_data::get_count(const string& indicator_name)
 {
 	const size_t row_count = get_row_count();
 
-	size_t neutropenia_index = diagnosis_indicator_indices[indicator_name];
+	size_t indicator_index = diagnosis_indicator_indices[indicator_name];
 
 	size_t count = 0;
 
 	for (size_t i = 0; i < row_count; i++)
 	{
-		if (data[neutropenia_index][i] == "1")
+		if (data[indicator_index][i] == "1")
 			count++;
 	}
 
