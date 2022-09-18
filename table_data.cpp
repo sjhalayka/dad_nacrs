@@ -262,7 +262,7 @@ size_t table_data::get_count(const string& indicator_name)
 {
 	const size_t row_count = get_row_count();
 
-	size_t indicator_index = diagnosis_indicator_indices[indicator_name];
+	const size_t indicator_index = diagnosis_indicator_indices[indicator_name];
 
 	size_t count = 0;
 
