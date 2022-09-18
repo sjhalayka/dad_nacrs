@@ -9,11 +9,11 @@ int main(void)
 	vector<diagnosis_indicator> indicators;
 	diagnosis_indicator d;
 
-	d.diagnosis_name = "Neutropenia";
+	d.diagnosis_name = "Neutropenia_Indicator";
 	d.diagnosis_codes.push_back("D700");
 	indicators.push_back(d);
 
-	d.diagnosis_name = "Myocarditis";
+	d.diagnosis_name = "Myocarditis_Indicator";
 	d.diagnosis_codes.clear();
 	d.diagnosis_codes.push_back("I401");
 	d.diagnosis_codes.push_back("I408");
@@ -22,7 +22,7 @@ int main(void)
 	d.diagnosis_codes.push_back("I514");
 	indicators.push_back(d);
 
-	d.diagnosis_name = "Cardiomyopathy";
+	d.diagnosis_name = "Cardiomyopathy_Indicator";
 	d.diagnosis_codes.clear();
 	d.diagnosis_codes.push_back("I420");
 	d.diagnosis_codes.push_back("I421");
@@ -40,6 +40,8 @@ int main(void)
 	// Handle DAD data
 	dad_table_data dtd(indicators);
 
+	cout << "loading from csv buffer" << endl;
+
 	// Use the buffer method to load the CSV file
 	// This is a tiny bit faster than doing it line by line
 	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_cohorts_08_18.csv"))
@@ -53,6 +55,10 @@ int main(void)
 
 	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_cohorts_08_18_with_indicators.csv"))
 		return -1;
+
+
+	return 0;
+
 
 	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18.csv"))
 		return -1;

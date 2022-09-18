@@ -114,9 +114,8 @@ bool table_data::get_data_buffer(const string& filename)
 				column_headers = tokens;
 
 				// Add columns
-				column_headers.push_back("Neutropenia_Indicator");
-				column_headers.push_back("Myocarditis_Indicator");
-				column_headers.push_back("Cardiomyopathy_Indicator");
+				for (size_t j = 0; j < indicators.size(); j++)
+					column_headers.push_back(indicators[j].diagnosis_name);
 
 				data.resize(column_headers.size());
 
@@ -127,24 +126,30 @@ bool table_data::get_data_buffer(const string& filename)
 				vector<string> data_cells = tokens;
 
 				// Touch up the data in case it's broken
-				if (data_cells.size() > (column_headers.size() - 1))
+				if (data_cells.size() > (column_headers.size() - indicators.size()))
 				{
+					cout << "too many data" << endl;
 					// Too many data, chop off the end
-					data_cells.resize(column_headers.size() - 1);
+					data_cells.resize(column_headers.size() - indicators.size());
 				}
-				else if (data_cells.size() < (column_headers.size() - 1))
+				else if (data_cells.size() < (column_headers.size() - indicators.size()))
 				{
+					cout << "not enough data" << endl;
+
 					// Not enough data, pad with empty strings
-					size_t num_to_add = (column_headers.size() - 1) - data_cells.size();
+					size_t num_to_add = (column_headers.size() - indicators.size()) - data_cells.size();
 
 					for (size_t i = 0; i < num_to_add; i++)
 						data_cells.push_back("");
 				}
+				//else
+				//{
+				//	cout << "right amount of data" << endl;
+				//}
 
 				// Initialize indicators with blank data
-				data_cells.push_back("");
-				data_cells.push_back("");
-				data_cells.push_back("");
+				for (size_t j = 0; j < indicators.size(); j++)
+					data_cells.push_back("");
 
 				for (size_t j = 0; j < column_headers.size(); j++)
 					data[j].push_back(data_cells[j]);
@@ -205,46 +210,62 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 
 bool table_data::load_from_CSV_buffer(const string& filename)
 {
+	cout << "getting data" << endl;
+
 	if (false == get_data_buffer(filename))
 		return false;
+
+	cout << "got data" << endl;
 
 	if (false == get_various_column_indices())
 		return false;
 
-	const size_t row_count = get_row_count();
+	cout << "got various column indices" << endl;
 
+	const size_t row_count = get_row_count();
 
 	for (map<string, size_t>::const_iterator ci = diagnosis_indicator_indices.begin(); ci != diagnosis_indicator_indices.end(); ci++)
 	{
 		const string di_name = ci->first;
-		const size_t di_index = ci->second;
+		const size_t di_index = ci->second;	
+		
+		cout << di_name << " " << di_index << endl;
 
 		for (size_t i = 0; i < row_count; i++)
 		{
-			data[di_index][i] = "0";
+			data[di_index][i] = "1";
 
-			for (size_t j = 0; j < diag_codes.size(); j++)
-			{
-				const size_t index = diag_codes[j];
+			//for (size_t j = 0; j < diag_codes.size(); j++)
+			//{
+			//	const size_t index = diag_codes[j];
 
-				bool found = false;
+			//	bool found = false;
 
-				for (size_t k = 0; k < indicators[di_index].diagnosis_codes.size(); k++)
-				{
-					// If found code, then adjust the 
-					// indicator and go to next row
-					if (data[index][i] == indicators[di_index].diagnosis_codes[k])
-					{
-						data[di_index][i] = "1";
-						found = true;
-						break;
-					}
-				}
+			//	for (size_t k = 0; k < indicators[di_index].diagnosis_codes.size(); k++)
+			//	{
+			//		cout << "diag code test" << endl;
 
-				if (found)
-					break;
-			}
+			//		// If found code, then adjust the 
+			//		// indicator and go to next row
+			//		if (data[index][i] == indicators[di_index].diagnosis_codes[k])
+			//		{
+			//			cout << "altering" << endl;
+
+			//			data[di_index][i] = "1";
+			//			found = true;
+			//			break;
+			//		}
+
+			//		cout << "done diag code test" << endl;
+
+			//	}
+
+			//	if (found)
+			//		break;
+			//}
 		}
+
+		cout << "Done loop" << endl;
 	}
 
 	return true;
@@ -261,16 +282,13 @@ size_t table_data::get_row_count(void)
 size_t table_data::get_count(const string& indicator_name)
 {
 	const size_t row_count = get_row_count();
-
 	const size_t indicator_index = diagnosis_indicator_indices[indicator_name];
 
 	size_t count = 0;
 
 	for (size_t i = 0; i < row_count; i++)
-	{
 		if (data[indicator_index][i] == "1")
 			count++;
-	}
 
 	return count;
 }
