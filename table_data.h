@@ -41,6 +41,11 @@ using std::sregex_token_iterator;
 #include <chrono>
 
 
+
+#include "diagnosis_indicators.h"
+
+
+
 // Base class
 class table_data
 {
@@ -67,6 +72,8 @@ protected:
 	virtual bool get_various_column_indices(void) = 0;
 
 	string filepath = "";
+
+	vector<diagnosis_indicator> indicators;
 
 public:
 

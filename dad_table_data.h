@@ -11,6 +11,11 @@ class dad_table_data : public table_data
 {
 public:
 
+	dad_table_data(const vector<diagnosis_indicator>& src_indicators)
+	{
+		indicators = src_indicators;
+	}
+
 	// Function that is dataset specific
 	bool get_various_column_indices(void);
 };
