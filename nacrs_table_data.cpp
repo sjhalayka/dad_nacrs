@@ -1,6 +1,7 @@
 #include "nacrs_table_data.h"
 
 
+
 bool nacrs_table_data::get_various_column_indices(void)
 {
 	diagnosis_indicator_indices.clear();
