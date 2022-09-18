@@ -2,6 +2,11 @@
 
 
 
+nacrs_table_data::nacrs_table_data(const vector<diagnosis_indicator>& src_indicators)
+{
+	indicators = src_indicators;
+}
+
 bool nacrs_table_data::get_various_column_indices(void)
 {
 	diagnosis_indicator_indices.clear();

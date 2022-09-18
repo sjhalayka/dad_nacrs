@@ -1,6 +1,12 @@
 #include "dad_table_data.h"
 
 
+
+dad_table_data::dad_table_data(const vector<diagnosis_indicator>& src_indicators)
+{
+	indicators = src_indicators;
+}
+
 bool dad_table_data::get_various_column_indices(void)
 {
 	diagnosis_indicator_indices.clear();
