@@ -57,11 +57,10 @@ protected:
 	// Keep the data inaccessible from outside the class
 	vector<string> column_headers;
 	vector<vector<string>> data;
-
 	map<string, size_t> diagnosis_indicator_indices;
 	vector<diagnosis_indicator> indicators;
-
 	vector<size_t> diag_codes;
+	string filepath = "";
 
 	// The following are helper functions that are inaccessible
 	// from outside of the class
@@ -73,8 +72,6 @@ protected:
 	// Making it equal to 0 means that one cannot instantiate the
 	// base class table_data
 	virtual bool get_various_column_indices(void) = 0;
-
-	string filepath = "";
 
 public:
 
