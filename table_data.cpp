@@ -1,7 +1,7 @@
 #include "table_data.h"
 
 
-bool table_data::get_index(const string& column_name, size_t &index)
+bool table_data::get_index(const string& column_name, size_t& index)
 {
 	index = 0;
 
@@ -213,77 +213,112 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 
 	const size_t row_count = get_row_count();
 
-	// Search for neutropenia code(s), 
-	// to populate the Neutropenia indicator
-	for (size_t i = 0; i < row_count; i++)
+
+	for (map<string, size_t>::const_iterator ci = diagnosis_indicator_indices.begin(); ci != diagnosis_indicator_indices.end(); ci++)
 	{
-		data[neutropenia_index][i] = "0";
+		const string di_name = ci->first;
+		const size_t di_index = ci->second;
 
-		for (size_t j = 0; j < diag_codes.size(); j++)
+		for (size_t i = 0; i < row_count; i++)
 		{
-			const size_t index = diag_codes[j];
+			data[di_index][i] = "0";
 
-			// If found D700, then adjust the 
-			// Neutropenia indicator and go to next row
-			if (data[index][i] == "D700")
+			for (size_t j = 0; j < diag_codes.size(); j++)
 			{
-				data[neutropenia_index][i] = "1";
-				break;
+				const size_t index = diag_codes[j];
+
+				bool found = false;
+
+				for (size_t k = 0; k < indicators[di_index].diagnosis_codes.size(); k++)
+				{
+					// If found code, then adjust the 
+					// indicator and go to next row
+					if (data[index][i] == indicators[di_index].diagnosis_codes[k])
+					{
+						data[di_index][i] = "1";
+						found = true;
+						break;
+					}
+				}
+
+				if (found)
+					break;
 			}
 		}
 	}
 
-	// Search for myocarditis code(s), 
-	// to populate the myocarditis indicator
-	for (size_t i = 0; i < row_count; i++)
-	{
-		data[myocarditis_index][i] = "0";
 
-		for (size_t j = 0; j < diag_codes.size(); j++)
-		{
-			const size_t index = diag_codes[j];
+	//// Search for neutropenia code(s), 
+	//// to populate the Neutropenia indicator
+	//for (size_t i = 0; i < row_count; i++)
+	//{
+	//	data[neutropenia_index][i] = "0";
 
-			// If found code, then adjust the 
-			// indicator and go to next row
-			if (data[index][i] == "I401" || 
-				data[index][i] == "I408" ||
-				data[index][i] == "I409" ||
-				data[index][i] == "I41"  ||
-				data[index][i] == "I514")
-			{
-				data[myocarditis_index][i] = "1";
-				break;
-			}
-		}
-	}
+	//	for (size_t j = 0; j < diag_codes.size(); j++)
+	//	{
+	//		const size_t index = diag_codes[j];
 
-	// Search for cardiomyopathy code(s), 
-	// to populate the cardiomyopathy indicator
-	for (size_t i = 0; i < row_count; i++)
-	{
-		data[cardiomyopathy_index][i] = "0";
+	//		// If found D700, then adjust the 
+	//		// Neutropenia indicator and go to next row
+	//		if (data[index][i] == "D700")
+	//		{
+	//			data[neutropenia_index][i] = "1";
+	//			break;
+	//		}
+	//	}
+	//}
 
-		for (size_t j = 0; j < diag_codes.size(); j++)
-		{
-			const size_t index = diag_codes[j];
+	//// Search for myocarditis code(s), 
+	//// to populate the myocarditis indicator
+	//for (size_t i = 0; i < row_count; i++)
+	//{
+	//	data[myocarditis_index][i] = "0";
 
-			// If found code, then adjust the 
-			// indicator and go to next row
-			if (data[index][i] == "I420" ||
-				data[index][i] == "I421" ||
-				data[index][i] == "I422" ||
-				data[index][i] == "I423" ||
-				data[index][i] == "I424" ||
-				data[index][i] == "I425" ||
-				data[index][i] == "I427" ||
-				data[index][i] == "I428" ||
-				data[index][i] == "I429")
-			{
-				data[cardiomyopathy_index][i] = "1";
-				break;
-			}
-		}
-	}
+	//	for (size_t j = 0; j < diag_codes.size(); j++)
+	//	{
+	//		const size_t index = diag_codes[j];
+
+	//		// If found code, then adjust the 
+	//		// indicator and go to next row
+	//		if (data[index][i] == "I401" || 
+	//			data[index][i] == "I408" ||
+	//			data[index][i] == "I409" ||
+	//			data[index][i] == "I41"  ||
+	//			data[index][i] == "I514")
+	//		{
+	//			data[myocarditis_index][i] = "1";
+	//			break;
+	//		}
+	//	}
+	//}
+
+	//// Search for cardiomyopathy code(s), 
+	//// to populate the cardiomyopathy indicator
+	//for (size_t i = 0; i < row_count; i++)
+	//{
+	//	data[cardiomyopathy_index][i] = "0";
+
+	//	for (size_t j = 0; j < diag_codes.size(); j++)
+	//	{
+	//		const size_t index = diag_codes[j];
+
+	//		// If found code, then adjust the 
+	//		// indicator and go to next row
+	//		if (data[index][i] == "I420" ||
+	//			data[index][i] == "I421" ||
+	//			data[index][i] == "I422" ||
+	//			data[index][i] == "I423" ||
+	//			data[index][i] == "I424" ||
+	//			data[index][i] == "I425" ||
+	//			data[index][i] == "I427" ||
+	//			data[index][i] == "I428" ||
+	//			data[index][i] == "I429")
+	//		{
+	//			data[cardiomyopathy_index][i] = "1";
+	//			break;
+	//		}
+	//	}
+	//}
 
 	return true;
 }
@@ -296,45 +331,17 @@ size_t table_data::get_row_count(void)
 	return data[0].size();
 }
 
-size_t table_data::get_neutropenia_count(void)
+size_t table_data::get_count(const string& indicator_name)
 {
 	const size_t row_count = get_row_count();
+
+	size_t neutropenia_index = diagnosis_indicator_indices[indicator_name];
 
 	size_t count = 0;
 
 	for (size_t i = 0; i < row_count; i++)
 	{
 		if (data[neutropenia_index][i] == "1")
-			count++;
-	}
-
-	return count;
-}
-
-size_t table_data::get_myocarditis_count(void)
-{
-	const size_t row_count = get_row_count();
-
-	size_t count = 0;
-
-	for (size_t i = 0; i < row_count; i++)
-	{
-		if (data[myocarditis_index][i] == "1")
-			count++;
-	}
-
-	return count;
-}
-
-size_t table_data::get_cardiomyopathy_count(void)
-{
-	const size_t row_count = get_row_count();
-
-	size_t count = 0;
-
-	for (size_t i = 0; i < row_count; i++)
-	{
-		if (data[cardiomyopathy_index][i] == "1")
 			count++;
 	}
 

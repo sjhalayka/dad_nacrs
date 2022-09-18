@@ -25,6 +25,9 @@ using std::ostringstream;
 #include <vector>
 using std::vector;
 
+#include <map>
+using std::map;
+
 // String (a kind of array) using 8-bit chars
 // We use this in lieu of new[]/delete[]
 #include <string>
@@ -54,9 +57,9 @@ protected:
 	// Keep the data inaccessible from outside the class
 	vector<string> column_headers;
 	vector<vector<string>> data;
-	size_t neutropenia_index = 0;
-	size_t myocarditis_index = 0;
-	size_t cardiomyopathy_index = 0;
+
+	map<string, size_t> diagnosis_indicator_indices;
+	vector<diagnosis_indicator> indicators;
 
 	vector<size_t> diag_codes;
 
@@ -73,17 +76,15 @@ protected:
 
 	string filepath = "";
 
-	vector<diagnosis_indicator> indicators;
-
 public:
 
 	// These are accessible from outside the class
 	bool save_to_CSV_buffer(const string& filename);
 	bool load_from_CSV_buffer(const string& filename);
 	size_t get_row_count(void);
-	size_t get_neutropenia_count(void);
-	size_t get_myocarditis_count(void);
-	size_t get_cardiomyopathy_count(void);
+
+	size_t get_count(const string& indicator_name);
+
 	string get_filename(void);
 };
 

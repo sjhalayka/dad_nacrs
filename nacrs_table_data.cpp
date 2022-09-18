@@ -3,14 +3,13 @@
 
 bool nacrs_table_data::get_various_column_indices(void)
 {
-	if (false == get_index("Neutropenia_Indicator", neutropenia_index))
-		return false;
+	diagnosis_indicator_indices.clear();
 
-	if (false == get_index("Myocarditis_Indicator", myocarditis_index))
-		return false;
-
-	if (false == get_index("Cardiomyopathy_Indicator", cardiomyopathy_index))
-		return false;
+	for (size_t i = 0; i < indicators.size(); i++)
+	{
+		string name = indicators[i].diagnosis_name + "_Indicator";
+		diagnosis_indicator_indices[name] = i;
+	}
 
 	diag_codes.clear();
 

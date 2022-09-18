@@ -46,9 +46,9 @@ int main(void)
 		return -1;
 
 	cout << dtd.get_filename() << endl;
-	cout << "Neutropenia count: " << dtd.get_neutropenia_count() << endl;
-	cout << "Myocarditis count: " << dtd.get_myocarditis_count() << endl;
-	cout << "Cardiomyopathy count: " << dtd.get_cardiomyopathy_count() << endl;
+	cout << "Neutropenia count:    " << dtd.get_count("Neutropenia_Indicator") << endl;
+	cout << "Myocarditis count:    " << dtd.get_count("Myocarditis_Indicator") << endl;
+	cout << "Cardiomyopathy count: " << dtd.get_count("Cardiomyopathy_Indicator") << endl;
 	cout << endl;
 
 	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_cohorts_08_18_with_indicators.csv"))
@@ -58,9 +58,9 @@ int main(void)
 		return -1;
 
 	cout << dtd.get_filename() << endl;
-	cout << "Neutropenia count: " << dtd.get_neutropenia_count() << endl;
-	cout << "Myocarditis count: " << dtd.get_myocarditis_count() << endl;
-	cout << "Cardiomyopathy count: " << dtd.get_cardiomyopathy_count() << endl;
+	cout << "Neutropenia count:    " << dtd.get_count("Neutropenia_Indicator") << endl;
+	cout << "Myocarditis count:    " << dtd.get_count("Myocarditis_Indicator") << endl;
+	cout << "Cardiomyopathy count: " << dtd.get_count("Cardiomyopathy_Indicator") << endl;
 	cout << endl;
 
 	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/dad_post_08_18_with_indicators.csv"))
@@ -75,9 +75,9 @@ int main(void)
 		return -1;
 
 	cout << ntd.get_filename() << endl;
-	cout << "Neutropenia count: " << ntd.get_neutropenia_count() << endl;
-	cout << "Myocarditis count: " << ntd.get_myocarditis_count() << endl;
-	cout << "Cardiomyopathy count: " << ntd.get_cardiomyopathy_count() << endl;
+	cout << "Neutropenia count:    " << ntd.get_count("Neutropenia_Indicator") << endl;
+	cout << "Myocarditis count:    " << ntd.get_count("Myocarditis_Indicator") << endl;
+	cout << "Cardiomyopathy count: " << ntd.get_count("Cardiomyopathy_Indicator") << endl;
 	cout << endl;
 
 	if(false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_cohorts_08_18_with_indicators.csv"))
@@ -87,9 +87,9 @@ int main(void)
 		return -1;
 
 	cout << ntd.get_filename() << endl;
-	cout << "Neutropenia count: " << ntd.get_neutropenia_count() << endl;
-	cout << "Myocarditis count: " << ntd.get_myocarditis_count() << endl;
-	cout << "Cardiomyopathy count: " << ntd.get_cardiomyopathy_count() << endl;
+	cout << "Neutropenia count:    " << ntd.get_count("Neutropenia_Indicator") << endl;
+	cout << "Myocarditis count:    " << ntd.get_count("Myocarditis_Indicator") << endl;
+	cout << "Cardiomyopathy count: " << ntd.get_count("Cardiomyopathy_Indicator") << endl;
 	cout << endl;
 
 	if (false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Neutropenia/nacrs_post_08_18_with_indicators.csv"))
