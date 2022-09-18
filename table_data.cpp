@@ -27,10 +27,7 @@ void table_data::std_strtok(const string& s, const string& regex_s, vector<strin
 	sregex_token_iterator end;
 
 	while (iter != end)
-	{
-		tokens.push_back(*iter);
-		iter++;
-	}
+		tokens.push_back(*iter++);
 }
 
 bool table_data::get_data_buffer(const string& filename)
@@ -236,6 +233,7 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 
 		for (size_t i = 0; i < row_count; i++)
 		{
+			// Default value
 			data[di_index][i] = "0";
 
 			for (size_t j = 0; j < diag_codes.size(); j++)
