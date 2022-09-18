@@ -6,6 +6,7 @@
 
 int main(void)
 {
+	// Set up custom indicators
 	vector<diagnosis_indicator> indicators;
 	diagnosis_indicator d;
 
