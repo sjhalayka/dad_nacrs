@@ -3,7 +3,9 @@
 #define DAD_TABLE_DATA_H
 
 
+
 #include "table_data.h"
+
 
 
 // Inherit from table_data class
@@ -15,8 +17,9 @@ public:
 	dad_table_data(const vector<diagnosis_indicator>& src_indicators);
 
 	// Function that is dataset specific
-	bool get_various_column_indices(void);
+	bool get_various_diag_codes(void);
 };
+
 
 
 #endif

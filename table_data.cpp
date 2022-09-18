@@ -206,7 +206,23 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 	if (false == get_data_buffer(filename))
 		return false;
 
-	if (false == get_various_column_indices())
+	diagnosis_indicator_indices.clear();
+	diagnosis_indicator_names.clear();
+
+	for (size_t i = 0; i < indicators.size(); i++)
+	{
+		const string name = indicators[i].diagnosis_name;
+			
+		size_t index = 0;
+
+		if (false == get_index(name, index))
+			return false;
+
+		diagnosis_indicator_indices.push_back(index);
+		diagnosis_indicator_names.push_back(name);
+	}
+
+	if (false == get_various_diag_codes())
 		return false;
 
 	const size_t row_count = get_row_count();

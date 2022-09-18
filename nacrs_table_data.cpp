@@ -7,24 +7,8 @@ nacrs_table_data::nacrs_table_data(const vector<diagnosis_indicator>& src_indica
 	indicators = src_indicators;
 }
 
-bool nacrs_table_data::get_various_column_indices(void)
+bool nacrs_table_data::get_various_diag_codes(void)
 {
-	diagnosis_indicator_indices.clear();
-	diagnosis_indicator_names.clear();
-
-	for (size_t i = 0; i < indicators.size(); i++)
-	{	
-		const string name = indicators[i].diagnosis_name;
-
-		size_t index = 0;
-
-		if (false == get_index(name, index))
-			return false;
-
-		diagnosis_indicator_indices.push_back(index);
-		diagnosis_indicator_names.push_back(name);
-	}
-
 	diag_codes.clear();
 
 	size_t diag_codes_index = 0;

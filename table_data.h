@@ -77,7 +77,7 @@ protected:
 	// This function *must* be implemented by inheriting classes
 	// Making it equal to 0 means that one cannot instantiate the
 	// base class table_data
-	virtual bool get_various_column_indices(void) = 0;
+	virtual bool get_various_diag_codes(void) = 0;
 
 public:
 
@@ -85,9 +85,7 @@ public:
 	bool save_to_CSV_buffer(const string& filename);
 	bool load_from_CSV_buffer(const string& filename);
 	size_t get_row_count(void);
-
 	size_t get_count(const string& indicator_name);
-
 	string get_filename(void);
 };
 
