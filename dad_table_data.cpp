@@ -4,8 +4,7 @@
 bool dad_table_data::get_various_column_indices(void)
 {
 	diagnosis_indicator_indices.clear();
-
-	cout << "getting column indices" << endl;
+	diagnosis_indicator_names.clear();
 
 	for (size_t i = 0; i < indicators.size(); i++)
 	{
@@ -16,10 +15,9 @@ bool dad_table_data::get_various_column_indices(void)
 		if (false == get_index(name, index))
 			return false;
 
-		diagnosis_indicator_indices[name] = index;
+		diagnosis_indicator_indices.push_back(index);
+		diagnosis_indicator_names.push_back(name);
 	}
-
-	cout << "done getting indices" << endl;
 
 	// Get column numbers for DIAG_CODE_1 through DIAG_CODE_25
 	diag_codes.clear();
@@ -42,8 +40,6 @@ bool dad_table_data::get_various_column_indices(void)
 	// Something went horribly wrong
 	if (diag_codes.size() != 25)
 		return false;
-
-	cout << "done getting diag codes" << endl;
 
 	return true;
 }

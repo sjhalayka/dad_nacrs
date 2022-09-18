@@ -28,6 +28,9 @@ using std::vector;
 #include <map>
 using std::map;
 
+#include <unordered_map>
+using std::unordered_map;
+
 // String (a kind of array) using 8-bit chars
 // We use this in lieu of new[]/delete[]
 #include <string>
@@ -57,7 +60,10 @@ protected:
 	// Keep the data inaccessible from outside the class
 	vector<string> column_headers;
 	vector<vector<string>> data;
-	map<string, size_t> diagnosis_indicator_indices;
+	
+	vector<string> diagnosis_indicator_names;
+	vector<size_t> diagnosis_indicator_indices;
+
 	vector<diagnosis_indicator> indicators;
 	vector<size_t> diag_codes;
 	string filepath = "";
