@@ -161,6 +161,27 @@ bool table_data::get_data_buffer(const string& filename)
 	return true;
 }
 
+bool table_data::get_diagnosis_indicators(void)
+{
+	diagnosis_indicator_indices.clear();
+	diagnosis_indicator_names.clear();
+
+	for (size_t i = 0; i < indicators.size(); i++)
+	{
+		const string name = indicators[i].diagnosis_name;
+
+		size_t index = 0;
+
+		if (false == get_index(name, index))
+			return false;
+
+		diagnosis_indicator_indices.push_back(index);
+		diagnosis_indicator_names.push_back(name);
+	}
+
+	return true;
+}
+
 bool table_data::save_to_CSV_buffer(const string& filename)
 {
 	// Throw everything into a single string.
@@ -198,28 +219,13 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 	return true;
 }
 
-
 bool table_data::load_from_CSV_buffer(const string& filename)
 {
 	if (false == get_data_buffer(filename))
 		return false;
 
-	// Set up diagnosis indicators
-	diagnosis_indicator_indices.clear();
-	diagnosis_indicator_names.clear();
-
-	for (size_t i = 0; i < indicators.size(); i++)
-	{
-		const string name = indicators[i].diagnosis_name;
-			
-		size_t index = 0;
-
-		if (false == get_index(name, index))
-			return false;
-
-		diagnosis_indicator_indices.push_back(index);
-		diagnosis_indicator_names.push_back(name);
-	}
+	if (false == get_diagnosis_indicators())
+		return false;
 
 	if (false == get_various_diag_codes())
 		return false;
@@ -244,7 +250,7 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 
 				bool found = false;
 
-				// For each indicator code
+				// For each indicator's code
 				for (size_t k = 0; k < indicators[v].diagnosis_codes.size(); k++)
 				{
 					// If found code, then adjust the 
@@ -276,13 +282,13 @@ size_t table_data::get_row_count(void)
 
 size_t table_data::get_count(const string& indicator_name)
 {
-	const size_t row_count = get_row_count();
 	size_t indicator_index = 0;
 
 	if (false == get_index(indicator_name, indicator_index))
 		return 0;
 
 	size_t count = 0;
+	const size_t row_count = get_row_count();
 
 	for (size_t i = 0; i < row_count; i++)
 		if (data[indicator_index][i] == "1")

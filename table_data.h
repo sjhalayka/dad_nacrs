@@ -67,6 +67,7 @@ protected:
 	bool get_index(const string& column_name, size_t& index);
 	void std_strtok(const string& s, const string& regex_s, vector<string>& tokens);
 	bool get_data_buffer(const string& filename);
+	bool get_diagnosis_indicators(void);
 
 	// This function *must* be implemented by inheriting classes
 	// Making it equal to 0 means that one cannot instantiate the
