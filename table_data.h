@@ -25,12 +25,6 @@ using std::ostringstream;
 #include <vector>
 using std::vector;
 
-#include <map>
-using std::map;
-
-#include <unordered_map>
-using std::unordered_map;
-
 // String (a kind of array) using 8-bit chars
 // We use this in lieu of new[]/delete[]
 #include <string>
