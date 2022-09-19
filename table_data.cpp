@@ -250,7 +250,7 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 
 				bool found = false;
 
-				// For each indicator's code
+				// For each indicator code
 				for (size_t k = 0; k < indicators[v].diagnosis_codes.size(); k++)
 				{
 					// If found code, then adjust the 
