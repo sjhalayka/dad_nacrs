@@ -238,26 +238,26 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 		const size_t row_count = get_row_count();
 
 		// For each row
-		for (size_t i = 0; i < row_count; i++)
+		for (size_t r = 0; r < row_count; r++)
 		{
 			// Use the default value
-			data[di_index][i] = "0";
+			data[di_index][r] = "0";
 
 			// For each diagnostic code
-			for (size_t j = 0; j < diag_codes.size(); j++)
+			for (size_t d = 0; d < diag_codes.size(); d++)
 			{
-				const size_t j_index = diag_codes[j];
+				const size_t j = diag_codes[d];
 
 				bool found = false;
 
 				// For each indicator's codes
-				for (size_t k = 0; k < indicators[v].diagnosis_codes.size(); k++)
+				for (size_t i = 0; i < indicators[v].diagnosis_codes.size(); i++)
 				{
 					// If found code match, then adjust the 
-					// indicator and go to the next row
-					if (data[j_index][i] == indicators[v].diagnosis_codes[k])
+					// indicator's datum and go to the next row
+					if (data[j][r] == indicators[v].diagnosis_codes[i])
 					{
-						data[di_index][i] = "1";
+						data[di_index][r] = "1";
 						found = true;
 						break;
 					}
