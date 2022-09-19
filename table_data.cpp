@@ -240,7 +240,7 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 		// For each row
 		for (size_t i = 0; i < row_count; i++)
 		{
-			// Default value
+			// Use the default value
 			data[di_index][i] = "0";
 
 			// For each diagnostic code
@@ -250,11 +250,11 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 
 				bool found = false;
 
-				// For each indicator code
+				// For each indicator's codes
 				for (size_t k = 0; k < indicators[v].diagnosis_codes.size(); k++)
 				{
-					// If found code, then adjust the 
-					// indicator and go to next row
+					// If found code match, then adjust the 
+					// indicator and go to the next row
 					if (data[j_index][i] == indicators[v].diagnosis_codes[k])
 					{
 						data[di_index][i] = "1";
