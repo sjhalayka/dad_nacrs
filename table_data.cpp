@@ -88,6 +88,7 @@ bool table_data::get_data_buffer(const string& filename)
 
 	bool first_line = true;
 
+	// For each character in the file
 	for (size_t i = 0; i < file_size; i++)
 	{
 		if (s[i] == '\r')
@@ -203,6 +204,7 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 	if (false == get_data_buffer(filename))
 		return false;
 
+	// Set up diagnosis indicators
 	diagnosis_indicator_indices.clear();
 	diagnosis_indicator_names.clear();
 
@@ -222,23 +224,27 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 	if (false == get_various_diag_codes())
 		return false;
 
+	// For each diagnosis indicator
 	for(size_t v = 0; v < diagnosis_indicator_indices.size(); v++)
 	{
 		const string di_name = diagnosis_indicator_names[v];
 		const size_t di_index = diagnosis_indicator_indices[v];
 		const size_t row_count = get_row_count();
 
+		// For each row
 		for (size_t i = 0; i < row_count; i++)
 		{
 			// Default value
 			data[di_index][i] = "0";
 
+			// For each diagnostic code
 			for (size_t j = 0; j < diag_codes.size(); j++)
 			{
 				const size_t j_index = diag_codes[j];
 
 				bool found = false;
 
+				// For each indicator code
 				for (size_t k = 0; k < indicators[v].diagnosis_codes.size(); k++)
 				{
 					// If found code, then adjust the 
