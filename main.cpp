@@ -3,7 +3,6 @@
 
 
 
-
 int main(void)
 {
 	// Set up custom indicators

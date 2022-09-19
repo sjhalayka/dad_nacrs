@@ -222,14 +222,11 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 	if (false == get_various_diag_codes())
 		return false;
 
-	const size_t row_count = get_row_count();
-
-	size_t ci_index = 0;
-
-	for(size_t ci = 0; ci < diagnosis_indicator_indices.size(); ci++)
+	for(size_t v = 0; v < diagnosis_indicator_indices.size(); v++)
 	{
-		const string di_name = diagnosis_indicator_names[ci];
-		const size_t di_index = diagnosis_indicator_indices[ci];
+		const string di_name = diagnosis_indicator_names[v];
+		const size_t di_index = diagnosis_indicator_indices[v];
+		const size_t row_count = get_row_count();
 
 		for (size_t i = 0; i < row_count; i++)
 		{
@@ -238,15 +235,15 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 
 			for (size_t j = 0; j < diag_codes.size(); j++)
 			{
-				const size_t index = diag_codes[j];
+				const size_t j_index = diag_codes[j];
 
 				bool found = false;
 
-				for (size_t k = 0; k < indicators[ci_index].diagnosis_codes.size(); k++)
+				for (size_t k = 0; k < indicators[v].diagnosis_codes.size(); k++)
 				{
 					// If found code, then adjust the 
 					// indicator and go to next row
-					if (data[index][i] == indicators[ci_index].diagnosis_codes[k])
+					if (data[j_index][i] == indicators[v].diagnosis_codes[k])
 					{
 						data[di_index][i] = "1";
 						found = true;
@@ -258,8 +255,6 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 					break;
 			}
 		}
-
-		ci_index++;
 	}
 
 	return true;
