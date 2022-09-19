@@ -5,12 +5,12 @@ bool table_data::get_index(const string& column_name, size_t& index)
 {
 	index = 0;
 
-	for (vector<string>::const_iterator ci = column_headers.begin(); ci != column_headers.end(); ci++)
+	vector<string>::const_iterator ci = find(column_headers.begin(), column_headers.end(), column_name);
+
+	if (ci != column_headers.end())
 	{
-		if (*ci == column_name)
-			return true;
-		else
-			index++;
+		index = ci - column_headers.begin();
+		return true;
 	}
 
 	// If we made it this far, there was no match at all
@@ -33,11 +33,6 @@ void table_data::std_strtok(const string& s, const string& regex_s, vector<strin
 bool table_data::get_data_buffer(const string& filename)
 {
 	filepath = "";
-
-	//cout << "Getting file size" << endl;
-
-	//std::chrono::high_resolution_clock::time_point start_time, end_time;
-	//start_time = std::chrono::high_resolution_clock::now();
 
 	column_headers.clear();
 	data.clear();
@@ -80,7 +75,7 @@ bool table_data::get_data_buffer(const string& filename)
 	if (s[s.size() - 1] != '\n')
 	{
 		s += '\n';
-		file_size += 1;
+		file_size++;
 	}
 
 	vector<string> tokens;
@@ -121,29 +116,29 @@ bool table_data::get_data_buffer(const string& filename)
 			}
 			else
 			{
-				vector<string> data_cells = tokens;
+				const size_t input_column_count = column_headers.size() - indicators.size();
 
 				// Touch up the data in case it's broken
-				if (data_cells.size() > (column_headers.size() - indicators.size()))
+				if (tokens.size() > input_column_count)
 				{
 					// Too many data, chop off the end
-					data_cells.resize(column_headers.size() - indicators.size());
+					tokens.resize(input_column_count);
 				}
-				else if (data_cells.size() < (column_headers.size() - indicators.size()))
+				else if (tokens.size() < input_column_count)
 				{
 					// Not enough data, pad with empty strings
-					size_t num_to_add = (column_headers.size() - indicators.size()) - data_cells.size();
+					const size_t num_to_add = input_column_count - tokens.size();
 
 					for (size_t i = 0; i < num_to_add; i++)
-						data_cells.push_back("");
+						tokens.push_back("");
 				}
 
-				// Initialize indicators with blank data
+				// Initialize indicators with empty strings
 				for (size_t j = 0; j < indicators.size(); j++)
-					data_cells.push_back("");
+					tokens.push_back("");
 
 				for (size_t j = 0; j < column_headers.size(); j++)
-					data[j].push_back(data_cells[j]);
+					data[j].push_back(tokens[j]);
 			}
 
 			tokens.clear();
@@ -153,10 +148,6 @@ bool table_data::get_data_buffer(const string& filename)
 			temp_token += s[i];
 		}
 	}
-
-	//end_time = std::chrono::high_resolution_clock::now();
-	//std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
-	//cout << elapsed.count() / 1000.0f << endl;
 
 	return true;
 }
