@@ -230,15 +230,16 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 	if (false == get_various_diag_codes())
 		return false;
 
+	// The loop from hell is as follows...
+
 	// For each diagnosis indicator
 	for(size_t v = 0; v < diagnosis_indicator_indices.size(); v++)
 	{
 		const string di_name = diagnosis_indicator_names[v];
 		const size_t di_index = diagnosis_indicator_indices[v];
-		const size_t row_count = get_row_count();
 
 		// For each row
-		for (size_t r = 0; r < row_count; r++)
+		for (size_t r = 0; r < get_row_count(); r++)
 		{
 			// Use the default value
 			data[di_index][r] = "0";
