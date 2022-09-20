@@ -171,6 +171,8 @@ bool table_data::get_diagnosis_indicators(void)
 
 bool table_data::save_to_CSV_buffer(const string& filename)
 {
+	cout << "Saving to file" << endl;
+
 	// Throw everything into a single string.
 	// This takes up 2x the RAM, but it's about as fast
 	// as it can get
@@ -199,15 +201,21 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 		s += '\n';
 	}
 
+	cout << "Writing data" << endl;
+
 	// Write string contents to file in one shot
 	ofstream outfile(filename, ifstream::binary);
 	outfile.write(s.c_str(), s.length());
+
+	cout << "Done saving to file" << endl;
 
 	return true;
 }
 
 bool table_data::load_from_CSV_buffer(const string& filename)
 {
+	cout << "Loading from file" << endl;
+
 	if (false == get_data_buffer(filename))
 		return false;
 
@@ -255,6 +263,8 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 			}
 		}
 	}
+
+	cout << "Done loading from file" << endl;
 
 	return true;
 }
