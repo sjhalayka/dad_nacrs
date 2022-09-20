@@ -5,7 +5,7 @@
 
 int main(void)
 {
-	// Set up custom indicators
+	// Set up indicators
 	vector<diagnosis_indicator> indicators;
 	diagnosis_indicator d;
 

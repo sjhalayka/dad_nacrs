@@ -52,8 +52,6 @@ bool table_data::get_data_buffer(const string& filename)
 	if (file_size == 0)
 		return false;
 
-	//cout << "Reopening file" << endl;
-
 	infile.open(filename, ifstream::binary);
 
 	if (infile.fail())
@@ -64,10 +62,8 @@ bool table_data::get_data_buffer(const string& filename)
 
 	filepath = filename;
 
-	//cout << "Allocating memory" << endl;
 	string s(file_size, ' ');
 
-	//cout << "Reading file" << endl;
 	infile.read(&s[0], file_size);
 	infile.close();
 
@@ -226,7 +222,6 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 	// For each diagnosis indicator
 	for(size_t v = 0; v < diagnosis_indicator_indices.size(); v++)
 	{
-		const string di_name = diagnosis_indicator_names[v];
 		const size_t di_index = diagnosis_indicator_indices[v];
 
 		// For each row
