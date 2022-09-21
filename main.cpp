@@ -6,6 +6,10 @@
 int main(void)
 {
 	// Set up indicators
+	//
+	// Here we make use of the push_back
+	// function, which adds an item to the end
+	// of the vector
 	vector<diagnosis_indicator> indicators;
 	diagnosis_indicator d;
 

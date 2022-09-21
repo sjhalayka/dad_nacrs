@@ -225,8 +225,6 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 	if (false == get_various_diag_codes())
 		return false;
 
-	// The loop from hell is as follows...
-
 	// For each diagnosis indicator
 	for(size_t v = 0; v < diagnosis_indicator_indices.size(); v++)
 	{
