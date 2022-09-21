@@ -3,6 +3,7 @@
 #define TABLE_DATA_H
 
 
+
 // Standard library console input/output
 #include <iostream>
 using std::cout;
@@ -57,9 +58,9 @@ protected:
 	
 	vector<string> diagnosis_indicator_names;
 	vector<size_t> diagnosis_indicator_indices;
-
 	vector<diagnosis_indicator> indicators;
 	vector<size_t> diag_codes;
+
 	string filepath = "";
 
 	// The following are helper functions that are inaccessible
@@ -83,6 +84,7 @@ public:
 	size_t get_count(const string& indicator_name);
 	string get_filename(void);
 };
+
 
 
 #endif

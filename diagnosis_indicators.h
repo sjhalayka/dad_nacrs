@@ -10,6 +10,8 @@ using std::string;
 #include <vector>
 using std::vector;
 
+
+
 class diagnosis_indicator
 {
 public:

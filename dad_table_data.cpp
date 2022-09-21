@@ -33,3 +33,6 @@ bool dad_table_data::get_various_diag_codes(void)
 
 	return true;
 }
+
+
+
