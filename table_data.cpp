@@ -262,6 +262,46 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 		}
 	}
 
+
+
+	//// For each diagnosis indicator
+	//for (size_t v = 0; v < diagnosis_indicator_indices.size(); v++)
+	//{
+	//	const size_t di_index = diagnosis_indicator_indices[v];
+
+	//	// For each indicator's codes
+	//	for (size_t i = 0; i < indicators[v].diagnosis_codes.size(); i++)
+	//	{
+	//		// For each row
+	//		for (size_t r = 0; r < get_row_count(); r++)
+	//		{
+	//			// Use the default value
+	//			data[di_index][r] = "0";
+
+	//			// For each diagnostic code
+	//			for (size_t d = 0; d < diag_codes.size(); d++)
+	//			{
+	//				const size_t j = diag_codes[d];
+
+	//				// If found code match, then adjust the 
+	//				// indicator's datum and go to the next row
+	//				if (data[j][r] == indicators[v].diagnosis_codes[i])
+	//				{
+	//					data[di_index][r] = "1";
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
+
+
+
+
+
+
+
+
 	//cout << "Done loading from file" << endl;
 
 	return true;
