@@ -226,21 +226,21 @@ bool table_data::load_from_CSV_buffer(const string& filename)
 		return false;
 
 	// For each diagnosis indicator
-	for(size_t v = 0; v < diagnosis_indicator_indices.size(); v++)
+	for(size_t q = 0; q < diagnosis_indicator_indices.size(); q++)
 	{
 		// For each row
 		for (size_t r = 0; r < get_row_count(); r++)
 		{
 			// Use the default value
-			data[diagnosis_indicator_indices[v]][r] = "0";
+			data[diagnosis_indicator_indices[q]][r] = "0";
 
 			// For each diagnostic code
 			// For each indicator's codes
 			// If found code match, then adjust the indicator's datum
 			for (size_t d = 0; d < diag_codes.size(); d++)
-				for (size_t i = 0; i < indicators[v].diagnosis_codes.size(); i++)
-					if (data[diag_codes[d]][r] == indicators[v].diagnosis_codes[i])
-						data[diagnosis_indicator_indices[v]][r] = "1";
+				for (size_t i = 0; i < indicators[q].diagnosis_codes.size(); i++)
+					if (data[diag_codes[d]][r] == indicators[q].diagnosis_codes[i])
+						data[diagnosis_indicator_indices[q]][r] = "1";
 		}
 	}
 
