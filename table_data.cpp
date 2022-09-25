@@ -181,7 +181,7 @@ bool table_data::get_matches(void)
 			data[diagnosis_indicator_indices[q]][r] = "0";
 
 			// For each diagnostic code
-			// For each indicator's codes
+			// For each indicator's diagnostic codes
 			// If found code match, then adjust the indicator's datum
 			for (size_t d = 0; d < diag_codes.size(); d++)
 				for (size_t i = 0; i < indicators[q].diagnosis_codes.size(); i++)
