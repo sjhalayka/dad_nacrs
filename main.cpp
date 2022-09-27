@@ -30,7 +30,6 @@ int main(void)
 	d.diagnosis_codes.clear();
 	d.diagnosis_codes.push_back("I420");
 	d.diagnosis_codes.push_back("I421");
-	d.diagnosis_codes.push_back("I422");
 	d.diagnosis_codes.push_back("I423");
 	d.diagnosis_codes.push_back("I424");
 	d.diagnosis_codes.push_back("I425");
