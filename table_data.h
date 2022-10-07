@@ -78,9 +78,8 @@ protected:
 
 public:
 
-	void print_indicators(void);
-
 	// These are accessible from outside the class
+	void print_indicators(void);
 	bool save_to_CSV_buffer(const string& filename);
 	bool load_from_CSV_buffer(const string& filename);
 	size_t get_row_count(void);
