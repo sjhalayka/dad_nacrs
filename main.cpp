@@ -58,35 +58,22 @@ int main(void)
 		return -1;
 
 	cout << dtd.get_filename() << endl;
-	cout << "Neutropenia count:    " << dtd.get_count("Neutropenia_Indicator") << endl;
-	cout << "Myocarditis count:    " << dtd.get_count("Myocarditis_Indicator") << endl;
-	cout << "Cardiomyopathy count: " << dtd.get_count("Cardiomyopathy_Indicator") << endl;
-	cout << "Schizophrenia count: " << dtd.get_count("Schizophrenia_Indicator") << endl;
-	cout << "Schizoaffective count: " << dtd.get_count("Schizoaffective_Indicator") << endl;
-	cout << "Bipolar count: " << dtd.get_count("Bipolar_Indicator") << endl;
-	cout << "Other non-organic psychosis count: " << dtd.get_count("Other_non-organic_psychosis_Indicator") << endl;
-	cout << "Unspecified organic psychosis count: " << dtd.get_count("Unspecified_organic_psychosis_Indicator") << endl;
-	cout << "Self-harm: " << dtd.get_count("Self-harm_Indicator") << endl;
-	cout << endl;
+
+	for (size_t i = 0; i < indicators.size(); i++)
+		cout << indicators[i].diagnosis_name << ": " << dtd.get_count(indicators[i].diagnosis_name) << endl;
 
 	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18_with_indicators.csv"))
 		return -1;
+
+
 
 	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18.csv"))
 		return -1;
 
 	cout << dtd.get_filename() << endl;
-	cout << "Neutropenia count:    " << dtd.get_count("Neutropenia_Indicator") << endl;
-	cout << "Myocarditis count:    " << dtd.get_count("Myocarditis_Indicator") << endl;
-	cout << "Cardiomyopathy count: " << dtd.get_count("Cardiomyopathy_Indicator") << endl;
-	cout << "Schizophrenia count: " << dtd.get_count("Schizophrenia_Indicator") << endl;
-	cout << "Schizoaffective count: " << dtd.get_count("Schizoaffective_Indicator") << endl;
-	cout << "Bipolar count: " << dtd.get_count("Bipolar_Indicator") << endl;
-	cout << "Other non-organic psychosis count: " << dtd.get_count("Other_non-organic_psychosis_Indicator") << endl;
-	cout << "Unspecified organic psychosis count: " << dtd.get_count("Unspecified_organic_psychosis_Indicator") << endl;
-	cout << "Self-harm: " << dtd.get_count("Self-harm_Indicator") << endl;
-	cout << endl;
 
+	for (size_t i = 0; i < indicators.size(); i++)
+		cout << indicators[i].diagnosis_name << ": " << dtd.get_count(indicators[i].diagnosis_name) << endl;
 
 	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18_with_indicators.csv"))
 		return -1;
@@ -100,34 +87,25 @@ int main(void)
 		return -1;
 
 	cout << ntd.get_filename() << endl;
-	cout << "Neutropenia count:    " << ntd.get_count("Neutropenia_Indicator") << endl;
-	cout << "Myocarditis count:    " << ntd.get_count("Myocarditis_Indicator") << endl;
-	cout << "Cardiomyopathy count: " << ntd.get_count("Cardiomyopathy_Indicator") << endl;
-	cout << "Schizophrenia count: " << ntd.get_count("Schizophrenia_Indicator") << endl;
-	cout << "Schizoaffective count: " << ntd.get_count("Schizoaffective_Indicator") << endl;
-	cout << "Bipolar count: " << ntd.get_count("Bipolar_Indicator") << endl;
-	cout << "Other non-organic psychosis count: " << ntd.get_count("Other_non-organic_psychosis_Indicator") << endl;
-	cout << "Unspecified organic psychosis count: " << ntd.get_count("Unspecified_organic_psychosis_Indicator") << endl;
-	cout << "Self-harm: " << ntd.get_count("Self-harm_Indicator") << endl;
-	cout << endl;
 
+	for (size_t i = 0; i < indicators.size(); i++)
+		cout << indicators[i].diagnosis_name << ": " << ntd.get_count(indicators[i].diagnosis_name) << endl;
+
+	cout << endl;
 
 	if(false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18_with_indicators.csv"))
 		return -1;
+
+
 
 	if (false == ntd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18.csv"))
 		return -1;
 
 	cout << ntd.get_filename() << endl;
-	cout << "Neutropenia count:    " << ntd.get_count("Neutropenia_Indicator") << endl;
-	cout << "Myocarditis count:    " << ntd.get_count("Myocarditis_Indicator") << endl;
-	cout << "Cardiomyopathy count: " << ntd.get_count("Cardiomyopathy_Indicator") << endl;
-	cout << "Schizophrenia count: " << ntd.get_count("Schizophrenia_Indicator") << endl;
-	cout << "Schizoaffective count: " << ntd.get_count("Schizoaffective_Indicator") << endl;
-	cout << "Bipolar count: " << ntd.get_count("Bipolar_Indicator") << endl;
-	cout << "Other non-organic psychosis count: " << ntd.get_count("Other_non-organic_psychosis_Indicator") << endl;
-	cout << "Unspecified organic psychosis count: " << ntd.get_count("Unspecified_organic_psychosis_Indicator") << endl;
-	cout << "Self-harm: " << ntd.get_count("Self-harm_Indicator") << endl;
+
+	for (size_t i = 0; i < indicators.size(); i++)
+		cout << indicators[i].diagnosis_name << ": " << ntd.get_count(indicators[i].diagnosis_name) << endl;
+
 	cout << endl;
 
 	if (false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18_with_indicators.csv"))
