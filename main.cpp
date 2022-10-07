@@ -18,7 +18,7 @@ int main(void)
 	indicators.push_back(d);
 
 	d.diagnosis_name = "Cardiomyopathy_Indicator";
-	d.diagnosis_codes = { "I420", "I421", "I422", "I423" "I424", "I425", "I427", "I428", "I429" };
+	d.diagnosis_codes = { "I420", "I421", "I422", "I423", "I424", "I425", "I427", "I428", "I429" };
 	indicators.push_back(d);
 
 	d.diagnosis_name = "Schizophrenia_Indicator";
@@ -42,7 +42,7 @@ int main(void)
 	indicators.push_back(d);
 	
 	d.diagnosis_name = "Self-harm_Indicator";
-	d.diagnosis_codes = { "X60", "X61", "X62", "X63", "X64", "X65", "X66", "X67", "X68", "X69" "X70", "X71", "X72", "X73", "X74", "X75", "X76", "X77", "X78", "X79", "X80", "X81", "X82", "X83", "X84" };
+	d.diagnosis_codes = { "X60", "X61", "X62", "X63", "X64", "X65", "X66", "X67", "X68", "X69", "X70", "X71", "X72", "X73", "X74", "X75", "X76", "X77", "X78", "X79", "X80", "X81", "X82", "X83", "X84" };
 	indicators.push_back(d);
 
 
@@ -92,3 +92,5 @@ int main(void)
 	// It's all good
 	return 0;
 }
+
+
