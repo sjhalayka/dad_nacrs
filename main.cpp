@@ -6,10 +6,6 @@
 int main(void)
 {
 	// Set up indicators
-	//
-	// Here we make use of the push_back
-	// function, which adds an item to the end
-	// of the vector
 	vector<diagnosis_indicator> indicators;
 	diagnosis_indicator d;
 
@@ -57,23 +53,15 @@ int main(void)
 	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18.csv"))
 		return -1;
 
-	cout << dtd.get_filename() << endl;
-
-	for (size_t i = 0; i < indicators.size(); i++)
-		cout << indicators[i].diagnosis_name << ": " << dtd.get_count(indicators[i].diagnosis_name) << endl;
+	dtd.print_indicators();
 
 	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18_with_indicators.csv"))
 		return -1;
 
-
-
 	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18.csv"))
 		return -1;
 
-	cout << dtd.get_filename() << endl;
-
-	for (size_t i = 0; i < indicators.size(); i++)
-		cout << indicators[i].diagnosis_name << ": " << dtd.get_count(indicators[i].diagnosis_name) << endl;
+	dtd.print_indicators();
 
 	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18_with_indicators.csv"))
 		return -1;
@@ -86,27 +74,15 @@ int main(void)
 	if (false == ntd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18.csv"))
 		return -1;
 
-	cout << ntd.get_filename() << endl;
-
-	for (size_t i = 0; i < indicators.size(); i++)
-		cout << indicators[i].diagnosis_name << ": " << ntd.get_count(indicators[i].diagnosis_name) << endl;
-
-	cout << endl;
+	ntd.print_indicators();
 
 	if(false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18_with_indicators.csv"))
 		return -1;
 
-
-
 	if (false == ntd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18.csv"))
 		return -1;
 
-	cout << ntd.get_filename() << endl;
-
-	for (size_t i = 0; i < indicators.size(); i++)
-		cout << indicators[i].diagnosis_name << ": " << ntd.get_count(indicators[i].diagnosis_name) << endl;
-
-	cout << endl;
+	ntd.print_indicators();
 
 	if (false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18_with_indicators.csv"))
 		return -1;

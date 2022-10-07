@@ -286,3 +286,14 @@ string table_data::get_filename(void)
 {
 	return filepath;
 }
+
+void table_data::print_indicators(void)
+{
+	cout << get_filename() << endl;
+
+	for (size_t i = 0; i < indicators.size(); i++)
+		cout << indicators[i].diagnosis_name << ": " << get_count(indicators[i].diagnosis_name) << endl;
+
+	cout << endl;
+}
+

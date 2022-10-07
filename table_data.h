@@ -78,6 +78,8 @@ protected:
 
 public:
 
+	void print_indicators(void);
+
 	// These are accessible from outside the class
 	bool save_to_CSV_buffer(const string& filename);
 	bool load_from_CSV_buffer(const string& filename);
