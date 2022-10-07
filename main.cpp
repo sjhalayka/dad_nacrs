@@ -18,7 +18,7 @@ int main(void)
 	indicators.push_back(d);
 
 	d.diagnosis_name = "Cardiomyopathy_Indicator";
-	d.diagnosis_codes = { "I420", "I421", "I423" "I424", "I425", "I427", "I428", "I429" };
+	d.diagnosis_codes = { "I420", "I421", "I422", "I423" "I424", "I425", "I427", "I428", "I429" };
 	indicators.push_back(d);
 
 	d.diagnosis_name = "Schizophrenia_Indicator";
