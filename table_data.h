@@ -50,7 +50,7 @@ using std::sregex_token_iterator;
 // Base class
 class table_data
 {
-protected:
+public:
 
 	// Keep the data inaccessible from outside the class
 	vector<string> column_headers;
@@ -65,11 +65,13 @@ protected:
 
 	// The following are helper functions that are inaccessible
 	// from outside of the class
-	bool get_index(const string& column_name, size_t& index);
+	bool get_index(const string& column_name, size_t& index) const;
 	void std_strtok(const string& s, const string& regex_s, vector<string>& tokens);
 	bool get_data_buffer(const string& filename);
 	bool get_diagnosis_indicators(void);
 	bool get_matches(void);
+
+
 
 	// This function *must* be implemented by inheriting classes
 	// Making it equal to 0 means that one cannot instantiate the

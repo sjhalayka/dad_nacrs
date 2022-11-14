@@ -1,7 +1,7 @@
 #include "table_data.h"
 
 
-bool table_data::get_index(const string& column_name, size_t& index)
+bool table_data::get_index(const string& column_name, size_t& index) const
 {
 	index = 0;
 
@@ -195,7 +195,7 @@ bool table_data::get_matches(void)
 
 bool table_data::save_to_CSV_buffer(const string& filename)
 {
-	//cout << "Saving to file" << endl;
+	cout << "Saving to file" << endl;
 
 	// Throw everything into a single string.
 	// This takes up 2x the RAM, but it's about as fast
@@ -213,6 +213,8 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 
 	const size_t row_count = get_row_count();
 
+	cout << row_count << endl;
+
 	for (size_t i = 0; i < row_count; i++)
 	{
 		for (size_t j = 0; j < (column_headers.size() - 1); j++)
@@ -225,13 +227,13 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 		s += '\n';
 	}
 
-	//cout << "Writing data" << endl;
+	cout << "Writing data" << endl;
 
 	// Write string contents to file in one shot
 	ofstream outfile(filename, ifstream::binary);
 	outfile.write(s.c_str(), s.length());
 
-	//cout << "Done saving to file" << endl;
+	cout << "Done saving to file" << endl;
 
 	return true;
 }

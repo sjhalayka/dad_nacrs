@@ -2,6 +2,138 @@
 #include "nacrs_table_data.h"
 
 
+template <class T>
+void merge( const T &left, const T& right, dad_table_data &out)
+{
+	out.column_headers.clear();
+	out.data.clear();
+
+	unordered_map<string, size_t> header_count;
+
+	for (size_t i = 0; i < left.column_headers.size(); i++)
+		header_count[left.column_headers[i]]++;
+
+	for (size_t i = 0; i < right.column_headers.size(); i++)
+		header_count[right.column_headers[i]]++;
+
+	for (auto ci = header_count.begin(); ci != header_count.end(); ci++)
+	{
+		size_t index_left = 0;
+		size_t index_right = 0;
+
+		if (false == left.get_index(ci->first, index_left) || false == right.get_index(ci->first, index_right))
+		{
+			cout << "dropping " << ci->first << endl;
+		}
+		else
+		{
+			cout << "merging " << ci->first << endl;
+
+			vector<string> empty_vec;
+
+			out.column_headers.push_back(ci->first);
+			out.data.push_back(empty_vec);
+
+			for (size_t i = 0; i < left.data[index_left].size(); i++)
+				out.data[out.data.size() - 1].push_back(left.data[index_left][i]);
+
+			for (size_t i = 0; i < right.data[index_right].size(); i++)
+				out.data[out.data.size() - 1].push_back(right.data[index_right][i]);
+		}
+	}
+}
+
+/*
+void merge(const nacrs_table_data& left, const dad_table_data& right, dad_table_data& out)
+{
+	out.column_headers.clear();
+	out.data.clear();
+
+	unordered_map<string, size_t> header_count;
+
+	for (size_t i = 0; i < left.column_headers.size(); i++)
+		header_count[left.column_headers[i]]++;
+
+	for (size_t i = 0; i < right.column_headers.size(); i++)
+		header_count[right.column_headers[i]]++;
+
+	for (auto ci = header_count.begin(); ci != header_count.end(); ci++)
+	{
+		size_t index_left = 0;
+		size_t index_right = 0;
+
+		if (false == left.get_index(ci->first, index_left) || false == right.get_index(ci->first, index_right))
+		{
+			cout << "dropping " << ci->first << endl;
+		}
+		else
+		{
+			cout << "merging " << ci->first << endl;
+
+			vector<string> empty_vec;
+
+			out.column_headers.push_back(ci->first);
+			out.data.push_back(empty_vec);
+
+			for (size_t i = 0; i < left.data[index_left].size(); i++)
+				out.data[out.data.size() - 1].push_back(left.data[index_left][i]);
+
+			for (size_t i = 0; i < right.data[index_right].size(); i++)
+				out.data[out.data.size() - 1].push_back(right.data[index_right][i]);
+		}
+	}
+}
+
+
+
+
+void merge(const dad_table_data& left, const nacrs_table_data& right, dad_table_data& out)
+{
+	out.column_headers.clear();
+	out.data.clear();
+
+	unordered_map<string, size_t> header_count;
+
+	for (size_t i = 0; i < left.column_headers.size(); i++)
+		header_count[left.column_headers[i]]++;
+
+	for (size_t i = 0; i < right.column_headers.size(); i++)
+		header_count[right.column_headers[i]]++;
+
+	for (auto ci = header_count.begin(); ci != header_count.end(); ci++)
+	{
+		size_t index_left = 0;
+		size_t index_right = 0;
+
+		if (false == left.get_index(ci->first, index_left) || false == right.get_index(ci->first, index_right))
+		{
+			cout << "dropping " << ci->first << endl;
+		}
+		else
+		{
+			cout << "merging " << ci->first << endl;
+
+			vector<string> empty_vec;
+
+			out.column_headers.push_back(ci->first);
+			out.data.push_back(empty_vec);
+
+			for (size_t i = 0; i < left.data[index_left].size(); i++)
+				out.data[out.data.size() - 1].push_back(left.data[index_left][i]);
+
+			for (size_t i = 0; i < right.data[index_right].size(); i++)
+				out.data[out.data.size() - 1].push_back(right.data[index_right][i]);
+		}
+	}
+}
+*/
+
+
+
+
+
+
+
 
 int main(void)
 {
@@ -46,47 +178,59 @@ int main(void)
 	indicators.push_back(d);
 
 
-
 	// Handle DAD data
-	dad_table_data dtd(indicators);
+	dad_table_data dtd0(indicators);
+	dad_table_data dtd1(indicators);
 
-	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18.csv"))
+	if (false == dtd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18.csv"))
 		return -1;
 
-	dtd.print_indicators();
-
-	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18_with_indicators.csv"))
+	if (false == dtd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18.csv"))
 		return -1;
 
-	if (false == dtd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18.csv"))
-		return -1;
+	dad_table_data dtd_out(indicators);
 
-	dtd.print_indicators();
+	merge<dad_table_data>(dtd0, dtd1, dtd_out);
 
-	if (false == dtd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18_with_indicators.csv"))
-		return -1;
+
+
+
+	//if (false == out.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/aggregate.csv"))
+	//{
+	//	cout << "Could not save CSV file" << endl;
+	//	return -1;
+	//}
+
+	//cout << "done" << endl;
+
+	//return 0;
+
+
+
 
 
 
 	// Handle NACRS data
-	nacrs_table_data ntd(indicators);
+	nacrs_table_data ntd0(indicators);
+	nacrs_table_data ntd1(indicators);
 
-	if (false == ntd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18.csv"))
+	if (false == ntd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18.csv"))
 		return -1;
 
-	ntd.print_indicators();
-
-	if(false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18_with_indicators.csv"))
+	if (false == ntd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18.csv"))
 		return -1;
 
-	if (false == ntd.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18.csv"))
+	dad_table_data ntd_out(indicators);
+
+	merge<nacrs_table_data>(ntd0, ntd1, ntd_out);
+
+	dad_table_data all(indicators);
+
+	merge<dad_table_data>(dtd_out, ntd_out, all);
+
+
+	if (false == all.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/aggregate.csv"))
 		return -1;
-
-	ntd.print_indicators();
-
-	if (false == ntd.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18_with_indicators.csv"))
-		return -1;
-
 
 
 	// It's all good

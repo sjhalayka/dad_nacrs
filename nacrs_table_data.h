@@ -18,6 +18,11 @@ public:
 
 	// Function that is dataset specific
 	bool get_various_diag_codes(void);
+
+	void merge(nacrs_table_data& right)
+	{
+
+	}
 };
 
 

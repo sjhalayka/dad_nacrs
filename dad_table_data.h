@@ -5,7 +5,12 @@
 
 
 #include "table_data.h"
+#include "nacrs_table_data.h"
 
+#include <map>
+#include <unordered_map>
+#include <string>
+using namespace std;
 
 
 // Inherit from table_data class
@@ -18,6 +23,8 @@ public:
 
 	// Function that is dataset specific
 	bool get_various_diag_codes(void);
+
+
 };
 
 
