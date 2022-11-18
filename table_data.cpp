@@ -221,6 +221,8 @@ bool table_data::replace(const string& column_name, const string& find_value, co
 	for (size_t i = 0; i < data[index].size(); i++)
 		if (data[index][i] == find_value)
 			data[index][i] = replace_value;
+
+	return true;
 }
 
 bool table_data::save_to_CSV_buffer(const string& filename)
