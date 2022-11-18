@@ -193,6 +193,36 @@ bool table_data::get_matches(void)
 	return true;
 }
 
+bool table_data::add_column(const string& column_name, const string& initializer_value)
+{
+	size_t index = 0;
+
+	// If already exists, abort
+	if (get_index(column_name, index))
+		return false;
+
+	column_headers.push_back(column_name);
+
+	vector<string> d(get_row_count(), initializer_value);
+	data.push_back(d);
+
+	return true;
+}
+
+
+bool table_data::replace(const string& column_name, const string& find_value, const string& replace_value)
+{
+	size_t index = 0;
+
+	// If does not exist, abort
+	if (false == get_index(column_name, index))
+		return false;
+
+	for (size_t i = 0; i < data[index].size(); i++)
+		if (data[index][i] == find_value)
+			data[index][i] = replace_value;
+}
+
 bool table_data::save_to_CSV_buffer(const string& filename)
 {
 	cout << "Saving to file" << endl;

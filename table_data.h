@@ -70,7 +70,8 @@ public:
 	bool get_data_buffer(const string& filename);
 	bool get_diagnosis_indicators(void);
 	bool get_matches(void);
-
+	bool add_column(const string& column_name, const string& initializer_value);
+	bool replace(const string& column_name, const string& find_value, const string& replace_value);
 
 
 	// This function *must* be implemented by inheriting classes

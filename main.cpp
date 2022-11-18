@@ -88,6 +88,7 @@ int main(void)
 	indicators.push_back(d);
 
 
+
 	// Handle DAD data
 	dad_table_data dtd0(indicators);
 	dad_table_data dtd1(indicators);
@@ -95,8 +96,12 @@ int main(void)
 	if (false == dtd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18.csv"))
 		return -1;
 
+	//dtd0.add_column("shawn", "NULLdtd0");
+
 	if (false == dtd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18.csv"))
 		return -1;
+
+	//dtd1.add_column("shawn", "NULLdtd1");
 
 	generic_table_data generic_out0;
 	merge<dad_table_data>(dtd0, dtd1, generic_out0);
@@ -109,9 +114,14 @@ int main(void)
 
 	if (false == ntd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18.csv"))
 		return -1;
+	
+	//ntd0.add_column("shawn", "NULLntd0");
+
 
 	if (false == ntd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18.csv"))
 		return -1;
+
+	//ntd1.add_column("shawn", "NULLntd1");
 
 	generic_table_data generic_out1;
 	merge<nacrs_table_data>(ntd0, ntd1, generic_out1);
@@ -119,11 +129,13 @@ int main(void)
 
 
 	generic_table_data generic_out2;
-
 	merge<generic_table_data>(generic_out0, generic_out1, generic_out2);
+//	generic_out2.replace("shawn", "NULLdtd0", "NULL_DAD0");
 
-	if (false == generic_out2.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/aggregate.csv"))
+	if (false == generic_out2.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/shawn_aggregate.csv"))
 		return -1;
+
+
 
 
 
