@@ -31,6 +31,7 @@ using std::vector;
 #include <string>
 using std::string;
 using std::getline;
+using std::to_string;
 
 // Regular expressions
 // We use this to tokenize a string
@@ -71,8 +72,27 @@ public:
 	bool get_diagnosis_indicators(void);
 	bool get_matches(void);
 	bool add_column(const string& column_name, const string& initializer_value);
+
+	bool rename_column(const string& column_name, const string& new_column_name);
+
+	bool calc_age(const string& column_name_a, const string& column_name_b);
+
+	bool delete_column(const string& column_name);
+
 	bool replace(const string& column_name, const string& find_value, const string& replace_value);
 
+	bool print_column(const string& column_name)
+	{
+		size_t index = 0;
+
+		if (false == get_index(column_name, index))
+			return false;
+
+		for (size_t i = 0; i < get_row_count(); i++)
+			cout << data[index][i] << endl;
+	
+		return true;
+	}
 
 	// This function *must* be implemented by inheriting classes
 	// Making it equal to 0 means that one cannot instantiate the

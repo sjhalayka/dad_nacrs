@@ -24,11 +24,11 @@ void merge( const T &left, const T &right, generic_table_data &out)
 
 		if (false == left.get_index(ci->first, index_left) || false == right.get_index(ci->first, index_right))
 		{
-			cout << "dropping " << ci->first << endl;
+			//cout << "dropping " << ci->first << endl;
 		}
 		else
 		{
-			cout << "merging " << ci->first << endl;
+			//cout << "merging " << ci->first << endl;
 
 			vector<string> empty_vec;
 
@@ -96,10 +96,23 @@ int main(void)
 	if (false == dtd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18.csv"))
 		return -1;
 
+	dtd0.rename_column("GENDER_CODE", "female");
+	dtd0.replace("female", "M", "0");
+	dtd0.replace("female", "F", "1");
+
+
+
 	//dtd0.add_column("shawn", "NULLdtd0");
 
 	if (false == dtd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18.csv"))
 		return -1;
+
+	dtd1.calc_age("admission_date", "BIRTHDATE_TRUNCATED");
+	dtd1.rename_column("BIRTHDATE_TRUNCATED", "birth_yr");
+	dtd1.rename_column("GENDER_CODE", "female");
+	dtd1.replace("female", "M", "0");
+	dtd1.replace("female", "F", "1");
+
 
 	//dtd1.add_column("shawn", "NULLdtd1");
 
@@ -115,11 +128,31 @@ int main(void)
 	if (false == ntd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18.csv"))
 		return -1;
 	
+	ntd0.calc_age("DATE_OF_REGISTRATION", "BIRTHDATE_TRUNCATED");
+	ntd0.rename_column("BIRTHDATE_TRUNCATED", "birth_yr");
+	ntd0.rename_column("GENDER_CODE", "female");
+	ntd0.replace("female", "M", "0");
+	ntd0.replace("female", "F", "1");
+
+
+
+
 	//ntd0.add_column("shawn", "NULLntd0");
+
+
+
+
 
 
 	if (false == ntd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18.csv"))
 		return -1;
+
+
+	ntd1.calc_age("DATE_OF_REGISTRATION", "birthdate_truncated");
+	ntd1.rename_column("birthdate_truncated", "birth_yr");
+	ntd1.rename_column("GENDER_CODE", "female");
+	ntd1.replace("female", "M", "0");
+	ntd1.replace("female", "F", "1");
 
 	//ntd1.add_column("shawn", "NULLntd1");
 
@@ -128,12 +161,36 @@ int main(void)
 
 
 
+
+
+
 	generic_table_data generic_out2;
 	merge<generic_table_data>(generic_out0, generic_out1, generic_out2);
 //	generic_out2.replace("shawn", "NULLdtd0", "NULL_DAD0");
 
+
+
+	generic_out2.rename_column("SUBMITTING_PROV_CODE", "province");
+	generic_out2.rename_column("FISCAL_YEAR", "fiscal_yr");
+	generic_out2.delete_column("DEID_INST_CODE");
+	generic_out2.delete_column("DEID_XFER_FROM_INST_CODE");
+	generic_out2.delete_column("DEID_XFER_TO_INST_CODE");
+	
+
+
+
+
+
+
+
+
+
+
+
 	if (false == generic_out2.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/shawn_aggregate.csv"))
 		return -1;
+
+
 
 
 

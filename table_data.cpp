@@ -209,6 +209,81 @@ bool table_data::add_column(const string& column_name, const string& initializer
 	return true;
 }
 
+bool table_data::rename_column(const string& column_name, const string& new_column_name)
+{
+	size_t index = 0;
+
+	if (false == get_index(column_name, index))
+		return false;
+
+	column_headers[index] = new_column_name;
+
+	return true;
+}
+
+bool table_data::calc_age(const string& column_name_a, const string& column_name_b)
+{
+	add_column("age", "");
+
+	size_t column_a_index = 0;
+	size_t column_b_index = 0;
+	size_t age_index = 0;
+
+	if (false == get_index(column_name_a, column_a_index))
+		return false;
+
+	if (false == get_index(column_name_b, column_b_index))
+		return false;
+
+	if (false == get_index("age", age_index))
+		return false;
+
+	for (size_t i = 0; i < get_row_count(); i++)
+	{
+		string column_b_string = data[column_b_index][i];
+		unsigned int column_b_int = 0;
+
+		istringstream iss(column_b_string);
+		iss >> column_b_int;
+
+		if (data[column_a_index][i].length() >= 2)
+		{
+			string admin_reg_year_string = data[column_a_index][i].substr(data[column_a_index][i].size() - 2, 2);
+			unsigned int admin_reg_year_int = 0;
+
+			iss.clear();
+			iss.str(admin_reg_year_string);
+			iss >> admin_reg_year_int;
+
+			const size_t current_year = 22; // 2022
+
+			if (admin_reg_year_int > current_year)
+				admin_reg_year_int = 1900 + admin_reg_year_int;
+			else
+				admin_reg_year_int = 2000 + admin_reg_year_int;
+
+			data[age_index][i] = to_string(admin_reg_year_int - column_b_int);
+		}
+		else
+		{
+			data[age_index][i] = "NULL"; // this happens when the input is garbage
+		}
+	}
+}
+
+
+bool table_data::delete_column(const string& column_name)
+{
+	size_t index = 0;
+
+	if (false == get_index(column_name, index))
+		return false;
+
+	column_headers.erase(column_headers.begin() + index);
+	data.erase(data.begin() + index);
+
+	return true;
+}
 
 bool table_data::replace(const string& column_name, const string& find_value, const string& replace_value)
 {
