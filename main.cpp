@@ -51,39 +51,39 @@ int main(void)
 	vector<diagnosis_indicator> indicators;
 	diagnosis_indicator d;
 
-	d.diagnosis_name = "Neutropenia_Indicator";
+	d.diagnosis_name = "neutropenia";
 	d.diagnosis_codes = { "D700" };
 	indicators.push_back(d);
 
-	d.diagnosis_name = "Myocarditis_Indicator";
+	d.diagnosis_name = "myocarditis";
 	d.diagnosis_codes = { "I401", "I408", "I409", "I41", "I514" };
 	indicators.push_back(d);
 
-	d.diagnosis_name = "Cardiomyopathy_Indicator";
+	d.diagnosis_name = "cardiomyopathy";
 	d.diagnosis_codes = { "I420", "I421", "I422", "I423", "I424", "I425", "I427", "I428", "I429" };
 	indicators.push_back(d);
 
-	d.diagnosis_name = "Schizophrenia_Indicator";
+	d.diagnosis_name = "schizoph";
 	d.diagnosis_codes = { "F200", "F201", "F202", "F203", "F204", "F205", "F206", "F208", "F209" };
 	indicators.push_back(d);
 
-	d.diagnosis_name = "Schizoaffective_Indicator";
+	d.diagnosis_name = "schizaff";
 	d.diagnosis_codes = { "F250", "F251", "F258", "F259" };
 	indicators.push_back(d);
 	
-	d.diagnosis_name = "Bipolar_Indicator";
+	d.diagnosis_name = "bipolar";
 	d.diagnosis_codes = { "F310", "F311", "F312", "F313", "F314", "F315", "F316", "F317", "F318", "F319" };
 	indicators.push_back(d);
 
-	d.diagnosis_name = "Other_non-organic_psychosis_Indicator";
+	d.diagnosis_name = "psychosis_non";
 	d.diagnosis_codes = { "F28" };
 	indicators.push_back(d);
 
-	d.diagnosis_name = "Unspecified_organic_psychosis_Indicator";
+	d.diagnosis_name = "psychosis_org";
 	d.diagnosis_codes = { "F29" };
 	indicators.push_back(d);
 	
-	d.diagnosis_name = "Self-harm_Indicator";
+	d.diagnosis_name = "self_harm";
 	d.diagnosis_codes = { "X60", "X61", "X62", "X63", "X64", "X65", "X66", "X67", "X68", "X69", "X70", "X71", "X72", "X73", "X74", "X75", "X76", "X77", "X78", "X79", "X80", "X81", "X82", "X83", "X84" };
 	indicators.push_back(d);
 
@@ -93,16 +93,17 @@ int main(void)
 	dad_table_data dtd0(indicators);
 	dad_table_data dtd1(indicators);
 
+
+
 	if (false == dtd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18.csv"))
 		return -1;
 
 	dtd0.rename_column("GENDER_CODE", "female");
 	dtd0.replace("female", "M", "0");
 	dtd0.replace("female", "F", "1");
+	dtd0.add_column("source_DAD", "1");
 
 
-
-	//dtd0.add_column("shawn", "NULLdtd0");
 
 	if (false == dtd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18.csv"))
 		return -1;
@@ -112,7 +113,7 @@ int main(void)
 	dtd1.rename_column("GENDER_CODE", "female");
 	dtd1.replace("female", "M", "0");
 	dtd1.replace("female", "F", "1");
-
+	dtd1.add_column("source_DAD", "1");
 
 	//dtd1.add_column("shawn", "NULLdtd1");
 
@@ -125,6 +126,8 @@ int main(void)
 	nacrs_table_data ntd0(indicators);
 	nacrs_table_data ntd1(indicators);
 
+
+
 	if (false == ntd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18.csv"))
 		return -1;
 	
@@ -133,66 +136,42 @@ int main(void)
 	ntd0.rename_column("GENDER_CODE", "female");
 	ntd0.replace("female", "M", "0");
 	ntd0.replace("female", "F", "1");
-
-
-
-
-	//ntd0.add_column("shawn", "NULLntd0");
-
-
-
+	ntd0.add_column("source_DAD", "0");
 
 
 
 	if (false == ntd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18.csv"))
 		return -1;
 
-
 	ntd1.calc_age("DATE_OF_REGISTRATION", "birthdate_truncated");
 	ntd1.rename_column("birthdate_truncated", "birth_yr");
 	ntd1.rename_column("GENDER_CODE", "female");
 	ntd1.replace("female", "M", "0");
 	ntd1.replace("female", "F", "1");
+	ntd1.add_column("source_DAD", "0");
 
-	//ntd1.add_column("shawn", "NULLntd1");
+
 
 	generic_table_data generic_out1;
 	merge<nacrs_table_data>(ntd0, ntd1, generic_out1);
 
-
-
-
-
-
 	generic_table_data generic_out2;
 	merge<generic_table_data>(generic_out0, generic_out1, generic_out2);
-//	generic_out2.replace("shawn", "NULLdtd0", "NULL_DAD0");
-
-
 
 	generic_out2.rename_column("SUBMITTING_PROV_CODE", "province");
 	generic_out2.rename_column("FISCAL_YEAR", "fiscal_yr");
+	generic_out2.rename_column("URBAN_RURAL_REMOTE", "rural_unkn");
+	generic_out2.replace("rural_unkn", "RURAL/REMOTE", "1");
+	generic_out2.replace("rural_unkn", "UNK", "1");
+	generic_out2.replace("rural_unkn", "URBAN", "0");
+
 	generic_out2.delete_column("DEID_INST_CODE");
 	generic_out2.delete_column("DEID_XFER_FROM_INST_CODE");
 	generic_out2.delete_column("DEID_XFER_TO_INST_CODE");
-	
-
-
-
-
-
-
-
-
-
-
+	generic_out2.delete_column("case_id");
 
 	if (false == generic_out2.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/shawn_aggregate.csv"))
 		return -1;
-
-
-
-
 
 
 
