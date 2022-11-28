@@ -50,7 +50,8 @@ using std::sregex_token_iterator;
 #include "diagnosis_indicators.h"
 
 
-
+// Forward declare that there will be a class called generic_table_data,
+// which will be inherited from the table_data class
 class generic_table_data;
 
 
@@ -72,6 +73,8 @@ protected:
 
 public:
 
+	// Forward declaring that there will be a friend function that can access
+	// the class' protected members
 	template <class T>
 	friend void merge(const T& left, const T& right, generic_table_data& out);
 

@@ -3,8 +3,9 @@
 #include "generic_table_data.h"
 
 
+
 template <class T>
-void merge( const T &left, const T &right, generic_table_data &out)
+void merge(const T& left, const T& right, generic_table_data& out)
 {
 	out.column_headers.clear();
 	out.data.clear();
