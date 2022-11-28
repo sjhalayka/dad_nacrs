@@ -293,6 +293,20 @@ bool table_data::calc_age(const string& column_name_a, const string& column_name
 }
 
 
+bool table_data::print_column(const string& column_name)
+{
+	size_t index = 0;
+
+	if (false == get_index(column_name, index))
+		return false;
+
+	for (size_t i = 0; i < get_row_count(); i++)
+		cout << data[index][i] << endl;
+
+	return true;
+}
+
+
 bool table_data::delete_column(const string& column_name)
 {
 	size_t index = 0;
