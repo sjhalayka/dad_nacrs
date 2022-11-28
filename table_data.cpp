@@ -230,13 +230,25 @@ bool table_data::calc_age(const string& column_name_a, const string& column_name
 	size_t age_index = 0;
 
 	if (false == get_index(column_name_a, column_a_index))
+	{
+//		cout << "could not find " << column_name_a << endl;
 		return false;
+	}
 
 	if (false == get_index(column_name_b, column_b_index))
+	{
+//		cout << "could not find " << column_name_b << endl;
 		return false;
+	}
 
 	if (false == get_index("age", age_index))
+	{
+//		cout << "could not find age" << endl;
 		return false;
+	}
+
+
+
 
 	for (size_t i = 0; i < get_row_count(); i++)
 	{
@@ -255,9 +267,16 @@ bool table_data::calc_age(const string& column_name_a, const string& column_name
 			iss.str(admin_reg_year_string);
 			iss >> admin_reg_year_int;
 
-			const size_t current_year = 22; // 2022
+			string current_year_string = format("{:%Y}", std::chrono::system_clock::now());
+			current_year_string = current_year_string.substr(current_year_string.size() - 2, 2); // e.g. 20 for 2020
+			
+			size_t current_year_int = 0;
 
-			if (admin_reg_year_int > current_year)
+			iss.clear();
+			iss.str(current_year_string);
+			iss >> current_year_int;
+
+			if (admin_reg_year_int > current_year_int)
 				admin_reg_year_int = 1900 + admin_reg_year_int;
 			else
 				admin_reg_year_int = 2000 + admin_reg_year_int;
@@ -269,6 +288,8 @@ bool table_data::calc_age(const string& column_name_a, const string& column_name
 			data[age_index][i] = "NULL"; // this happens when the input is garbage
 		}
 	}
+
+	return true;
 }
 
 

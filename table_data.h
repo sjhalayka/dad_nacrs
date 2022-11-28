@@ -33,6 +33,9 @@ using std::string;
 using std::getline;
 using std::to_string;
 
+#include <format>
+using std::format;
+
 // Regular expressions
 // We use this to tokenize a string
 #include <regex>
