@@ -153,15 +153,13 @@ int main(void)
 	ntd1.replace("female", "F", "1");
 	ntd1.add_column("source_DAD", "0");
 
-
-
 	generic_table_data generic_out1;
 	merge<nacrs_table_data>(ntd0, ntd1, generic_out1);
 
+
+
 	generic_table_data generic_out2;
 	merge<generic_table_data>(generic_out0, generic_out1, generic_out2);
-
-
 
 	generic_out2.rename_column("SUBMITTING_PROV_CODE", "province");
 	generic_out2.rename_column("FISCAL_YEAR", "fiscal_yr");
