@@ -49,7 +49,7 @@ void merge(const T& left, const T& right, generic_table_data& out)
 
 int main(void)
 {
-	// Set up indicators
+	// Set up indicators for DAD and NACRS data
 	vector<diagnosis_indicator> indicators;
 	diagnosis_indicator d;
 
@@ -95,8 +95,6 @@ int main(void)
 	dad_table_data dtd0(indicators);
 	dad_table_data dtd1(indicators);
 
-
-
 	if (false == dtd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18.csv"))
 		return -1;
 
@@ -106,7 +104,6 @@ int main(void)
 	dtd0.add_column("source_DAD", "1");
 	dtd0.delete_column("age"); // redo age from scratch
 	dtd0.calc_age("admission_date", "BIRTHDATE_TRUNCATED"); // redo age from scratch
-
 
 	if (false == dtd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18.csv"))
 		return -1;
@@ -120,6 +117,7 @@ int main(void)
 
 
 
+	// Merge DAD data
 	generic_table_data generic_out0;
 	merge<dad_table_data>(dtd0, dtd1, generic_out0);
 
@@ -128,8 +126,6 @@ int main(void)
 	// Handle NACRS data
 	nacrs_table_data ntd0(indicators);
 	nacrs_table_data ntd1(indicators);
-
-
 
 	if (false == ntd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18.csv"))
 		return -1;
@@ -141,8 +137,6 @@ int main(void)
 	ntd0.replace("female", "F", "1");
 	ntd0.add_column("source_DAD", "0");
 
-
-
 	if (false == ntd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18.csv"))
 		return -1;
 
@@ -153,11 +147,15 @@ int main(void)
 	ntd1.replace("female", "F", "1");
 	ntd1.add_column("source_DAD", "0");
 
+
+
+	// Merge NACRS data
 	generic_table_data generic_out1;
 	merge<nacrs_table_data>(ntd0, ntd1, generic_out1);
 
 
 
+	// Do final merge, and then polish the data a bit
 	generic_table_data generic_out2;
 	merge<generic_table_data>(generic_out0, generic_out1, generic_out2);
 
@@ -173,7 +171,7 @@ int main(void)
 	generic_out2.delete_column("DEID_XFER_TO_INST_CODE");
 	generic_out2.delete_column("case_id");
 
-	// sort
+	// Sort by example
 	vector<string> sorted_column_names = { "mbun", "province", "birth_yr", "age", "female",
 											"rural_unkn", "fiscal_yr", "source_DAD", "schizoph", "schizaff",
 											"bipolar", "psychosis_org", "psychosis_non", "self_harm", "myocarditis",
