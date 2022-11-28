@@ -102,7 +102,8 @@ int main(void)
 	dtd0.replace("female", "M", "0");
 	dtd0.replace("female", "F", "1");
 	dtd0.add_column("source_DAD", "1");
-
+	dtd0.delete_column("age"); // redo age from scratch
+	dtd0.calc_age("admission_date", "BIRTHDATE_TRUNCATED"); // redo age from scratch
 
 
 	if (false == dtd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18.csv"))
@@ -115,7 +116,7 @@ int main(void)
 	dtd1.replace("female", "F", "1");
 	dtd1.add_column("source_DAD", "1");
 
-	//dtd1.add_column("shawn", "NULLdtd1");
+
 
 	generic_table_data generic_out0;
 	merge<dad_table_data>(dtd0, dtd1, generic_out0);
