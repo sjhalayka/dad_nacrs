@@ -9,6 +9,9 @@
 using std::cout;
 using std::endl;
 
+#include <map>
+using std::map;
+
 // File input/output
 #include <fstream>
 using std::ifstream;

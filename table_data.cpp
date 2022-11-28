@@ -443,9 +443,42 @@ void table_data::print_indicators(void)
 
 bool table_data::sort_columns(const vector<string> &in_column_names)
 {
+	// Do some consistency checking...
 	if (in_column_names.size() != column_headers.size())
+	{
+//		cout << "Wrong number of columns. Aborting sort" << endl;
 		return false;
+	}
 
+	map<string, size_t> src_counts;
+		
+	for (size_t i = 0; i < in_column_names.size(); i++)
+		src_counts[in_column_names[i]]++;
+
+	if (src_counts.size() != in_column_names.size())
+	{
+//		cout << "Duplicate input column found. Aborting sort" << endl;
+		return false;
+	}
+
+	map<string, size_t> dest_counts;
+
+	for (size_t i = 0; i < column_headers.size(); i++)
+		dest_counts[column_headers[i]]++;
+
+	if (dest_counts.size() != column_headers.size())
+	{
+//		cout << "Duplicate output column found. Aborting sort" << endl;
+		return false;
+	}
+
+	if (src_counts != dest_counts)
+	{
+//		cout << "Column headers not identical. Aborting sort" << endl;
+		return false;
+	}
+
+	// Consistency checks are finished. Do sort
 	for (size_t i = 0; i < in_column_names.size(); i++)
 	{
 		size_t index = 0;
@@ -459,3 +492,5 @@ bool table_data::sort_columns(const vector<string> &in_column_names)
 
 	return true;
 }
+
+
