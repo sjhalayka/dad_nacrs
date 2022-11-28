@@ -46,6 +46,7 @@ void merge(const T& left, const T& right, generic_table_data& out)
 }
 
 
+
 int main(void)
 {
 	// Set up indicators
@@ -160,6 +161,8 @@ int main(void)
 	generic_table_data generic_out2;
 	merge<generic_table_data>(generic_out0, generic_out1, generic_out2);
 
+
+
 	generic_out2.rename_column("SUBMITTING_PROV_CODE", "province");
 	generic_out2.rename_column("FISCAL_YEAR", "fiscal_yr");
 	generic_out2.rename_column("URBAN_RURAL_REMOTE", "rural_unkn");
@@ -171,6 +174,14 @@ int main(void)
 	generic_out2.delete_column("DEID_XFER_FROM_INST_CODE");
 	generic_out2.delete_column("DEID_XFER_TO_INST_CODE");
 	generic_out2.delete_column("case_id");
+
+	// sort
+	vector<string> sorted_column_names = { "mbun", "province", "birth_yr", "age", "female",
+											"rural_unkn", "fiscal_yr", "source_DAD", "schizoph", "schizaff",
+											"bipolar", "psychosis_org", "psychosis_non", "self_harm", "myocarditis",
+											"cardiomyopathy", "neutropenia" };
+
+	generic_out2.sort_columns(sorted_column_names);
 
 	if (false == generic_out2.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/shawn_aggregate.csv"))
 		return -1;

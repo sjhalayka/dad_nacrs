@@ -78,6 +78,7 @@ public:
 	template <class T>
 	friend void merge(const T& left, const T& right, generic_table_data& out);
 
+	bool sort_columns(const vector<string> &in_column_names);
 	bool get_index(const string& column_name, size_t& index) const;
 	void std_strtok(const string& s, const string& regex_s, vector<string>& tokens);
 	bool get_data_buffer(const string& filename);

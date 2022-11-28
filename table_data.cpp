@@ -441,3 +441,21 @@ void table_data::print_indicators(void)
 	cout << endl;
 }
 
+bool table_data::sort_columns(const vector<string> &in_column_names)
+{
+	if (in_column_names.size() != column_headers.size())
+		return false;
+
+	for (size_t i = 0; i < in_column_names.size(); i++)
+	{
+		size_t index = 0;
+
+		if (false == get_index(in_column_names[i], index))
+			return false;
+
+		column_headers[i].swap(column_headers[index]);
+		data[i].swap(data[index]);
+	}
+
+	return true;
+}
