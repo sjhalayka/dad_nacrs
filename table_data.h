@@ -99,6 +99,7 @@ public:
 	size_t get_row_count(void);
 	size_t get_count(const string& indicator_name);
 	string get_filename(void);
+	void unify_column_names_case(void);
 
 	// This function *must* be implemented by inheriting classes
 	// Making it equal to 0 means that one cannot instantiate the

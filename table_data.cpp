@@ -493,4 +493,23 @@ bool table_data::sort_columns(const vector<string> &in_column_names)
 	return true;
 }
 
+void table_data::unify_column_names_case(void)
+{
+	for (size_t i = 0; i < column_headers.size(); i++)
+	{
+		string h = column_headers[i];
+
+		// This column header is blank, nothing to do here
+		if (h.size() == 0)
+			continue;
+
+		// Convert to all lower case
+		transform(h.begin(), h.end(), h.begin(), tolower);
+
+		// Set first letter to be upper case
+		h[0] = toupper(h[0]);
+
+		column_headers[i] = h;
+	}
+}
 

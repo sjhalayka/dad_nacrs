@@ -179,6 +179,9 @@ int main(void)
 
 	generic_out2.sort_columns(sorted_column_names);
 
+	// Make the variable names fit the requirement
+	generic_out2.unify_column_names_case();
+
 	if (false == generic_out2.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/shawn_aggregate.csv"))
 		return -1;
 
