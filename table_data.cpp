@@ -320,6 +320,14 @@ bool table_data::delete_column(const string& column_name)
 	return true;
 }
 
+bool table_data::clear_memory(void)
+{
+	column_headers.clear();
+	data.clear();
+
+	return true;
+}
+
 bool table_data::replace(const string& column_name, const string& find_value, const string& replace_value)
 {
 	size_t index = 0;

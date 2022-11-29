@@ -117,9 +117,11 @@ int main(void)
 
 
 
-	// Merge DAD data
+	// Merge DAD data, then clear the unneeded memory
 	generic_table_data generic_out0;
 	merge<dad_table_data>(dtd0, dtd1, generic_out0);
+	dtd0.clear_memory();
+	dtd1.clear_memory();
 
 
 
@@ -149,16 +151,23 @@ int main(void)
 
 
 
-	// Merge NACRS data
+	// Merge NACRS data, then clear the unneeded memory
 	generic_table_data generic_out1;
 	merge<nacrs_table_data>(ntd0, ntd1, generic_out1);
+	ntd0.clear_memory();
+	ntd1.clear_memory();
 
 
 
-	// Do final merge, and then polish the data a bit
+	// Do final merge
 	generic_table_data generic_out2;
 	merge<generic_table_data>(generic_out0, generic_out1, generic_out2);
+	generic_out0.clear_memory();
+	generic_out1.clear_memory();
 
+
+
+	// Polish the data a little bit
 	generic_out2.rename_column("SUBMITTING_PROV_CODE", "province");
 	generic_out2.rename_column("FISCAL_YEAR", "fiscal_yr");
 	generic_out2.rename_column("URBAN_RURAL_REMOTE", "rural_unkn");
@@ -179,7 +188,7 @@ int main(void)
 
 	generic_out2.sort_columns(sorted_column_names);
 
-	// Make the variable names fit the requirement
+	// Make the variable names' case fit the requirement (for example: Mbun, Province, etc.)
 	generic_out2.unify_column_names_case();
 
 	if (false == generic_out2.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/shawn_aggregate.csv"))

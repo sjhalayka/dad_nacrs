@@ -91,6 +91,7 @@ public:
 	bool rename_column(const string& column_name, const string& new_column_name);
 	bool calc_age(const string& column_name_a, const string& column_name_b);
 	bool delete_column(const string& column_name);
+	bool clear_memory(void);
 	bool replace(const string& column_name, const string& find_value, const string& replace_value);
 	bool print_column(const string& column_name);
 	void print_indicators(void);
