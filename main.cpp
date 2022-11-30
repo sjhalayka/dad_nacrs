@@ -142,6 +142,9 @@ int main(void)
 	if (false == npduis.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/NPDUIS_small.csv"))
 		return -1;
 
+	// Note, NPDUIS data already have
+	// mbun, province, fiscal_year, source_dad
+	// Let's add in the rest of the columns
 	npduis.add_column("birth_yr", "");
 	npduis.add_column("age", "");
 	npduis.add_column("female", "");
