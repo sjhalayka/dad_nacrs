@@ -45,10 +45,89 @@ void merge(const T& left, const T& right, generic_table_data& out)
 	}
 }
 
+bool date_equals(const tm& left, const tm& right)
+{
+		if (right.tm_year == left.tm_year && right.tm_mon == left.tm_mon && right.tm_mday == left.tm_mday)
+			return true;
+		else
+			return false;
+}
+
+bool date_less_than(const tm& left, const tm& right)
+{
+		if (right.tm_year > left.tm_year)
+			return true;
+		else if (right.tm_year < left.tm_year)
+			return false;
+
+		if (right.tm_mon > left.tm_mon)
+			return true;
+		else if (right.tm_mon < left.tm_mon)
+			return false;
+
+		if (right.tm_mday > left.tm_mday)
+			return true;
+		else if (right.tm_mday < left.tm_mday)
+			return false;
+
+		return false;
+}
+
+bool is_date_between_two_dates(tm& ta, tm& tb, tm& t_curr)
+{
+	//cout << put_time(&ta, "%c") << endl;
+	//cout << put_time(&tb, "%c") << endl;
+	//cout << put_time(&t_curr, "%c") << endl;
+
+	vector<tm> vtm;
+	vtm.push_back(ta);
+	vtm.push_back(tb);
+	vtm.push_back(t_curr);
+
+	sort(vtm.begin(), vtm.end(), date_less_than);
+
+	if (date_equals(vtm[1], t_curr))
+		return true;
+
+	return false;
+}
 
 
 int main(void)
 {
+	tm ta = {}, tb = {}, t_curr = {};
+
+	istringstream iss("31-Mar-07");
+	iss >> get_time(&ta, "%d-%b-%y");
+
+	iss.clear();
+	iss.str("31-Apr-07");
+	iss >> get_time(&tb, "%d-%b-%y");
+
+	iss.clear();
+	iss.str("05-Apr-07");
+	iss >> get_time(&t_curr, "%d-%b-%y");
+
+	cout << is_date_between_two_dates(ta, tb, t_curr) << endl;
+
+
+	return 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// Set up indicators for DAD and NACRS data
 	vector<diagnosis_indicator> indicators;
 	diagnosis_indicator d;
@@ -72,7 +151,7 @@ int main(void)
 	d.diagnosis_name = "schizaff";
 	d.diagnosis_codes = { "F250", "F251", "F258", "F259" };
 	indicators.push_back(d);
-	
+
 	d.diagnosis_name = "bipolar";
 	d.diagnosis_codes = { "F310", "F311", "F312", "F313", "F314", "F315", "F316", "F317", "F318", "F319" };
 	indicators.push_back(d);
@@ -84,7 +163,7 @@ int main(void)
 	d.diagnosis_name = "psychosis_org";
 	d.diagnosis_codes = { "F29" };
 	indicators.push_back(d);
-	
+
 	d.diagnosis_name = "self_harm";
 	d.diagnosis_codes = { "X60", "X61", "X62", "X63", "X64", "X65", "X66", "X67", "X68", "X69", "X70", "X71", "X72", "X73", "X74", "X75", "X76", "X77", "X78", "X79", "X80", "X81", "X82", "X83", "X84" };
 	indicators.push_back(d);
@@ -131,7 +210,7 @@ int main(void)
 
 	if (false == ntd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18.csv"))
 		return -1;
-	
+
 	ntd0.calc_age("DATE_OF_REGISTRATION", "BIRTHDATE_TRUNCATED");
 	ntd0.rename_column("BIRTHDATE_TRUNCATED", "birth_yr");
 	ntd0.rename_column("GENDER_CODE", "female");
