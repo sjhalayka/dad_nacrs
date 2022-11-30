@@ -91,6 +91,7 @@ bool is_date_between_two_dates(tm& ta, tm& tb, tm& t_curr)
 
 	sort(vtm.begin(), vtm.end(), date_less_than);
 
+	// If t_curr is in the middle, return true
 	if (date_equals(vtm[1], t_curr))
 		return true;
 
