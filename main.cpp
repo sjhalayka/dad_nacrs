@@ -3,12 +3,6 @@
 
 int main(void)
 {
-//	cout << is_date_between_two_dates("31-Mar-07", "31-Apr-07", "05-Apr-07") << endl;
-
-
-
-
-
 	// Set up indicators for DAD and NACRS data
 	vector<diagnosis_indicator> indicators;
 	diagnosis_indicator d;
@@ -61,7 +55,7 @@ int main(void)
 	dtd0.rename_column("GENDER_CODE", "female");
 	dtd0.replace("female", "M", "0");
 	dtd0.replace("female", "F", "1");
-	dtd0.add_column("source_DAD", "1");
+	dtd0.add_column("source_dad", "1");
 	dtd0.delete_column("age"); // redo age from scratch
 	dtd0.calc_age("admission_date", "BIRTHDATE_TRUNCATED"); // redo age from scratch
 
@@ -73,7 +67,7 @@ int main(void)
 	dtd1.rename_column("GENDER_CODE", "female");
 	dtd1.replace("female", "M", "0");
 	dtd1.replace("female", "F", "1");
-	dtd1.add_column("source_DAD", "1");
+	dtd1.add_column("source_dad", "1");
 
 
 
@@ -97,7 +91,7 @@ int main(void)
 	ntd0.rename_column("GENDER_CODE", "female");
 	ntd0.replace("female", "M", "0");
 	ntd0.replace("female", "F", "1");
-	ntd0.add_column("source_DAD", "0");
+	ntd0.add_column("source_dad", "0");
 
 	if (false == ntd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18.csv"))
 		return -1;
@@ -107,7 +101,7 @@ int main(void)
 	ntd1.rename_column("GENDER_CODE", "female");
 	ntd1.replace("female", "M", "0");
 	ntd1.replace("female", "F", "1");
-	ntd1.add_column("source_DAD", "0");
+	ntd1.add_column("source_dad", "0");
 
 
 
@@ -119,7 +113,7 @@ int main(void)
 
 
 
-	// Do final merge
+	// Do final DAD/NACRS merge
 	generic_table_data generic_out2;
 	merge<generic_table_data>(generic_out0, generic_out1, generic_out2);
 	generic_out0.clear_memory();
@@ -134,24 +128,52 @@ int main(void)
 	generic_out2.replace("rural_unkn", "RURAL/REMOTE", "1");
 	generic_out2.replace("rural_unkn", "UNK", "1");
 	generic_out2.replace("rural_unkn", "URBAN", "0");
-
 	generic_out2.delete_column("DEID_INST_CODE");
 	generic_out2.delete_column("DEID_XFER_FROM_INST_CODE");
 	generic_out2.delete_column("DEID_XFER_TO_INST_CODE");
 	generic_out2.delete_column("case_id");
-
-	// Sort by example
-	vector<string> sorted_column_names = { "mbun", "province", "birth_yr", "age", "female",
-											"rural_unkn", "fiscal_yr", "source_DAD", "schizoph", "schizaff",
-											"bipolar", "psychosis_org", "psychosis_non", "self_harm", "myocarditis",
-											"cardiomyopathy", "neutropenia" };
-
-	generic_out2.sort_columns(sorted_column_names);
-
-	// Make the variable names' case fit the requirement (for example: Mbun, Province, etc.)
 	generic_out2.unify_column_names_case();
 
-	if (false == generic_out2.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/shawn_aggregate.csv"))
+
+
+	// Handle NPDUIS data	
+	generic_table_data npduis;
+
+	if (false == npduis.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/NPDUIS_small.csv"))
+		return -1;
+
+	npduis.add_column("birth_yr", "");
+	npduis.add_column("age", "");
+	npduis.add_column("female", "");
+	npduis.add_column("rural_unkn", "");
+	npduis.add_column("schizoph", "");
+	npduis.add_column("schizaff", "");
+	npduis.add_column("bipolar", "");
+	npduis.add_column("psychosis_org", "");
+	npduis.add_column("psychosis_non", "");
+	npduis.add_column("self_harm", "");
+	npduis.add_column("myocarditis", "");
+	npduis.add_column("cardiomyopathy", "");
+	npduis.add_column("neutropenia", "");
+	npduis.replace("province", "BC", "9");
+	npduis.replace("province", "Sask", "7");
+	npduis.replace("province", "Man", "6");
+	npduis.unify_column_names_case();
+
+	generic_table_data generic_out3;
+	merge<generic_table_data>(generic_out2, npduis, generic_out3);
+	generic_out2.clear_memory();
+	npduis.clear_memory();
+
+	// Sort by example
+	vector<string> sorted_column_names = { "Mbun", "Province", "Birth_yr", "Age", "Female",
+											"Rural_unkn", "Fiscal_yr", "Source_dad", "Schizoph", "Schizaff",
+											"Bipolar", "Psychosis_org", "Psychosis_non", "Self_harm", "Myocarditis",
+											"Cardiomyopathy", "Neutropenia" };
+
+	generic_out3.sort_columns(sorted_column_names);
+
+	if (false == generic_out3.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/shawn_aggregate.csv"))
 		return -1;
 
 

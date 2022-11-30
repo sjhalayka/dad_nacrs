@@ -363,7 +363,7 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 
 	const size_t row_count = get_row_count();
 
-	cout << row_count << endl;
+//	cout << row_count << endl;
 
 	for (size_t i = 0; i < row_count; i++)
 	{
