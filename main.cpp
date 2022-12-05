@@ -49,27 +49,35 @@ int main(void)
 	dad_table_data dtd0(indicators);
 	dad_table_data dtd1(indicators);
 
+	cout << "Loading DAD cohorts data" << endl;
+
 	if (false == dtd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_cohorts_08_18.csv"))
 		return -1;
 
+	dtd0.delete_column("age"); // redo age from scratch
+	dtd0.calc_age("admission_date", "BIRTHDATE_TRUNCATED"); // redo age from scratch
+	dtd0.rename_column("BIRTHDATE_TRUNCATED", "birth_yr");
 	dtd0.rename_column("GENDER_CODE", "female");
 	dtd0.replace("female", "M", "0");
 	dtd0.replace("female", "F", "1");
 	dtd0.add_column("source_dad", "1");
-	dtd0.delete_column("age"); // redo age from scratch
-	dtd0.calc_age("admission_date", "BIRTHDATE_TRUNCATED"); // redo age from scratch
+
+
+
+	cout << "Loading DAD post data" << endl;
 
 	if (false == dtd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/dad_post_08_18.csv"))
 		return -1;
 
-	dtd1.calc_age("admission_date", "BIRTHDATE_TRUNCATED");
-	dtd1.rename_column("BIRTHDATE_TRUNCATED", "birth_yr");
+	dtd1.delete_column("age"); // redo age from scratch
+	dtd1.calc_age("admission_date", "birthdate_truncated");
+	dtd1.rename_column("birthdate_truncated", "birth_yr");
 	dtd1.rename_column("GENDER_CODE", "female");
 	dtd1.replace("female", "M", "0");
 	dtd1.replace("female", "F", "1");
 	dtd1.add_column("source_dad", "1");
 
-
+	cout << "Merging DAD files" << endl;
 
 	// Merge DAD data, then clear the unneeded memory
 	generic_table_data generic_out0;
@@ -83,6 +91,8 @@ int main(void)
 	nacrs_table_data ntd0(indicators);
 	nacrs_table_data ntd1(indicators);
 
+	cout << "Loading NACRS cohorts data" << endl;
+
 	if (false == ntd0.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_cohorts_08_18.csv"))
 		return -1;
 
@@ -92,6 +102,10 @@ int main(void)
 	ntd0.replace("female", "M", "0");
 	ntd0.replace("female", "F", "1");
 	ntd0.add_column("source_dad", "0");
+
+
+
+	cout << "Loading NACRS post data" << endl;
 
 	if (false == ntd1.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/nacrs_post_08_18.csv"))
 		return -1;
@@ -104,6 +118,8 @@ int main(void)
 	ntd1.add_column("source_dad", "0");
 
 
+	
+	cout << "Merging NACRS files" << endl;
 
 	// Merge NACRS data, then clear the unneeded memory
 	generic_table_data generic_out1;
@@ -113,13 +129,15 @@ int main(void)
 
 
 
+	cout << "Merging DAD/NACRS files" << endl;
+
 	// Do final DAD/NACRS merge
 	generic_table_data generic_out2;
 	merge<generic_table_data>(generic_out0, generic_out1, generic_out2);
 	generic_out0.clear_memory();
 	generic_out1.clear_memory();
 
-
+	cout << "Polishing data" << endl;
 
 	// Polish the data a little bit
 	generic_out2.rename_column("SUBMITTING_PROV_CODE", "province");
@@ -132,41 +150,10 @@ int main(void)
 	generic_out2.delete_column("DEID_XFER_FROM_INST_CODE");
 	generic_out2.delete_column("DEID_XFER_TO_INST_CODE");
 	generic_out2.delete_column("case_id");
+
 	generic_out2.unify_column_names_case();
 
-
-
-	// Handle NPDUIS data	
-	generic_table_data npduis;
-
-	if (false == npduis.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/NPDUIS_small.csv"))
-		return -1;
-
-	// Note, NPDUIS data already have
-	// mbun, province, fiscal_year, source_dad
-	// Let's add in the rest of the columns
-	npduis.add_column("birth_yr", "");
-	npduis.add_column("age", "");
-	npduis.add_column("female", "");
-	npduis.add_column("rural_unkn", "");
-	npduis.add_column("schizoph", "");
-	npduis.add_column("schizaff", "");
-	npduis.add_column("bipolar", "");
-	npduis.add_column("psychosis_org", "");
-	npduis.add_column("psychosis_non", "");
-	npduis.add_column("self_harm", "");
-	npduis.add_column("myocarditis", "");
-	npduis.add_column("cardiomyopathy", "");
-	npduis.add_column("neutropenia", "");
-	npduis.replace("province", "BC", "9");
-	npduis.replace("province", "Sask", "7");
-	npduis.replace("province", "Man", "6");
-	npduis.unify_column_names_case();
-
-	generic_table_data generic_out3;
-	merge<generic_table_data>(generic_out2, npduis, generic_out3);
-	generic_out2.clear_memory();
-	npduis.clear_memory();
+	cout << "Sorting columns" << endl;
 
 	// Sort by example
 	vector<string> sorted_column_names = { "Mbun", "Province", "Birth_yr", "Age", "Female",
@@ -174,10 +161,65 @@ int main(void)
 											"Bipolar", "Psychosis_org", "Psychosis_non", "Self_harm", "Myocarditis",
 											"Cardiomyopathy", "Neutropenia" };
 
-	generic_out3.sort_columns(sorted_column_names);
+	generic_out2.sort_columns(sorted_column_names);
 
-	if (false == generic_out3.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/shawn_aggregate.csv"))
+	cout << "Saving to file" << endl;
+
+	if (false == generic_out2.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/aggregate.csv"))
 		return -1;
+
+
+
+
+	//// Note, NPDUIS data already have
+	//// mbun, province, fiscal_year, source_dad
+	//// Let's add in the rest of the columns
+	//npduis.add_column("birth_yr", "");
+	//npduis.add_column("age", "");
+	//npduis.add_column("female", "");
+	//npduis.add_column("rural_unkn", "");
+	//npduis.add_column("schizoph", "");
+	//npduis.add_column("schizaff", "");
+	//npduis.add_column("bipolar", "");
+	//npduis.add_column("psychosis_org", "");
+	//npduis.add_column("psychosis_non", "");
+	//npduis.add_column("self_harm", "");
+	//npduis.add_column("myocarditis", "");
+	//npduis.add_column("cardiomyopathy", "");
+	//npduis.add_column("neutropenia", "");
+	//npduis.replace("province", "BC", "9");
+	//npduis.replace("province", "Sask", "7");
+	//npduis.replace("province", "Man", "6");
+	//npduis.unify_column_names_case();
+	//// Sort by example
+	//vector<string> sorted_column_names = { "Mbun", "Province", "Birth_yr", "Age", "Female",
+	//										"Rural_unkn", "Fiscal_yr", "Source_dad", "Schizoph", "Schizaff",
+	//										"Bipolar", "Psychosis_org", "Psychosis_non", "Self_harm", "Myocarditis",
+	//										"Cardiomyopathy", "Neutropenia" };
+
+	//npduis.sort_columns(sorted_column_names);
+
+	//if (false == npduis.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/aggregate.csv"))
+	//	return -1;
+
+
+
+
+	//generic_table_data generic_out3;
+	//merge<generic_table_data>(generic_out2, npduis, generic_out3);
+	//generic_out2.clear_memory();
+	//npduis.clear_memory();
+
+	//// Sort by example
+	//vector<string> sorted_column_names = { "Mbun", "Province", "Birth_yr", "Age", "Female",
+	//										"Rural_unkn", "Fiscal_yr", "Source_dad", "Schizoph", "Schizaff",
+	//										"Bipolar", "Psychosis_org", "Psychosis_non", "Self_harm", "Myocarditis",
+	//										"Cardiomyopathy", "Neutropenia" };
+
+	//generic_out3.sort_columns(sorted_column_names);
+
+	//if (false == generic_out3.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Indicators/shawn_aggregate.csv"))
+	//	return -1;
 
 
 
