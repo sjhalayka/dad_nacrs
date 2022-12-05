@@ -62,7 +62,7 @@ int main(void)
 	dtd0.replace("female", "F", "1");
 	dtd0.add_column("source_dad", "1");
 
-
+	//dtd0.print_indicators();
 
 	cout << "Loading DAD post data" << endl;
 
@@ -76,6 +76,10 @@ int main(void)
 	dtd1.replace("female", "M", "0");
 	dtd1.replace("female", "F", "1");
 	dtd1.add_column("source_dad", "1");
+
+	//dtd1.print_indicators();
+
+
 
 	cout << "Merging DAD files" << endl;
 
