@@ -61,6 +61,9 @@ int main(void)
 	dtd0.replace("female", "M", "0");
 	dtd0.replace("female", "F", "1");
 	dtd0.add_column("source_dad", "1");
+	dtd0.rename_column("admission_date", "Episode_beg_dt");
+	dtd0.rename_column("discharge_date", "Episode_end_dt");
+
 
 	//dtd0.print_indicators();
 
@@ -76,6 +79,8 @@ int main(void)
 	dtd1.replace("female", "M", "0");
 	dtd1.replace("female", "F", "1");
 	dtd1.add_column("source_dad", "1");
+	dtd1.rename_column("admission_date", "Episode_beg_dt");
+	dtd1.rename_column("discharge_date", "Episode_end_dt");
 
 	//dtd1.print_indicators();
 
@@ -106,7 +111,8 @@ int main(void)
 	ntd0.replace("female", "M", "0");
 	ntd0.replace("female", "F", "1");
 	ntd0.add_column("source_dad", "0");
-
+	ntd0.rename_column("DATE_OF_REGISTRATION", "Episode_beg_dt");
+	ntd0.rename_column("DISPOSITION_DATE", "Episode_end_dt");
 
 
 	cout << "Loading NACRS post data" << endl;
@@ -120,7 +126,8 @@ int main(void)
 	ntd1.replace("female", "M", "0");
 	ntd1.replace("female", "F", "1");
 	ntd1.add_column("source_dad", "0");
-
+	ntd1.rename_column("DATE_OF_REGISTRATION", "Episode_beg_dt");
+	ntd1.rename_column("DISPOSITION_DATE", "Episode_end_dt");
 
 	
 	cout << "Merging NACRS files" << endl;
@@ -163,7 +170,7 @@ int main(void)
 	vector<string> sorted_column_names = { "Mbun", "Province", "Birth_yr", "Age", "Female",
 											"Rural_unkn", "Fiscal_yr", "Source_dad", "Schizoph", "Schizaff",
 											"Bipolar", "Psychosis_org", "Psychosis_non", "Self_harm", "Myocarditis",
-											"Cardiomyopathy", "Neutropenia" };
+											"Cardiomyopathy", "Neutropenia", "Episode_beg_dt", "Episode_end_dt"};
 
 	generic_out2.sort_columns(sorted_column_names);
 
