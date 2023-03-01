@@ -61,7 +61,7 @@ class generic_table_data;
 // Base class
 class table_data
 {
-protected:
+public:
 
 	// Keep the data inaccessible from outside the class
 	vector<string> column_headers;
@@ -81,6 +81,9 @@ public:
 	template <class T>
 	friend void merge(const T& left, const T& right, generic_table_data& out);
 
+	template <class T>
+	void split(T& in, generic_table_data& out_dadnacrs, generic_table_data& out_npduis);
+
 	bool sort_columns(const vector<string> &in_column_names);
 	bool get_index(const string& column_name, size_t& index) const;
 	void std_strtok(const string& s, const string& regex_s, vector<string>& tokens);
@@ -98,6 +101,15 @@ public:
 	bool save_to_CSV_buffer(const string& filename);
 	bool load_from_CSV_buffer(const string& filename);
 	size_t get_row_count(void);
+
+	void delete_row(size_t row_index)
+	{
+		if (row_index < get_row_count())
+			for (size_t i = 0; i < data.size(); i++)
+				data[i].erase(data[i].begin() + row_index);
+	}
+
+	void resize(const size_t max_row_count);
 	size_t get_count(const string& indicator_name);
 	string get_filename(void);
 	void unify_column_names_case(void);

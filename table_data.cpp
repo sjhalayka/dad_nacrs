@@ -417,6 +417,12 @@ size_t table_data::get_row_count(void)
 	return data[0].size();
 }
 
+void table_data::resize(const size_t max_row_count)
+{
+	for (size_t i = 0; i < data.size(); i++)
+		data[i].resize(max_row_count);
+}
+
 size_t table_data::get_count(const string& indicator_name)
 {
 	size_t indicator_index = 0;

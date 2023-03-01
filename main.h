@@ -50,6 +50,37 @@ void merge(const T& left, const T& right, generic_table_data& out)
 	}
 }
 
+
+template <class T>
+void split(T& in, generic_table_data &out_dadnacrs, generic_table_data& out_npduis)
+{
+	out_dadnacrs.column_headers = in.column_headers;
+	out_npduis.column_headers = in.column_headers;
+
+	out_dadnacrs.data.resize(out_dadnacrs.column_headers.size());
+	out_npduis.data.resize(out_npduis.column_headers.size());
+
+	size_t index = 0;
+	string s = "source_dad";
+	in.get_index(s, index);
+
+	for (size_t i = 0; i < in.get_row_count(); i++)
+	{
+		if (in.data[index][i] == "0" || in.data[index][i] == "1")
+		{
+			for (size_t j = 0; j < in.data.size(); j++)
+				out_dadnacrs.data[j].push_back(in.data[j][i]);
+		}
+		else
+		{
+			for (size_t j = 0; j < in.data.size(); j++)
+				out_npduis.data[j].push_back(in.data[j][i]);
+		}
+	}
+}
+
+
+
 bool date_equals(const tm& left, const tm& right)
 {
 	if (right.tm_year == left.tm_year && right.tm_mon == left.tm_mon && right.tm_mday == left.tm_mday)
@@ -77,6 +108,25 @@ bool date_less_than(const tm& left, const tm& right)
 
 	return false;
 }
+
+
+void add_days_to_date(const string &sa, int num_days_to_add, string &out)
+{
+	tm ta = {};
+
+	istringstream iss(sa);
+	iss >> get_time(&ta, "%d-%b-%y");
+
+	ta.tm_mday += num_days_to_add;
+	mktime(&ta);
+
+	ostringstream oss;
+	oss << put_time(&ta, "%d-%b-%y") << endl;
+	out = oss.str();
+
+	//cout << sa << " " << oss.str() << endl;
+}
+
 
 bool is_date_between_two_dates(tm& ta, tm& tb, tm& t_curr)
 {
