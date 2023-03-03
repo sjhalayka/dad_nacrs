@@ -1,6 +1,64 @@
 #include "main.h"
 
 
+
+
+
+
+class npduis_row
+{
+public:
+
+	bool operator<(const npduis_row &right) const
+	{
+		//if (right.x > x)
+		//	return true;
+		//else if (right.x < x)
+		//	return false;
+
+		//if (right.y > y)
+		//	return true;
+		//else if (right.y < y)
+		//	return false;
+
+		//if (right.z > z)
+		//	return true;
+		//else if (right.z < z)
+		//	return false;
+
+		return false;
+	}
+
+	string mbun;
+	string province;
+	string birth_yr;
+	string age;
+	string female;
+	string rural_unkn;
+	string source_dad;
+	string schizoph;
+	string schizaff;
+	string bipolar;
+	string psychosis_prg;
+	string psychosis_non;
+	string self_harm;
+	string myocarditis;
+	string cardiomyopathy;
+	string neutropenia;
+	string episode_beg_dt;
+	string episode_end_dt;
+	string drug_code;
+	string drug_desc;
+};
+
+
+
+
+
+
+
+
+
 int main(void)
 {
 	//string s = "31-Apr-07";
