@@ -5,54 +5,6 @@
 
 
 
-class npduis_row
-{
-public:
-
-	bool operator<(const npduis_row &right) const
-	{
-		//if (right.x > x)
-		//	return true;
-		//else if (right.x < x)
-		//	return false;
-
-		//if (right.y > y)
-		//	return true;
-		//else if (right.y < y)
-		//	return false;
-
-		//if (right.z > z)
-		//	return true;
-		//else if (right.z < z)
-		//	return false;
-
-		return false;
-	}
-
-	string mbun;
-	string province;
-	string birth_yr;
-	string age;
-	string female;
-	string rural_unkn;
-	string source_dad;
-	string schizoph;
-	string schizaff;
-	string bipolar;
-	string psychosis_prg;
-	string psychosis_non;
-	string self_harm;
-	string myocarditis;
-	string cardiomyopathy;
-	string neutropenia;
-	string episode_beg_dt;
-	string episode_end_dt;
-	string drug_code;
-	string drug_desc;
-};
-
-
-
 
 
 
@@ -81,23 +33,53 @@ int main(void)
 	if (false == all.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/meds_for_consolidation_ultra_small.csv"))
 		return -1;
 
+
+
+	cout << "Splitting" << endl;
+
 	split(all, dad_nacrs_rows, npduis_rows);
 
 
 
+	cout << "Getting rows" << endl;
+
+	vector<npduis_row> vn;
+
+	size_t row_count = npduis_rows.get_row_count();
+
+	for (size_t i = 0; i < row_count; i++)
+	{
+		npduis_row nr = npduis_rows.get_npduis_row(i);
+
+//		cout << nr.drug_desc << endl;
+
+		vn.push_back(nr);
+	}
+
+	sort(vn.begin(), vn.end());
+
+	for (size_t i = 0; i < vn.size(); i++)
+	{
+		cout << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].drug_code << endl;
+	}
+
+	return 0;
+		
+		
+		//	cout << npduis_rows.get_row_count() << " " << vn.size() << endl;
 
 	// Do stuff with npduis_rows
 	
 
 
 
-	generic_table_data generic_out0;
-	merge<generic_table_data>(dad_nacrs_rows, npduis_rows, generic_out0);
+	//generic_table_data generic_out0;
+	//merge<generic_table_data>(dad_nacrs_rows, npduis_rows, generic_out0);
 
-	if (false == generic_out0.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/meds_for_consolidation_remerged.csv"))
-		return -1;
+	//if (false == generic_out0.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/meds_for_consolidation_remerged.csv"))
+	//	return -1;
 
-	return 0;
+	//return 0;
 
 
 

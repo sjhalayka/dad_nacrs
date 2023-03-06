@@ -48,7 +48,9 @@ using std::sregex_token_iterator;
 // High-precision timing
 #include <chrono>
 
-
+#include <ctime>
+using std::get_time;
+using std::put_time;
 
 #include "diagnosis_indicators.h"
 
@@ -56,6 +58,100 @@ using std::sregex_token_iterator;
 // Forward declare that there will be a class called generic_table_data,
 // which will be inherited from the table_data class
 class generic_table_data;
+
+
+
+
+bool date_equals(const tm& left, const tm& right);
+
+bool date_less_than(const tm& left, const tm& right);
+
+
+void add_days_to_date(const string& sa, int num_days_to_add, string& out);
+
+
+bool is_date_between_two_dates(tm& ta, tm& tb, tm& t_curr);
+
+// for example: 31-Apr-07
+bool is_date_between_two_dates(const string& sa, const string& sb, const string& s_curr);
+
+
+
+class npduis_row
+{
+public:
+	bool operator<(const npduis_row& right) const
+	{
+		long unsigned int mbun_int = 0;
+		long unsigned int right_mbun_int = 0;
+
+		istringstream iss(mbun);
+		iss >> mbun_int;
+
+		iss.clear();
+		iss.str(right.mbun);
+		iss >> right_mbun_int;
+
+		if (right_mbun_int > mbun_int)
+			return true;
+		else if (right_mbun_int < mbun_int)
+			return false;
+
+
+		if (right.drug_code > drug_code)
+			return true;
+		else if (right.drug_code < drug_code)
+			return false;
+
+
+
+		tm ta = {}, tb = {};
+
+		//cout << episode_beg_dt << " " << right.episode_beg_dt << endl;
+
+
+		iss.clear();
+		iss.str(episode_beg_dt);
+		iss >> get_time(&ta, "%d%b%Y");
+
+		iss.clear();
+		iss.str(right.episode_beg_dt);
+		iss >> get_time(&tb, "%d%b%Y");
+
+		if (date_less_than(ta, tb))
+			return true;
+		else if (date_less_than(tb, ta))
+			return false;
+
+
+
+		return false;
+	}
+
+	string mbun;
+	string province;
+	string birth_yr;
+	string age;
+	string female;
+	string rural_unkn;
+	string fiscal_year;
+	string source_dad;
+	string schizoph;
+	string schizaff;
+	string bipolar;
+	string psychosis_org;
+	string psychosis_non;
+	string self_harm;
+	string myocarditis;
+	string cardiomyopathy;
+	string neutropenia;
+	string episode_beg_dt;
+	string episode_end_dt;
+	string drug_code;
+	string drug_desc;
+};
+
+
 
 
 // Base class
@@ -102,6 +198,39 @@ public:
 	bool load_from_CSV_buffer(const string& filename);
 	size_t get_row_count(void);
 
+	npduis_row get_npduis_row(const size_t row_index)
+	{
+		npduis_row nr;
+
+		if (row_index >= get_row_count())
+			return nr;
+
+		nr.mbun = data[0][row_index];
+		nr.province = data[1][row_index];
+		nr.birth_yr = data[2][row_index];
+		nr.age = data[3][row_index];
+		nr.female = data[4][row_index];
+		nr.rural_unkn = data[5][row_index];
+		nr.fiscal_year = data[6][row_index];
+		nr.source_dad = data[7][row_index];
+		nr.schizoph = data[8][row_index];
+		nr.schizaff = data[9][row_index];
+		nr.bipolar = data[10][row_index];
+		nr.psychosis_org = data[11][row_index];
+		nr.psychosis_non = data[12][row_index];
+		nr.self_harm = data[13][row_index];
+		nr.myocarditis = data[14][row_index];
+		nr.cardiomyopathy = data[15][row_index];
+		nr.neutropenia = data[16][row_index];
+		nr.episode_beg_dt = data[17][row_index];
+		nr.episode_end_dt = data[18][row_index];
+		nr.drug_code = data[19][row_index];
+		nr.drug_desc = data[20][row_index];
+
+		return nr;
+	}
+
+
 	void delete_row(size_t row_index)
 	{
 		if (row_index < get_row_count())
@@ -120,6 +249,9 @@ public:
 	virtual bool get_various_diag_codes(void) = 0;
 
 };
+
+
+
 
 
 
