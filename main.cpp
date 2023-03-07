@@ -48,20 +48,57 @@ int main(void)
 	size_t row_count = npduis_rows.get_row_count();
 
 	for (size_t i = 0; i < row_count; i++)
-	{
-		npduis_row nr = npduis_rows.get_npduis_row(i);
-
-//		cout << nr.drug_desc << endl;
-
-		vn.push_back(nr);
-	}
+		vn.push_back(npduis_rows.get_npduis_row(i));
 
 	sort(vn.begin(), vn.end());
 
+	for (size_t i = 1; i < vn.size();)
+	{
+		string prev_end = vn[i - 1].episode_end_dt;
+		string curr_begin = vn[i].episode_beg_dt;
+		string curr_end = vn[i].episode_end_dt;
+
+		string extended_prev_end;
+		add_days_to_date(prev_end, 30, extended_prev_end);
+
+		tm ta = {}, tb = {};
+
+		istringstream iss(curr_end);
+		iss >> get_time(&ta, "%d%b%Y");
+
+		iss.clear();
+		iss.str(extended_prev_end);
+		iss >> get_time(&tb, "%d%b%Y");
+
+		if (vn[i].mbun == vn[i - 1].mbun &&
+			vn[i].drug_code == vn[i - 1].drug_code &&
+			date_less_than(ta, tb))
+		{
+			//cout << "found deletable line" << endl;
+			//cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
+			
+			vn[i - 1].episode_end_dt = vn[i].episode_beg_dt;
+			vn.erase(vn.begin() + i);
+		}
+		else
+		{
+			//cout << "found non-deletable line" << endl;
+			//cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
+
+			i++;
+		}
+	}
+
+
+
 	for (size_t i = 0; i < vn.size(); i++)
 	{
-		cout << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].drug_code << endl;
+		cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].drug_code << endl;	
 	}
+
+
+
+
 
 	return 0;
 		

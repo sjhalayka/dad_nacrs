@@ -599,7 +599,6 @@ bool is_date_between_two_dates(tm& ta, tm& tb, tm& t_curr)
 	return false;
 }
 
-// for example: 31-Apr-07
 bool is_date_between_two_dates(const string& sa, const string& sb, const string& s_curr)
 {
 	tm ta = {}, tb = {}, t_curr = {};
