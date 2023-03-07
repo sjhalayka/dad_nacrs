@@ -70,13 +70,10 @@ bool date_equals(const tm& left, const tm& right);
 
 bool date_less_than(const tm& left, const tm& right);
 
-
 void add_days_to_date(const string& sa, int num_days_to_add, string& out);
-
 
 bool is_date_between_two_dates(tm& ta, tm& tb, tm& t_curr);
 
-// for example: 31-Apr-07
 bool is_date_between_two_dates(const string& sa, const string& sb, const string& s_curr);
 
 
@@ -194,6 +191,7 @@ public:
 	bool rename_column(const string& column_name, const string& new_column_name);
 	bool calc_age(const string& column_name_a, const string& column_name_b);
 	bool delete_column(const string& column_name);
+	bool clear_rows(void);
 	bool clear_memory(void);
 	bool replace(const string& column_name, const string& find_value, const string& replace_value);
 	bool print_column(const string& column_name);
@@ -233,6 +231,35 @@ public:
 
 		return nr;
 	}
+
+	void add_npduis_row(npduis_row nr)
+	{
+		data[0].push_back(nr.mbun);
+		data[1].push_back(nr.province);
+		data[2].push_back(nr.birth_yr);
+		data[3].push_back(nr.age);
+		data[4].push_back(nr.female);
+		data[5].push_back(nr.rural_unkn);
+		data[6].push_back(nr.fiscal_year);
+		data[7].push_back(nr.source_dad);
+		data[8].push_back(nr.schizoph);
+		data[9].push_back(nr.schizaff);
+		data[10].push_back(nr.bipolar);
+		data[11].push_back(nr.psychosis_org);
+		data[12].push_back(nr.psychosis_non);
+		data[13].push_back(nr.self_harm);
+		data[14].push_back(nr.myocarditis);
+		data[15].push_back(nr.cardiomyopathy);
+		data[16].push_back(nr.neutropenia);
+		data[17].push_back(nr.episode_beg_dt);
+		data[18].push_back(nr.episode_end_dt);
+		data[19].push_back(nr.drug_code);
+		data[20].push_back(nr.drug_desc);
+	}
+
+
+
+
 
 
 	void delete_row(size_t row_index)

@@ -30,7 +30,7 @@ void merge(const T& left, const T& right, generic_table_data& out)
 
 		if (false == left.get_index(ci->first, index_left) || false == right.get_index(ci->first, index_right))
 		{
-			//cout << "dropping " << ci->first << endl;
+			cout << "dropping " << ci->first << endl;
 		}
 		else
 		{
