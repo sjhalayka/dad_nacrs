@@ -13,36 +13,19 @@
 
 int main(void)
 {
-	//string s = "31-Apr-07";
-
-	//string out;
-
-	//add_days_to_date(s, 15, out);
-
-	//cout << s << " " << out << endl;
-
-	//return 0;
-
-
-
-
 	generic_table_data all, dad_nacrs_rows, npduis_rows;
 
-	cout << "Reading" << endl;
 
-	if (false == all.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/meds_for_consolidation_ultra_small.csv"))
+	cout << "Reading" << endl;
+	if (false == all.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/meds_for_consolidation.csv"))
 		return -1;
 
 
-
 	cout << "Splitting" << endl;
-
 	split(all, dad_nacrs_rows, npduis_rows);
 
 
-
 	cout << "Getting rows" << endl;
-
 	vector<npduis_row> vn;
 
 	size_t row_count = npduis_rows.get_row_count();
@@ -50,16 +33,35 @@ int main(void)
 	for (size_t i = 0; i < row_count; i++)
 		vn.push_back(npduis_rows.get_npduis_row(i));
 
+	npduis_rows.clear_memory();
+
+
+	cout << "Sorting rows" << endl;
 	sort(vn.begin(), vn.end());
 
-	for (size_t i = 1; i < vn.size();)
+
+	cout << "Culling rows" << endl;
+	list<npduis_row> ln;
+
+	for (size_t i = 0; i < vn.size(); i++)
+		ln.push_back(vn[i]);
+
+	list<npduis_row>::iterator curr = ln.begin();
+	curr++;
+
+	// culling rows
+	for (; curr != ln.end(); )
 	{
-		string prev_end = vn[i - 1].episode_end_dt;
-		string curr_begin = vn[i].episode_beg_dt;
-		string curr_end = vn[i].episode_end_dt;
+		list<npduis_row>::iterator prev = curr;
+		prev--;
+	
+		string prev_end = prev->episode_end_dt;
+		string curr_end = curr->episode_end_dt;
+
+		const size_t grace_period = 30;
 
 		string extended_prev_end;
-		add_days_to_date(prev_end, 31, extended_prev_end);
+		add_days_to_date(prev_end, grace_period + 1, extended_prev_end);
 
 		tm ta = {}, tb = {};
 
@@ -70,33 +72,31 @@ int main(void)
 		iss.str(extended_prev_end);
 		iss >> get_time(&tb, "%d%b%Y");
 
-		if (vn[i].mbun == vn[i - 1].mbun &&
-			vn[i].drug_code == vn[i - 1].drug_code &&
+		if (curr->mbun == prev->mbun &&
+			curr->drug_code == prev->drug_code &&
 			date_less_than(ta, tb))
 		{
-			//cout << "found deletable line" << endl;
-			//cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
-			
-			vn[i - 1].episode_end_dt = vn[i].episode_beg_dt;
-			vn.erase(vn.begin() + i);
+			// Erase this row
+			prev->episode_end_dt = curr->episode_beg_dt;
+			curr = ln.erase(curr);
 		}
 		else
 		{
-			//cout << "found non-deletable line" << endl;
-			//cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
-
-			i++;
+			// Keep this row
+			curr++;
 		}
+	
 	}
 
+	vn.clear();
 
+	for(list<npduis_row>::const_iterator ci = ln.begin(); ci != ln.end(); ci++)
+		vn.push_back(*ci);
+
+	ln.clear();
 
 	for (size_t i = 0; i < vn.size(); i++)
-	{
-		cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].drug_code << endl;	
-	}
-
-
+		cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
 
 
 

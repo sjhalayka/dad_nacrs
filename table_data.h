@@ -29,6 +29,10 @@ using std::ostringstream;
 #include <vector>
 using std::vector;
 
+#include <list>
+using std::list;
+
+
 // String (a kind of array) using 8-bit chars
 // We use this in lieu of new[]/delete[]
 #include <string>
