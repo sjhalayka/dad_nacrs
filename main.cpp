@@ -59,7 +59,7 @@ int main(void)
 		string curr_end = vn[i].episode_end_dt;
 
 		string extended_prev_end;
-		add_days_to_date(prev_end, 30, extended_prev_end);
+		add_days_to_date(prev_end, 31, extended_prev_end);
 
 		tm ta = {}, tb = {};
 
