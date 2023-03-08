@@ -580,10 +580,10 @@ void add_days_to_date(const string& sa, int num_days_to_add, string& out)
 	mktime(&ta);
 
 	ostringstream oss;
-	oss << put_time(&ta, "%d%b%Y") << endl;
+	oss << put_time(&ta, "%d%b%Y");
 	out = oss.str();
 
-	//cout << sa << " " << oss.str() << endl;
+//	cout << sa << " " << oss.str() << endl;
 }
 
 

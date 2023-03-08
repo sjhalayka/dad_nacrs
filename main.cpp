@@ -14,6 +14,8 @@
 int main(void)
 {
 	generic_table_data all, dad_nacrs_rows, npduis_rows;
+	const size_t grace_period = 30;
+
 
 
 	cout << "Reading" << endl;
@@ -42,9 +44,9 @@ int main(void)
 	sort(vn.begin(), vn.end());
 
 
-	//for (size_t i = 0; i < vn.size(); i++)
-	//	if (vn[i].mbun == "2")
-	//		cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
+	for (size_t i = 0; i < vn.size(); i++)
+		if (vn[i].mbun == "1")
+			cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
 
 
 
@@ -66,7 +68,7 @@ int main(void)
 		string prev_end = prev->episode_end_dt;
 		string curr_end = curr->episode_end_dt;
 
-		const size_t grace_period = 30;
+
 
 		string extended_prev_end;
 		add_days_to_date(prev_end, grace_period + 1, extended_prev_end);
@@ -102,10 +104,17 @@ int main(void)
 		vn.push_back(*ci);
 
 	ln.clear();
+ 
+	for (size_t i = 0; i < vn.size(); i++)
+		if (vn[i].episode_beg_dt == vn[i].episode_end_dt)
+			add_days_to_date(vn[i].episode_beg_dt, grace_period, vn[i].episode_end_dt);
 
-	//for (size_t i = 0; i < vn.size(); i++)
-	//	if(vn[i].mbun == "2")
-	//	cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
+	for (size_t i = 0; i < vn.size(); i++)
+		if(vn[i].mbun == "1")
+			cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
+
+
+
 
 	// copy from vn to npduis_rows
 	cout << "Copying to table" << endl;
