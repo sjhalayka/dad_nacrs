@@ -42,6 +42,12 @@ int main(void)
 	sort(vn.begin(), vn.end());
 
 
+	//for (size_t i = 0; i < vn.size(); i++)
+	//	if (vn[i].mbun == "2")
+	//		cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
+
+
+
 	cout << "Culling rows" << endl;
 	list<npduis_row> ln;
 
@@ -98,6 +104,7 @@ int main(void)
 	ln.clear();
 
 	//for (size_t i = 0; i < vn.size(); i++)
+	//	if(vn[i].mbun == "2")
 	//	cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
 
 	// copy from vn to npduis_rows
