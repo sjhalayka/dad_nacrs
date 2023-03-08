@@ -44,9 +44,9 @@ int main(void)
 	sort(vn.begin(), vn.end());
 
 
-	for (size_t i = 0; i < vn.size(); i++)
-		if (vn[i].mbun == "1")
-			cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
+	//for (size_t i = 0; i < vn.size(); i++)
+	//	if (vn[i].mbun == "1")
+	//		cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
 
 
 
@@ -109,9 +109,9 @@ int main(void)
 		if (vn[i].episode_beg_dt == vn[i].episode_end_dt)
 			add_days_to_date(vn[i].episode_beg_dt, grace_period, vn[i].episode_end_dt);
 
-	for (size_t i = 0; i < vn.size(); i++)
-		if(vn[i].mbun == "1")
-			cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
+	//for (size_t i = 0; i < vn.size(); i++)
+	//	if(vn[i].mbun == "1")
+	//		cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
 
 
 
