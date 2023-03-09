@@ -79,8 +79,6 @@ int main(void)
 		string prev_end = prev->episode_end_dt;
 		string curr_end = curr->episode_end_dt;
 
-
-
 		string extended_prev_end;
 		add_days_to_date(prev_end, grace_period + 1, extended_prev_end);
 
