@@ -45,8 +45,8 @@ int main(void)
 	auto start_time = std::chrono::high_resolution_clock::now();
 
 	cout << "Sorting rows" << endl;
-	//sort(vn.begin(), vn.end());
-	sort_by_mbun(vn);
+	sort(vn.begin(), vn.end());
+	//sort_by_mbun(vn);
 
 	auto end_time = std::chrono::high_resolution_clock::now();
 
