@@ -40,8 +40,19 @@ int main(void)
 	npduis_rows.clear_rows();
 
 
+
+
+	auto start_time = std::chrono::high_resolution_clock::now();
+
 	cout << "Sorting rows" << endl;
-	sort(vn.begin(), vn.end());
+	//sort(vn.begin(), vn.end());
+	sort_by_mbun(vn);
+
+	auto end_time = std::chrono::high_resolution_clock::now();
+
+	std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
+
+	cout << "Duration: " << elapsed.count() / 1000.0f << " seconds" << endl;
 
 
 	//for (size_t i = 0; i < vn.size(); i++)

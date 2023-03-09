@@ -179,7 +179,10 @@ public:
 	friend void merge(const T& left, const T& right, generic_table_data& out);
 
 	template <class T>
-	void split(T& in, generic_table_data& out_dadnacrs, generic_table_data& out_npduis);
+	friend void split(T& in, generic_table_data& out_dadnacrs, generic_table_data& out_npduis);
+
+	friend void sort_by_mbun(vector<npduis_row>& vn);
+
 
 	bool sort_columns(const vector<string> &in_column_names);
 	bool get_index(const string& column_name, size_t& index) const;

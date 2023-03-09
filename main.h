@@ -80,6 +80,24 @@ void split(T& in, generic_table_data &out_dadnacrs, generic_table_data& out_npdu
 }
 
 
+void sort_by_mbun(vector<npduis_row>& vn)
+{
+	map<string, vector<npduis_row>> mv;
+
+	for (size_t i = 0; i < vn.size(); i++)
+		mv[vn[i].mbun].push_back(vn[i]);
+
+	vn.clear();
+
+	for (map<string, vector<npduis_row>>::iterator i = mv.begin(); i != mv.end(); i++)
+		sort(i->second.begin(), i->second.end());
+
+	for (map<string, vector<npduis_row>>::iterator i = mv.begin(); i != mv.end(); i++)
+		for (size_t j = 0; j < i->second.size(); j++)
+			vn.push_back(i->second[j]);
+
+	mv.clear();
+}
 
 
 
