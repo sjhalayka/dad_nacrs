@@ -139,13 +139,18 @@ int main(void)
 	generic_table_data generic_out0;
 	merge<generic_table_data>(npduis_rows, dad_nacrs_rows, generic_out0);
 
+	npduis_rows.clear_memory();
+	dad_nacrs_rows.clear_memory();
+
+
+
+
 	cout << "Sorting columns" << endl;
 	vector<string> sorted_column_names = {
 		"mbun", "province", "age", "birth_yr", "female", "source_dad", "psychosis_non", "rural_unkn", "fiscal_yr", "neutropenia", "schizoph", "schizaff", "bipolar", "psychosis_org", "self_harm", "myocarditis", "cardiomyopathy", "episode_beg_dt", "episode_end_dt", "drug_code", "drug_desc"
 	};
 
 	generic_out0.sort_columns(sorted_column_names);
-
 
 	// Save to file
 	if (false == generic_out0.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/meds_for_consolidation_remerged.csv"))
