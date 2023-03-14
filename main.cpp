@@ -19,8 +19,11 @@ int main(void)
 
 
 	cout << "Reading" << endl;
-	if (false == all.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/meds_for_consolidation.csv"))
+	if (false == all.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/Agg_records_2023_medicated_for_consol.csv"))
 		return -1;
+
+//	if (false == all.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/backup/meds_for_consolidation.csv"))
+//		return -1;
 
 
 	cout << "Splitting" << endl;
@@ -124,6 +127,11 @@ int main(void)
 
 
 
+
+
+
+
+
 	// copy from vn to npduis_rows
 	cout << "Copying to table" << endl;
 
@@ -135,6 +143,15 @@ int main(void)
 
 
 
+	npduis_rows.add_column("drug_desc_grp", "");
+	npduis_rows.add_column("drug_set", "");
+
+
+
+	dad_nacrs_rows.add_column("drug_desc_grp", "");
+	dad_nacrs_rows.add_column("drug_set", "");
+
+
 	cout << "Merging" << endl;
 	generic_table_data generic_out0;
 	merge<generic_table_data>(npduis_rows, dad_nacrs_rows, generic_out0);
@@ -144,17 +161,26 @@ int main(void)
 
 
 
-
 	cout << "Sorting columns" << endl;
 	vector<string> sorted_column_names = {
-		"mbun", "province", "age", "birth_yr", "female", "source_dad", "psychosis_non", "rural_unkn", "fiscal_yr", "neutropenia", "schizoph", "schizaff", "bipolar", "psychosis_org", "self_harm", "myocarditis", "cardiomyopathy", "episode_beg_dt", "episode_end_dt", "drug_code", "drug_desc"
+		"mbun", "province", "age", "birth_yr", "female", 
+		"source_dad", "psychosis_non", "rural_unkn", "fiscal_yr", "neutropenia", 
+		"schizoph", "schizaff", "bipolar", "psychosis_org", "self_harm",
+		"myocarditis", "cardiomyopathy", "episode_beg_dt", "episode_end_dt", 
+		"drug_code", "drug_desc", "drug_desc_grp", "drug_set"
 	};
 
 	generic_out0.sort_columns(sorted_column_names);
 
 	// Save to file
-	if (false == generic_out0.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/meds_for_consolidation_remerged.csv"))
+	if (false == generic_out0.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/Agg_records_2023_medicated_for_consol_remerged.csv"))
 		return -1;
+
+//	if (false == generic_out0.save_to_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/backup/meds_for_consolidation_remerged.csv"))
+//		return -1;
+
+	
+
 
 	return 0;
 }
