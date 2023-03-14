@@ -51,7 +51,7 @@ int main(void)
 
 	std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
 
-	cout << "Duration: " << elapsed.count() / 1000.0f << " seconds" << endl;
+	cout << "Sort duration: " << elapsed.count() / 1000.0f << " seconds" << endl;
 
 
 	//for (size_t i = 0; i < vn.size(); i++)

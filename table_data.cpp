@@ -64,6 +64,8 @@ bool table_data::get_data_buffer(const string& filename)
 
 	string s(file_size, ' ');
 
+	cout << "Reading " << file_size / 1024.0 << " KBytes" << endl;
+
 	infile.read(&s[0], file_size);
 	infile.close();
 
@@ -73,6 +75,8 @@ bool table_data::get_data_buffer(const string& filename)
 		s += '\n';
 		file_size++;
 	}
+
+	cout << "Tokenizing file contents" << endl;
 
 	vector<string> tokens;
 	string temp_token;
@@ -385,7 +389,7 @@ bool table_data::save_to_CSV_buffer(const string& filename)
 		s += '\n';
 	}
 
-	cout << "Writing data" << endl;
+	cout << "Writing " << s.length() / 1024.0 << " KBytes" << endl;
 
 	// Write string contents to file in one shot
 	ofstream outfile(filename, ifstream::binary);
