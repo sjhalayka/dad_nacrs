@@ -150,6 +150,8 @@ public:
 	string episode_end_dt;
 	string drug_code;
 	string drug_desc;
+	string drug_desc_grp;
+	string drug_set;
 };
 
 
@@ -231,6 +233,8 @@ public:
 		nr.episode_end_dt = data[18][row_index];
 		nr.drug_code = data[19][row_index];
 		nr.drug_desc = data[20][row_index];
+		nr.drug_desc_grp = data[21][row_index];
+		nr.drug_set = data[22][row_index];
 
 		return nr;
 	}
@@ -258,6 +262,9 @@ public:
 		data[18].push_back(nr.episode_end_dt);
 		data[19].push_back(nr.drug_code);
 		data[20].push_back(nr.drug_desc);
+		data[21].push_back(nr.drug_desc_grp);
+		data[22].push_back(nr.drug_set);
+
 	}
 
 
