@@ -31,7 +31,6 @@ void get_date_range(const string& start_date, const string& end_date, vector<str
 
 		ta.tm_mday += 1;
 		mktime(&ta);
-
 	} 
 
 	ostringstream oss;
@@ -39,28 +38,93 @@ void get_date_range(const string& start_date, const string& end_date, vector<str
 	dates.push_back(oss.str());
 }
 
+class comp  //custom comparator
+{
+public:
+	bool operator()(const tm &left, const tm &right) const 
+	{
+		if (right.tm_year > left.tm_year)
+			return true;
+		else if (right.tm_year < left.tm_year)
+			return false;
 
+		if (right.tm_mon > left.tm_mon)
+			return true;
+		else if (right.tm_mon < left.tm_mon)
+			return false;
+
+		if (right.tm_mday > left.tm_mday)
+			return true;
+		else if (right.tm_mday < left.tm_mday)
+			return false;
+
+		return false;
+	}
+};
+
+void convert_rows_to_polypharmacy_rows(const vector<npduis_row>& vn, vector<npduis_row>& vout)
+{
+	vout.clear();
+
+	map<tm, vector<npduis_row>, comp> date_map;
+
+	for (size_t i = 0; i < vn.size(); i++)
+	{
+		vector<string> dates;
+		get_date_range(vn[i].episode_beg_dt, vn[i].episode_end_dt, dates);
+
+		for (size_t d = 0; d < dates.size(); d++)
+		{
+			tm ta = {};
+
+			istringstream iss;
+
+			iss.clear();
+			iss.str(dates[d]);
+			iss >> get_time(&ta, "%d%b%Y");
+
+			//cout << dates[d] << " " << (ta.tm_year + 1900) << " " << (ta.tm_mon + 1) << " " << ta.tm_mday << endl;
+			//cout << endl;
+
+			npduis_row nr = vn[i];
+
+			nr.episode_beg_dt = dates[d];
+			nr.episode_end_dt = dates[d];
+
+			date_map[ta].push_back(nr);
+		}
+	}
+	 
+	for (map<tm, vector<npduis_row>, comp>::const_iterator ci = date_map.begin(); ci != date_map.end(); ci++)
+	{
+		cout << (ci->first.tm_year + 1900) << " " << (ci->first.tm_mon + 1) << " " << ci->first.tm_mday << endl;
+
+		//cout << ci->second.size() << endl;
+
+		//for (size_t j = 0; j < ci->second.size(); j++)
+		//	cout << ci->second[j].drug_code << endl;
+
+//		cout << endl;
+	}
+
+}
 
 
 
 
 int main(void)
 {
+	//vector<string> dates;
+	//get_date_range("02Mar2023", "05Mar2023", dates);
 
-	vector<string> dates;
-	get_date_range("02Mar2023", "02Mar2023", dates);
+	//for (size_t i = 0; i < dates.size(); i++)
+	//	cout << dates[i] << endl;
 
-	for (size_t i = 0; i < dates.size(); i++)
-		cout << dates[i] << endl;
-
-	return 0;
+	//return 0;
 
 
 
 	generic_table_data all, dad_nacrs_rows, npduis_rows;
-	const size_t grace_period = 30;
-
-
 
 	cout << "Reading" << endl;
 	if (false == all.load_from_CSV_buffer("Z:/Smartphone_2/Shawn/Drug_spell_grouping/Agg_records_2023_medicated_for_consol_remerged_step1.csv"))
@@ -73,21 +137,55 @@ int main(void)
 
 
 	cout << "Getting rows" << endl;
-	vector<npduis_row> vn;
+
 
 	size_t row_count = npduis_rows.get_row_count();
 
+	if (row_count == 0)
+		return 0;
+
+	size_t curr_mbun = stoi(npduis_rows.get_npduis_row(0).mbun);
+
+	vector<npduis_row> vtemp;
+	vector<npduis_row> all_final;
+
 	for (size_t i = 0; i < row_count; i++)
-		vn.push_back(npduis_rows.get_npduis_row(i));
+	{
+		npduis_row nr = npduis_rows.get_npduis_row(i);
+
+		size_t this_mbun = stoi(nr.mbun);
+
+		if (this_mbun != curr_mbun)
+		{	
+			if (vtemp.size() != 0)
+			{
+				vector<npduis_row> final;
+				convert_rows_to_polypharmacy_rows(vtemp, final);
+
+				for (size_t j = 0; j < final.size(); j++)
+					all_final.push_back(final[j]);
+			}
+
+			vtemp.clear();
+			curr_mbun = this_mbun;
+		}
+
+		vtemp.push_back(nr);
+	}
+
+	if (vtemp.size() != 0)
+	{
+		vector<npduis_row> final;
+		convert_rows_to_polypharmacy_rows(vtemp, final);
+
+		for (size_t j = 0; j < final.size(); j++)
+			all_final.push_back(final[j]);
+	}
 
 	// Keep column headers
 	npduis_rows.clear_rows();
 
 
-
-	for (size_t i = 0; i < vn.size(); i++)
-		if (vn[i].mbun == "1")
-			cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
 
 
 
@@ -145,11 +243,11 @@ int main(void)
 	//ln.clear();
 
 
-	for (size_t i = 0; i < vn.size(); i++)
-	{
-		if (vn[i].mbun == "1")
-			cout << "  " << vn[i].mbun << " " << vn[i].episode_beg_dt << " " << vn[i].episode_end_dt << " " << vn[i].drug_code << endl;
-	}
+	//for (size_t i = 0; i < vtemp.size(); i++)
+	//{
+	//	if (vtemp[i].mbun == "1")
+	//		cout << "  " << vtemp[i].mbun << " " << vtemp[i].episode_beg_dt << " " << vtemp[i].episode_end_dt << " " << vtemp[i].drug_code << endl;
+	//}
 
 
 
@@ -161,10 +259,10 @@ int main(void)
 	// copy from vn to npduis_rows
 	cout << "Copying to table" << endl;
 
-	for (size_t i = 0; i < vn.size(); i++)
-		npduis_rows.add_npduis_row(vn[i]);
+	for (size_t i = 0; i < all_final.size(); i++)
+		npduis_rows.add_npduis_row(all_final[i]);
 
-	vn.clear();
+	all_final.clear();
 
 
 	cout << "Merging" << endl;
