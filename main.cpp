@@ -121,9 +121,13 @@ void convert_rows_to_polypharmacy_rows(const vector<npduis_row>& vn, vector<npdu
 
 			string drug_set = "";
 
-			// to do... get rid of trailing ; for last element
 			for (size_t j = 0; j < drug_set_strings.size(); j++)
-				drug_set += drug_set_strings[j] + ';';
+			{
+				drug_set += drug_set_strings[j];
+
+				if (j != drug_set_strings.size() - 1)
+					drug_set += ';';
+			}
 
 			ci->second[0].drug_desc_grp = "Polypharmacy";
 			ci->second[0].drug_set = drug_set;
