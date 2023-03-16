@@ -66,6 +66,8 @@ void convert_rows_to_polypharmacy_rows(const vector<npduis_row>& vn, vector<npdu
 {
 	vout.clear();
 
+	const size_t grace_period = 30;
+
 	map<tm, vector<npduis_row>, comp> date_map;
 
 	for (size_t i = 0; i < vn.size(); i++)
@@ -149,8 +151,25 @@ void convert_rows_to_polypharmacy_rows(const vector<npduis_row>& vn, vector<npdu
 		list<npduis_row>::iterator prev = curr;
 		prev--;
 
+		string prev_end = prev->episode_end_dt;
+		string curr_end = curr->episode_end_dt;
+
+		string extended_prev_end;
+		add_days_to_date(prev_end, grace_period + 1, extended_prev_end);
+
+		tm ta = {}, tb = {};
+
+		istringstream iss(curr_end);
+		iss >> get_time(&ta, "%d%b%Y");
+
+		iss.clear();
+		iss.str(extended_prev_end);
+		iss >> get_time(&tb, "%d%b%Y");
+
+
 		if (curr->drug_desc_grp == prev->drug_desc_grp &&
-			curr->drug_set == prev->drug_set)
+			curr->drug_set == prev->drug_set &&
+			date_less_than(ta, tb))
 		{
 			// Erase this row
 			prev->episode_end_dt = curr->episode_beg_dt;
