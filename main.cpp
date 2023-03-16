@@ -78,8 +78,6 @@ void convert_rows_to_polypharmacy_rows(const vector<npduis_row>& vn, vector<npdu
 			tm ta = {};
 
 			istringstream iss;
-
-			iss.clear();
 			iss.str(dates[d]);
 			iss >> get_time(&ta, "%d%b%Y");
 
@@ -94,19 +92,83 @@ void convert_rows_to_polypharmacy_rows(const vector<npduis_row>& vn, vector<npdu
 			date_map[ta].push_back(nr);
 		}
 	}
-	 
-	for (map<tm, vector<npduis_row>, comp>::const_iterator ci = date_map.begin(); ci != date_map.end(); ci++)
+
+	for (map<tm, vector<npduis_row>, comp>::iterator ci = date_map.begin(); ci != date_map.end(); ci++)
 	{
-		cout << (ci->first.tm_year + 1900) << " " << (ci->first.tm_mon + 1) << " " << ci->first.tm_mday << endl;
+		if (ci->second.size() == 0)
+		{
+			// this should never happen
+			continue;
+		}
+		else if (ci->second.size() == 1)
+		{
+			ci->second[0].drug_desc_grp = ci->second[0].drug_desc;
+			ci->second[0].drug_set = ci->second[0].drug_code;
+		}
+		else
+		{
+			// polypharmacy
+			size_t num_meds = ci->second.size();
 
-		//cout << ci->second.size() << endl;
+			vector<string> drug_set_strings;
 
-		//for (size_t j = 0; j < ci->second.size(); j++)
-		//	cout << ci->second[j].drug_code << endl;
+			for (size_t j = 0; j < num_meds; j++)
+				drug_set_strings.push_back(ci->second[j].drug_code);
 
-//		cout << endl;
+			sort(drug_set_strings.begin(), drug_set_strings.end());
+
+			string drug_set = "";
+
+			for (size_t j = 0; j < drug_set_strings.size(); j++)
+				drug_set += drug_set_strings[j] + ';';
+
+			ci->second[0].drug_desc_grp = "Polypharmacy";
+			ci->second[0].drug_set = drug_set;
+
+			ci->second.resize(1);
+		}
+
+		vout.push_back(ci->second[0]);
 	}
 
+
+
+	cout << "Culling rows" << endl;
+	list<npduis_row> ln;
+
+	for (size_t i = 0; i < vout.size(); i++)
+		ln.push_back(vout[i]);
+
+	list<npduis_row>::iterator curr = ln.begin();
+	curr++;
+
+	// culling rows
+	for (; curr != ln.end(); )
+	{
+		list<npduis_row>::iterator prev = curr;
+		prev--;
+
+		if (curr->drug_desc_grp == prev->drug_desc_grp &&
+			curr->drug_set == prev->drug_set)
+		{
+			// Erase this row
+			prev->episode_end_dt = curr->episode_beg_dt;
+			curr = ln.erase(curr);
+		}
+		else
+		{
+			// Keep this row
+			curr++;
+		}
+	
+	}
+
+	vout.clear();
+
+	for(list<npduis_row>::const_iterator ci = ln.begin(); ci != ln.end(); ci++)
+		vout.push_back(*ci);
+
+	ln.clear();
 }
 
 
@@ -114,16 +176,6 @@ void convert_rows_to_polypharmacy_rows(const vector<npduis_row>& vn, vector<npdu
 
 int main(void)
 {
-	//vector<string> dates;
-	//get_date_range("02Mar2023", "05Mar2023", dates);
-
-	//for (size_t i = 0; i < dates.size(); i++)
-	//	cout << dates[i] << endl;
-
-	//return 0;
-
-
-
 	generic_table_data all, dad_nacrs_rows, npduis_rows;
 
 	cout << "Reading" << endl;
@@ -137,7 +189,6 @@ int main(void)
 
 
 	cout << "Getting rows" << endl;
-
 
 	size_t row_count = npduis_rows.get_row_count();
 
@@ -184,76 +235,6 @@ int main(void)
 
 	// Keep column headers
 	npduis_rows.clear_rows();
-
-
-
-
-
-	//cout << "Culling rows" << endl;
-	//list<npduis_row> ln;
-
-	//for (size_t i = 0; i < vn.size(); i++)
-	//	ln.push_back(vn[i]);
-
-	//list<npduis_row>::iterator curr = ln.begin();
-	//curr++;
-
-	//// culling rows
-	//for (; curr != ln.end(); )
-	//{
-	//	list<npduis_row>::iterator prev = curr;
-	//	prev--;
-	//
-	//	string prev_end = prev->episode_end_dt;
-	//	string curr_end = curr->episode_end_dt;
-
-	//	string extended_prev_end;
-	//	add_days_to_date(prev_end, grace_period + 1, extended_prev_end);
-
-	//	tm ta = {}, tb = {};
-
-	//	istringstream iss(curr_end);
-	//	iss >> get_time(&ta, "%d%b%Y");
-
-	//	iss.clear();
-	//	iss.str(extended_prev_end);
-	//	iss >> get_time(&tb, "%d%b%Y");
-
-	//	if (curr->mbun == prev->mbun &&
-	//		curr->drug_code == prev->drug_code &&
-	//		date_less_than(ta, tb))
-	//	{
-	//		// Erase this row
-	//		prev->episode_end_dt = curr->episode_beg_dt;
-	//		curr = ln.erase(curr);
-	//	}
-	//	else
-	//	{
-	//		// Keep this row
-	//		curr++;
-	//	}
-	//
-	//}
-
-	//vn.clear();
-
-	//for(list<npduis_row>::const_iterator ci = ln.begin(); ci != ln.end(); ci++)
-	//	vn.push_back(*ci);
-
-	//ln.clear();
-
-
-	//for (size_t i = 0; i < vtemp.size(); i++)
-	//{
-	//	if (vtemp[i].mbun == "1")
-	//		cout << "  " << vtemp[i].mbun << " " << vtemp[i].episode_beg_dt << " " << vtemp[i].episode_end_dt << " " << vtemp[i].drug_code << endl;
-	//}
-
-
-
-
-
-
 
 
 	// copy from vn to npduis_rows
