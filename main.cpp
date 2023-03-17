@@ -110,7 +110,7 @@ void convert_rows_to_polypharmacy_rows(const vector<npduis_row>& vn, vector<npdu
 		else
 		{
 			// polypharmacy
-			size_t num_meds = ci->second.size();
+			const size_t num_meds = ci->second.size();
 
 			vector<string> drug_set_strings;
 
